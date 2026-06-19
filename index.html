@@ -1149,6 +1149,21 @@
       .ls-row{ display:flex; justify-content:space-between; margin-top:7px; font-size:.78rem; font-weight:800; color:#caa874; }
       .ls-ver{ opacity:.7; }
 
+      /* ===== Kaynaklar: ikon-odaklı, etiketsiz, 3D cilalı ===== */
+      .counter-band .resource{ position:relative; text-align:center; padding:14px 8px 13px; }
+      .counter-band .resource-label{ justify-content:center; gap:0; margin-bottom:4px; }
+      .counter-band .res-ic{ width:46px; height:46px; padding:8px; border-radius:15px;
+        background:radial-gradient(circle at 50% 26%, #4a371f, #211810);
+        box-shadow:0 6px 14px #000a, inset 0 1px 0 #ffffff1f, inset 0 -5px 9px #00000080;
+        animation:resfloat 2.9s ease-in-out infinite; }
+      @keyframes resfloat{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
+      .counter-band .resource-value{ text-align:center; text-shadow:0 2px 0 #00000070, 0 4px 8px #000a; }
+      .counter-band .resource-rate{ text-align:center; }
+      .res-bar{ margin-left:auto; margin-right:auto; max-width:120px; }
+      /* darboğaz rozeti köşeye (ikon-only düzeni bozmasın) */
+      .resource.bottleneck .resource-label::after{ content:"⚠"; position:absolute; top:7px; right:9px;
+        margin:0; font-size:1rem; color:#e8584a; }
+
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
       .machine-body{ background:linear-gradient(160deg, #e0ad55 0%, #a8742f 46%, #5a3a1c 100%);
         box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.28), 0 16px 30px rgba(0,0,0,0.45); }
@@ -1221,19 +1236,19 @@
           <section class="play-area" aria-label="Kahve alani">
             <div class="counter-band">
               <div class="resource">
-                <div class="resource-label"><img class="res-ic" src="assets/cup.svg" alt="">Kahve</div>
+                <div class="resource-label"><img class="res-ic" src="assets/cup.svg" alt="Kahve"></div>
                 <div class="resource-value" id="coffeeValue">0</div>
                 <div class="resource-rate" id="coffeeRate">1/sn</div>
                 <div class="res-bar"><i id="coffeeBar"></i></div>
               </div>
               <div class="resource">
-                <div class="resource-label"><img class="res-ic" src="assets/tier0.svg" alt="">Çekirdek</div>
+                <div class="resource-label"><img class="res-ic" src="assets/tier0.svg" alt="Çekirdek"></div>
                 <div class="resource-value" id="beanValue">0</div>
                 <div class="resource-rate" id="beanRate">0/sn</div>
                 <div class="res-bar"><i id="beanBar"></i></div>
               </div>
               <div class="resource">
-                <div class="resource-label"><img class="res-ic" src="assets/milk.svg" alt="">Süt</div>
+                <div class="resource-label"><img class="res-ic" src="assets/milk.svg" alt="Süt"></div>
                 <div class="resource-value" id="milkValue">0</div>
                 <div class="resource-rate" id="milkRate">0/sn</div>
                 <div class="res-bar"><i id="milkBar"></i></div>
