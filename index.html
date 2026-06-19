@@ -3553,5 +3553,138 @@
       window.addEventListener("focus", reconcile);
     })();
     </script>
+
+    <!-- ============ KahveX: günlük ödül + istatistik + save sağlamlık + juice ============ -->
+    <style>
+      .kx-modal{ position:fixed; inset:0; z-index:240; background:rgba(12,9,6,.82); display:none; align-items:center; justify-content:center; padding:18px; backdrop-filter:blur(4px); }
+      .kx-modal.show{ display:flex; }
+      .kx-card{ background:#241c16; border:1px solid #f5c97a; border-radius:18px; max-width:380px; width:100%; max-height:84vh; overflow:auto; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.75); }
+      .kx-card h3{ color:#f5c97a; margin:0 0 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:1.1rem; }
+      .kx-close{ background:none; border:1px solid #3a2e24; color:#a89070; border-radius:9px; padding:6px 12px; cursor:pointer; font-weight:700; flex:0 0 auto; }
+      .kx-btn{ width:100%; padding:13px; border:0; border-radius:12px; font-weight:800; cursor:pointer; background:linear-gradient(180deg,#f5c97a,#e0a85a); color:#2a1c10; margin-top:8px; font-size:.95rem; }
+      .kx-btn.sec{ background:#2a2018; color:#f5c97a; border:1px solid #3a2e24; }
+      .kx-days{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0 14px; }
+      .kx-day{ background:#2a2018; border:1px solid #3a2e24; border-radius:12px; padding:10px 4px; text-align:center; }
+      .kx-day.done{ opacity:.45; }
+      .kx-day.today{ border-color:#f5c97a; box-shadow:0 0 10px rgba(245,201,122,.33); }
+      .kx-day .d{ font-weight:900; color:#f5c97a; font-size:.78rem; }
+      .kx-day .r{ font-size:1.35rem; line-height:1.4; }
+      .kx-stat{ display:flex; justify-content:space-between; gap:12px; padding:9px 2px; border-bottom:1px solid rgba(58,46,36,.45); font-size:.92rem; color:#e8dcc8; }
+      .kx-stat b{ color:#f5c97a; font-variant-numeric:tabular-nums; }
+      textarea.kx-io{ width:100%; height:64px; background:#1a1410; border:1px solid #3a2e24; color:#f0e6d8; border-radius:10px; padding:8px; font-size:.72rem; margin-top:8px; resize:none; box-sizing:border-box; }
+      .kx-bump{ animation:kxbump .34s ease-out; display:inline-block; }
+      @keyframes kxbump{ 0%{ transform:scale(1) } 42%{ transform:scale(1.16) } 100%{ transform:scale(1) } }
+    </style>
+    <div class="kx-modal" id="kxDaily"><div class="kx-card">
+      <h3>🎁 Günlük Ödül <button class="kx-close" data-kx="kxDaily">Kapat</button></h3>
+      <div id="kxDailyBody"></div>
+    </div></div>
+    <div class="kx-modal" id="kxStats"><div class="kx-card">
+      <h3>📊 İstatistikler <button class="kx-close" data-kx="kxStats">Kapat</button></h3>
+      <div id="kxStatsBody"></div>
+      <button class="kx-btn sec" id="kxExport">📤 Kaydı Dışa Aktar</button>
+      <button class="kx-btn sec" id="kxImport">📥 Kaydı İçe Aktar</button>
+      <textarea class="kx-io" id="kxIO" placeholder="" style="display:none"></textarea>
+    </div></div>
+    <script>
+    (function(){
+      "use strict";
+      if (window.KahveX) return; var KX = window.KahveX = {};
+      function S(){ return (typeof state !== "undefined") ? state : null; }
+      function CD(){ try{ return (typeof currentDerived === "function") ? currentDerived() : null; }catch(e){ return null; } }
+      function MUL(d){ try{ return (typeof totalMultiplier === "function") ? totalMultiplier(d) : 1; }catch(e){ return 1; } }
+      function FMT(v){ try{ return (typeof format === "function") ? format(v) : String(Math.floor(v)); }catch(e){ return ""+Math.floor(v); } }
+      function SAVE(){ try{ if (typeof saveState === "function") saveState(); }catch(e){} }
+      function REND(){ try{ if (typeof render === "function") render(); }catch(e){} }
+      function CEL(t){ try{ if (typeof celebrate === "function") celebrate(t); }catch(e){} }
+      function SFX(n){ try{ if (typeof playSfx === "function") playSfx(n); }catch(e){} }
+      function FLASH(c){ try{ if (typeof fxFlash === "function") fxFlash(c); }catch(e){} }
+      function open(id){ var m=document.getElementById(id); if(m) m.classList.add("show"); }
+      function close(id){ var m=document.getElementById(id); if(m) m.classList.remove("show"); }
+      Array.prototype.forEach.call(document.querySelectorAll(".kx-close"), function(b){ b.addEventListener("click", function(){ close(b.getAttribute("data-kx")); }); });
+      Array.prototype.forEach.call(document.querySelectorAll(".kx-modal"), function(m){ m.addEventListener("click", function(e){ if(e.target===m) m.classList.remove("show"); }); });
+
+      /* ---- topbar tetik butonları (📊 stats, 🎁 daily) ---- */
+      var util = document.querySelector(".utility");
+      function mkBtn(txt, title, fn){ var b=document.createElement("button"); b.className="icon-button"; b.type="button"; b.title=title; b.setAttribute("aria-label",title); b.textContent=txt; b.addEventListener("click", fn); if(util) util.appendChild(b); return b; }
+      mkBtn("📊", "İstatistikler", function(){ renderStats(); open("kxStats"); });
+      mkBtn("🎁", "Günlük Ödül", function(){ renderDaily(); open("kxDaily"); });
+
+      /* ---- GÜNLÜK ÖDÜL ---- */
+      var DKEY = "kahve-daily-v1";
+      var REW = [ {d:1,r:"☕",mult:30}, {d:2,r:"☕",mult:75}, {d:3,r:"🫘",mult:60,res:"beans"}, {d:4,r:"☕",mult:160}, {d:5,r:"🥛",mult:80,res:"milk"}, {d:6,r:"☕",mult:320}, {d:7,r:"👑",mult:700,big:1} ];
+      function today(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+      function dnum(s){ if(!s) return null; var p=s.split("-"); if(p.length!==3) return null; return Math.floor(Date.UTC(+p[0], +p[1]-1, +p[2])/864e5); }
+      function dload(){ try{ var s=JSON.parse(localStorage.getItem(DKEY)); if(s && typeof s==="object") return s; }catch(e){} return {last:null, streak:0}; }
+      function dsave(s){ try{ localStorage.setItem(DKEY, JSON.stringify(s)); }catch(e){} }
+      function claimedToday(){ return dload().last === today(); }
+      function nextStreak(){ var s=dload(); if(s.last===today()) return s.streak; var l=dnum(s.last), t=dnum(today()); return (l!=null && t-l===1) ? (s.streak||0)+1 : 1; }
+      function rewardAmount(item){ var d=CD(); if(!d) return item.mult; var mul=MUL(d); var res=item.res||"coffee"; var ps = res==="beans" ? d.beanPerSecond : res==="milk" ? d.milkPerSecond : d.coffeePerSecond; var eff = (ps||0)*mul; return Math.max(item.mult, eff*item.mult); }
+      function renderDaily(){
+        var streak=nextStreak(); var slot=((streak-1)%7)+1; var canClaim=!claimedToday();
+        var html='<p style="color:#a89070;font-size:.86rem;margin:0 0 6px">Üst üste '+streak+' gün 🔥</p><div class="kx-days">';
+        REW.forEach(function(it){ var past=(it.d<slot)||(it.d===slot&&!canClaim); var cls="kx-day"+(past?" done":"")+(it.d===slot&&canClaim?" today":""); html+='<div class="'+cls+'"><div class="d">G'+it.d+'</div><div class="r">'+it.r+'</div></div>'; });
+        html+='</div>';
+        var it=REW[slot-1]; var amt=rewardAmount(it);
+        if(canClaim){ html+='<button class="kx-btn" id="kxClaim">'+slot+'. gün ödülünü al: +'+FMT(amt)+' '+it.r+'</button>'; }
+        else { html+='<p style="text-align:center;color:#7ec77e;font-weight:700;margin:6px 0 0">Bugünkü ödül alındı ✓ Yarın gel patron!</p>'; }
+        var body=document.getElementById("kxDailyBody"); if(body) body.innerHTML=html;
+        var c=document.getElementById("kxClaim"); if(c) c.addEventListener("click", doClaim);
+      }
+      function doClaim(){
+        if(claimedToday()) return; var st=S(), d=CD(); if(!st||!d) return;
+        var streak=nextStreak(); var slot=((streak-1)%7)+1; var it=REW[slot-1]; var amt=rewardAmount(it); var res=it.res||"coffee";
+        if(res==="coffee"){ if(typeof addCoffee==="function"){ addCoffee(amt, null, d); } else { st.coffee+=amt; st.runCoffeeEarned=(st.runCoffeeEarned||0)+amt; st.lifetimeCoffeeEarned=(st.lifetimeCoffeeEarned||0)+amt; } }
+        else { st[res]=(st[res]||0)+amt; }
+        dsave({last:today(), streak:streak}); SAVE(); REND();
+        SFX(it.big ? "prestige" : "milestone"); FLASH("#f5c97a"); CEL("🎁 Günlük ödül: +"+FMT(amt)+" "+it.r);
+        renderDaily();
+      }
+      // açılışta: welcome kapalıysa ve bugün alınmadıysa göster
+      setTimeout(function(){ var w=document.getElementById("welcomeOverlay"); if(w && w.classList.contains("show")) return; if(!claimedToday()){ renderDaily(); open("kxDaily"); } }, 3000);
+
+      /* ---- İSTATİSTİKLER ---- */
+      function playtime(){ var k="kahve-firstplay"; var first=Number(localStorage.getItem(k)); if(!first){ first=Date.now(); try{ localStorage.setItem(k, first); }catch(e){} } var ms=Math.max(0, Date.now()-first); var h=Math.floor(ms/3600000), m=Math.floor(ms/60000)%60; return h>0 ? (h+"sa "+m+"dk") : (m+"dk"); }
+      function achCount(){ try{ return (JSON.parse(localStorage.getItem("kahve-ach")||"[]")).length; }catch(e){ return 0; } }
+      function achTotal(){ try{ return (typeof ACHIEVEMENTS!=="undefined") ? ACHIEVEMENTS.length : 24; }catch(e){ return 24; } }
+      function renderStats(){
+        var st=S(), d=CD(); if(!st||!d) return; var mul=MUL(d);
+        var caf=""; try{ caf=(typeof cafeLevel==="function") ? cafeLevel(d) : "-"; }catch(e){ caf="-"; }
+        var rows=[
+          ["Toplam üretilen kahve", FMT(st.lifetimeCoffeeEarned||0)],
+          ["Bu turdaki kahve", FMT(st.runCoffeeEarned||0)],
+          ["Toplam tıklama", FMT(st.totalClicks||0)],
+          ["Kahve / sn", FMT((d.coffeePerSecond||0)*mul)],
+          ["Çekirdek / sn", FMT((d.beanPerSecond||0)*mul)],
+          ["Süt / sn", FMT((d.milkPerSecond||0)*mul)],
+          ["Prestij sayısı", String(st.totalPrestiges||0)],
+          ["Prestij seviyesi", String(st.prestigeLevel||0)],
+          ["Meta prestij", String(st.metaPrestigeLevel||0)],
+          ["Açılan başarım", achCount()+" / "+achTotal()],
+          ["Oynama süresi", playtime()]
+        ];
+        var body=document.getElementById("kxStatsBody"); if(body) body.innerHTML = rows.map(function(r){ return '<div class="kx-stat"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'; }).join("");
+      }
+
+      /* ---- SAVE SAĞLAMLIK: periyodik yedek + dışa/içe aktar ---- */
+      var SK = (typeof saveKey!=="undefined") ? saveKey : "coffee-clicker-v4";
+      setInterval(function(){ try{ var v=localStorage.getItem(SK); if(v) localStorage.setItem(SK+"-backup", v); }catch(e){} }, 20000);
+      (function(){
+        var io=document.getElementById("kxIO");
+        var ex=document.getElementById("kxExport"), im=document.getElementById("kxImport");
+        if(ex) ex.addEventListener("click", function(){ try{ io.style.display="block"; io.value=localStorage.getItem(SK)||""; io.focus(); io.select(); CEL("Kayıt kodu kutuda — kopyala"); }catch(e){} });
+        if(im) im.addEventListener("click", function(){ if(io.style.display==="none"||!io.value.trim()){ io.style.display="block"; io.value=""; io.placeholder="Kayıt kodunu yapıştır, tekrar bas"; io.focus(); return; } var v=io.value.trim(); try{ JSON.parse(v); localStorage.setItem(SK, v); CEL("Kayıt yüklendi, yeniden başlıyor"); setTimeout(function(){ location.reload(); }, 650); }catch(e){ CEL("⚠ Geçersiz kayıt kodu"); } });
+      })();
+
+      /* ---- JUICE: demlerken sayı pop ---- */
+      (function(){
+        var cv=document.getElementById("coffeeValue");
+        function pop(){ if(!cv) return; cv.classList.remove("kx-bump"); void cv.offsetWidth; cv.classList.add("kx-bump"); }
+        ["brewButton","hubBrew"].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener("click", pop); });
+      })();
+
+      KX.renderStats=renderStats; KX.renderDaily=renderDaily;
+    })();
+    </script>
   </body>
 </html>
