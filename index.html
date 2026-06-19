@@ -1798,6 +1798,38 @@
             ])
           ],
           message: "Espresso Singularity açıldı."
+        },
+        {
+          id: "coffeeStore",
+          family: "storage",
+          title: "Kahve Deposu",
+          desc: "Kahve depolama kapasitesi +6000",
+          baseCost: { coffee: 600 },
+          scale: 1.55,
+          effects: [stat("coffeeCap", 6000)],
+          message: "Daha çok kahve depolayabilirsin."
+        },
+        {
+          id: "beanStore",
+          family: "storage",
+          title: "Çekirdek Ambarı",
+          desc: "Çekirdek kapasitesi +4000",
+          baseCost: { coffee: 500, beans: 50 },
+          scale: 1.5,
+          needs: "beans",
+          effects: [stat("beanCap", 4000)],
+          message: "Çekirdek ambarı genişledi."
+        },
+        {
+          id: "milkStore",
+          family: "storage",
+          title: "Süt Soğutucu",
+          desc: "Süt kapasitesi +3000",
+          baseCost: { coffee: 600, beans: 80, milk: 30 },
+          scale: 1.5,
+          needs: "milk",
+          effects: [stat("milkCap", 3000)],
+          message: "Süt soğutucu kuruldu."
         }
       ];
 
@@ -1897,6 +1929,9 @@
           clickBonusCap: 2,
           branchMultiplier: 1,
           prestigeGainMultiplier: 1,
+          coffeeCap: 4000,
+          beanCap: 2000,
+          milkCap: 1200,
           unlockedBeans: levelOf("beanUnlock") > 0,
           unlockedMilk: levelOf("milkUnlock") > 0,
           branchLevel: levelOf("branch")
@@ -2162,6 +2197,10 @@
         addCoffee(d.coffeePerSecond * seconds, null, d);
         state.beans += d.beanPerSecond * totalMultiplier(d) * seconds;
         state.milk += d.milkPerSecond * totalMultiplier(d) * seconds;
+        // Storage cap (Kittens): depolama dolunca taşmaz, harca veya Depo al
+        state.coffee = Math.min(state.coffee, d.coffeeCap);
+        state.beans = Math.min(state.beans, d.beanCap);
+        state.milk = Math.min(state.milk, d.milkCap);
         updateResourceBars(seconds, d);
         state.activeHeat = Math.max(0, state.activeHeat - seconds * 0.55);
         if (now - lastSave > 5000) {
@@ -2206,9 +2245,9 @@
         els.coffee.textContent = format(state.coffee);
         els.beans.textContent = format(state.beans);
         els.milk.textContent = format(state.milk);
-        els.coffeeRate.textContent = `${format(coffeeRate)}/sn`;
-        els.beanRate.textContent = `${format(beanRate)}/sn`;
-        els.milkRate.textContent = `${format(milkRate)}/sn`;
+        els.coffeeRate.innerHTML = capLine(state.coffee, d.coffeeCap, coffeeRate);
+        els.beanRate.innerHTML = d.unlockedBeans ? capLine(state.beans, d.beanCap, beanRate) : "—";
+        els.milkRate.innerHTML = d.unlockedMilk ? capLine(state.milk, d.milkCap, milkRate) : "—";
         els.clickPower.textContent = `+${format(d.coffeePerClick * activeClickMultiplier(d) * mult)}`;
         els.totalRate.textContent = `${format(coffeeRate)} kahve/sn`;
         els.multiplier.textContent = `${d.branchMultiplier.toFixed(2)}x`;
@@ -2522,27 +2561,24 @@
         beans: document.getElementById("beanBar"),
         milk: document.getElementById("milkBar")
       };
-      const barPhase = { coffee: 0, beans: 0, milk: 0 };
+      function capLine(val, cap, rate) {
+        if (cap && val >= cap * 0.999) return `<b style="color:#e8584a">DOLU</b> · ⛁${format(cap)}`;
+        return `${format(rate)}/sn · ⛁${format(cap)}`;
+      }
       function updateResourceBars(seconds, d) {
-        const mult = totalMultiplier(d);
-        const rates = {
-          coffee: d.coffeePerSecond * mult,
-          beans: d.beanPerSecond * mult,
-          milk: d.milkPerSecond * mult
-        };
+        // Bar artık DEPOLAMA doluluğunu gösterir (değer / kapasite) — Kittens storage
+        const caps = { coffee: d.coffeeCap, beans: d.beanCap, milk: d.milkCap };
+        const vals = { coffee: state.coffee, beans: state.beans, milk: state.milk };
         for (const key of ["coffee", "beans", "milk"]) {
           const bar = resBars[key];
           if (!bar) continue;
-          const rate = rates[key];
-          if (rate > 0) {
-            const speed = Math.min(3, 0.5 + Math.log10(rate + 1) * 0.7); // hız arttıkça daha hızlı dolar
-            barPhase[key] = (barPhase[key] + speed * seconds) % 1;
-            bar.style.width = (barPhase[key] * 100).toFixed(1) + "%";
-            bar.style.opacity = "1";
-          } else {
-            bar.style.width = "0%";
-            bar.style.opacity = "0.3";
-          }
+          const cap = caps[key] || 1;
+          const pct = Math.max(0, Math.min(1, vals[key] / cap));
+          bar.style.width = (pct * 100).toFixed(1) + "%";
+          bar.style.opacity = "1";
+          bar.style.background = pct >= 0.999
+            ? "linear-gradient(90deg,#e8584a,#ff9a7a)"   // DOLU → kırmızı
+            : "linear-gradient(90deg,#e0a85a,#f5c97a)";
         }
       }
 
