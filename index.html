@@ -1788,6 +1788,15 @@
         if (!confirm("Tüm kayıt, şube ve prestij silinsin mi?")) return;
         state = freshState();
         saveState();
+        // Yardımcı kayıtları da temizle → taze adım-adım deneyim
+        ["kahve-revealed", "kahve-ach", "kahve-phases", "kahve-onboard-v1", "kahve-lastSeen"].forEach((k) => {
+          try { localStorage.removeItem(k); } catch (e) {}
+        });
+        if (typeof revealed !== "undefined") revealed.clear();
+        if (typeof achUnlocked !== "undefined") achUnlocked.clear();
+        if (typeof seenPhases !== "undefined") { seenPhases.clear(); phaseInit = false; }
+        if (typeof gotLucky !== "undefined") gotLucky = false;
+        if (typeof tutStep !== "undefined") { tutStep = 0; document.getElementById("welcomeOverlay").classList.add("show"); }
         render();
         log("Kafe tamamen temizlendi.");
       }
@@ -2179,6 +2188,25 @@
       function renderShop(d = currentDerived()) {
         let nextTarget = null;
 
+        // Progressive disclosure: yatırım ancak maliyetinin ~%25'ine ulaşınca (ya da aldıysan) görünür.
+        // Ayrıca her zaman "bir sonraki" en yakın yatırım görünür (foreshadowing).
+        const REVEAL = 0.25;
+        let bestHidden = null;
+        upgrades.forEach((u) => {
+          if (u.needsHook && levelOf(u.needsHook.id) < u.needsHook.level) return;
+          const lv = levelOf(u.id);
+          const mx = u.max && lv >= u.max;
+          if (!isVisible(u, d) || mx) return;
+          if (lv > 0 || revealed.has(u.id)) { revealed.add(u.id); return; }
+          const c = costFor(u);
+          let r = 1;
+          Object.entries(c).forEach(([res, amt]) => { r = Math.min(r, amt > 0 ? state[res] / amt : 1); });
+          if (r >= REVEAL) revealed.add(u.id);
+          else if (!bestHidden || r > bestHidden.r) bestHidden = { id: u.id, r };
+        });
+        if (bestHidden) revealed.add(bestHidden.id);
+        saveRevealed();
+
         upgrades.forEach((upgrade) => {
           const hookLocked = upgrade.needsHook && levelOf(upgrade.needsHook.id) < upgrade.needsHook.level;
           const existingButton = els.shop.querySelector(`[data-upgrade="${upgrade.id}"]`);
@@ -2192,6 +2220,12 @@
           const visible = isVisible(upgrade, d);
           const affordable = canBuy(upgrade, d);
           const cost = costFor(upgrade);
+
+          // Henüz reveal edilmemiş yatırımı gizle (adım adım açılma)
+          if (visible && !maxed && !revealed.has(upgrade.id)) {
+            if (existingButton) existingButton.hidden = true;
+            return;
+          }
 
           if (visible && !maxed) {
             const missing = missingResources(cost);
@@ -2633,6 +2667,11 @@
         setTimeout(() => { celebrate(`😴 Sen yokken +${format(oc)} kahve`); log(`${mins} dk yoktun, üretim toplandı: +${format(oc)} kahve.`); }, 700);
       }
       function stampSeen() { try { localStorage.setItem("kahve-lastSeen", String(Date.now())); } catch (e) {} }
+
+      /* ===== Progressive disclosure: hangi yatırımlar açıldı ===== */
+      let revealed = new Set();
+      try { revealed = new Set(JSON.parse(localStorage.getItem("kahve-revealed") || "[]")); } catch (e) {}
+      function saveRevealed() { try { localStorage.setItem("kahve-revealed", JSON.stringify([...revealed])); } catch (e) {} }
 
       /* ===== Çağ / faz geçişi (Universal Paperclips phase-shift + Melvor kimlik) ===== */
       let seenPhases = new Set();
