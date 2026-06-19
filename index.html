@@ -1095,6 +1095,11 @@
         font-size:.58rem; font-weight:900; letter-spacing:.5px; white-space:nowrap; }
       @keyframes bnpulse{ 0%,100%{ box-shadow:inset 0 0 0 2px #e8584a55 } 50%{ box-shadow:inset 0 0 0 2px #e8584a } }
 
+      /* Mini-aksiyonlar: gizli olanlar yer kaplamasın, görünenler genişlesin */
+      .mini-actions{ display:flex; gap:10px; }
+      .mini-actions .resource-action{ flex:1; }
+      .mini-actions .resource-action[hidden]{ display:none; }
+
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
       .machine-body{ background:linear-gradient(160deg, #e0ad55 0%, #a8742f 46%, #5a3a1c 100%);
         box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.28), 0 16px 30px rgba(0,0,0,0.45); }
@@ -2211,8 +2216,8 @@
         els.metaPrestigeMultiplier.textContent = `${metaPrestigeGainMultiplier().toFixed(0)}x`;
         els.activeBonus.textContent = `${activeClickMultiplier(d).toFixed(2)}x`;
         els.cafeLevel.textContent = cafeLevel(d);
-        els.beanButton.disabled = !d.unlockedBeans;
-        els.milkButton.disabled = !d.unlockedMilk;
+        els.beanButton.hidden = !d.unlockedBeans;
+        els.milkButton.hidden = !d.unlockedMilk;
         els.fill.style.height = `${Math.min(82, 20 + (state.coffee % 100) * 0.62)}%`;
         els.stage.classList.toggle("running", coffeeRate > 0);
         els.speedButtons.forEach((button) => {
@@ -2262,24 +2267,22 @@
       function renderShop(d = currentDerived()) {
         let nextTarget = null;
 
-        // Progressive disclosure: yatırım ancak maliyetinin ~%25'ine ulaşınca (ya da aldıysan) görünür.
-        // Ayrıca her zaman "bir sonraki" en yakın yatırım görünür (foreshadowing).
-        const REVEAL = 0.25;
-        let bestHidden = null;
+        // Step-by-step: SADECE sahip olduklarin + siradaki en ucuz 3 yatirim gorunur.
+        // (Hicbir sey "halihazirda acik" degil; aldikca yenisi belirir.)
+        const NEXT_STEPS = 3;
+        const showIds = new Set();
+        const candidates = [];
+        const costEq = (u) => { const c = costFor(u); return (c.coffee || 0) + (c.beans || 0) * 12 + (c.milk || 0) * 60; };
         upgrades.forEach((u) => {
           if (u.needsHook && levelOf(u.needsHook.id) < u.needsHook.level) return;
+          if (!isVisible(u, d)) return;
           const lv = levelOf(u.id);
-          const mx = u.max && lv >= u.max;
-          if (!isVisible(u, d) || mx) return;
-          if (lv > 0 || revealed.has(u.id)) { revealed.add(u.id); return; }
-          const c = costFor(u);
-          let r = 1;
-          Object.entries(c).forEach(([res, amt]) => { r = Math.min(r, amt > 0 ? state[res] / amt : 1); });
-          if (r >= REVEAL) revealed.add(u.id);
-          else if (!bestHidden || r > bestHidden.r) bestHidden = { id: u.id, r };
+          if (lv > 0) { showIds.add(u.id); return; }       // sahip olunan hep gorunur
+          if (u.max && lv >= u.max) return;
+          candidates.push(u);                                // alinmamis aday
         });
-        if (bestHidden) revealed.add(bestHidden.id);
-        saveRevealed();
+        candidates.sort((a, b) => costEq(a) - costEq(b));
+        candidates.slice(0, NEXT_STEPS).forEach((u) => showIds.add(u.id)); // siradaki 3 adim
 
         upgrades.forEach((upgrade) => {
           const hookLocked = upgrade.needsHook && levelOf(upgrade.needsHook.id) < upgrade.needsHook.level;
@@ -2295,8 +2298,8 @@
           const affordable = canBuy(upgrade, d);
           const cost = costFor(upgrade);
 
-          // Henüz reveal edilmemiş yatırımı gizle (adım adım açılma)
-          if (visible && !maxed && !revealed.has(upgrade.id)) {
+          // Step-by-step: gosterilmeyecekse gizle (sadece sahip + siradaki 3)
+          if (!showIds.has(upgrade.id)) {
             if (existingButton) existingButton.hidden = true;
             return;
           }
@@ -2425,7 +2428,6 @@
           if (!fams.includes(u.family)) return;
           if (u.max && levelOf(u.id) >= u.max) return;
           if (!isVisible(u)) return;
-          if (levelOf(u.id) === 0 && (typeof revealed === "undefined" || !revealed.has(u.id))) return;
           const c = costFor(u);
           const total = (c.coffee || 0) + (c.beans || 0) * 10 + (c.milk || 0) * 50;
           if (!best || total < best.total) best = { title: u.title, total };
