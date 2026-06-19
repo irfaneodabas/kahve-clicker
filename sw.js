@@ -1,9 +1,10 @@
 // Kahve İmparatorluğu — service worker (demo PWA)
 // HTML: network-first (oyun hep güncel) · assets: cache-first (hızlı + çevrimdışı)
-const CACHE = "kahve-v2";
+const CACHE = "kahve-v3";
 const ASSETS = [
   "./", "./index.html", "manifest.json",
   "assets/emblem.svg", "assets/banner.png", "assets/cup.svg", "assets/milk.svg", "assets/splash.jpg",
+  "assets/btn-gold.png", "assets/btn-green.png",
   "assets/tier0.svg", "assets/tier1.svg", "assets/tier2.svg", "assets/tier3.svg",
   "assets/tier4.svg", "assets/tier5.svg", "assets/tier6.svg", "assets/tier7.svg",
   "assets/sfx/click.mp3", "assets/sfx/buy.mp3", "assets/sfx/milestone.mp3",
