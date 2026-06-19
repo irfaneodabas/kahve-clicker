@@ -1099,6 +1099,16 @@
       .mini-actions{ display:flex; gap:10px; }
       .mini-actions .resource-action{ flex:1; }
       .mini-actions .resource-action[hidden]{ display:none; }
+      /* Çekirdek/Süt butonları: ikon + animasyon + miktar (kahve gibi) */
+      .resource-action{ display:flex; align-items:center; gap:10px; padding:0 13px; text-align:left; overflow:hidden; }
+      .ra-ic{ width:30px; height:30px; object-fit:contain; flex:0 0 auto; }
+      .ra-bean{ animation:raBean 1.8s ease-in-out infinite; }
+      .ra-milk{ animation:raMilk 2.4s ease-in-out infinite; transform-origin:50% 85%; }
+      @keyframes raBean{ 0%,100%{ transform:translateY(0) rotate(-9deg) } 50%{ transform:translateY(-4px) rotate(9deg) } }
+      @keyframes raMilk{ 0%,100%{ transform:rotate(-7deg) } 50%{ transform:rotate(7deg) } }
+      .ra-label{ flex:1; font-weight:900; }
+      .ra-amt{ background:var(--gold); color:#2a1c10; font-weight:900; font-size:.8rem; padding:4px 10px; border-radius:999px; flex:0 0 auto; }
+      .resource-action:active .ra-ic{ transform:scale(1.3); }
 
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
       .machine-body{ background:linear-gradient(160deg, #e0ad55 0%, #a8742f 46%, #5a3a1c 100%);
@@ -1109,6 +1119,10 @@
       .machine-face::before{ background:var(--gold); box-shadow:0 14px 0 var(--coffee-2); }
       .spout, .spout::after{ background:#2a1c10; }
       .coffee-drop{ background:#8a5a26; }
+      /* Musluk + damlayı makinenin ortasına hizala (cup ile aynı eksende) */
+      .spout{ left:calc(50% - 38px); }
+      .spout::after{ left:calc(50% - 8px); right:auto; }
+      .coffee-drop{ left:calc(50% - 4px); }
       .stage.running .machine-body{ box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.32), 0 16px 34px rgba(224,168,90,0.32); }
     </style>
   </head>
@@ -1215,8 +1229,16 @@
               </div>
 
               <div class="mini-actions">
-                <button class="resource-action" id="beanButton" type="button">Çekirdek Topla</button>
-                <button class="resource-action" id="milkButton" type="button">Süt Hazırla</button>
+                <button class="resource-action" id="beanButton" type="button">
+                  <img class="ra-ic ra-bean" src="assets/tier0.svg" alt="">
+                  <span class="ra-label">Çekirdek Topla</span>
+                  <span class="ra-amt" id="beanClickAmt">+2</span>
+                </button>
+                <button class="resource-action" id="milkButton" type="button">
+                  <img class="ra-ic ra-milk" src="assets/milk.svg" alt="">
+                  <span class="ra-label">Süt Hazırla</span>
+                  <span class="ra-amt" id="milkClickAmt">+2</span>
+                </button>
               </div>
             </div>
           </section>
@@ -2257,6 +2279,8 @@
         els.cafeLevel.textContent = cafeLevel(d);
         els.beanButton.hidden = !d.unlockedBeans;
         els.milkButton.hidden = !d.unlockedMilk;
+        if (d.unlockedBeans) { const e = document.getElementById("beanClickAmt"); if (e) e.textContent = "+" + format(d.beanPerClick * totalMultiplier(d)); }
+        if (d.unlockedMilk) { const e = document.getElementById("milkClickAmt"); if (e) e.textContent = "+" + format(d.milkPerClick * totalMultiplier(d)); }
         els.fill.style.height = `${Math.min(82, 20 + (state.coffee % 100) * 0.62)}%`;
         els.stage.classList.toggle("running", coffeeRate > 0);
         els.speedButtons.forEach((button) => {
