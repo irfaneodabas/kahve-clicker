@@ -1040,7 +1040,15 @@
       .upgrade.affordable .up-fill{ background:linear-gradient(90deg,#3a6a2c,#6fcf6f); opacity:.85; }
       .upgrade.locked .up-fill, .upgrade.maxed .up-fill{ opacity:0; }
       /* maliyet ikonu (47 + ☕ görseli, "47 kahve" yazısı yok) */
-      .cost-ic{ width:17px; height:17px; object-fit:contain; vertical-align:-3px; margin-left:3px; }
+      .cost-ic{ width:18px; height:18px; object-fit:contain; vertical-align:-4px; margin-left:3px; }
+
+      /* Yatırım satırı ikonu (üretici görseli — büyük, chip içinde) */
+      .upgrade{ grid-template-columns:auto 1fr auto !important; gap:12px !important; align-items:center; }
+      .up-ic{ width:52px; height:52px; padding:9px; border-radius:14px; object-fit:contain;
+        background:radial-gradient(circle at 50% 28%, #46341e, #211810);
+        box-shadow:0 5px 12px #0009, inset 0 1px 0 #ffffff1a, inset 0 -4px 8px #00000070; }
+      /* Kaynak ikonlarını biraz daha büyüt */
+      .counter-band .res-ic{ width:50px; height:50px; }
 
       /* ===== Daha canlı fincan: yüzey dalgası + parıltı ===== */
       .coffee-fill{ overflow:hidden; }
@@ -2407,6 +2415,18 @@
         }
       }
 
+      function upgradeIcon(u) {
+        const byId = {
+          coffeeStore: "assets/cup.svg", beanStore: "assets/tier0.svg", milkStore: "assets/milk.svg",
+          beanUnlock: "assets/tier0.svg", milkUnlock: "assets/milk.svg", branch: "assets/tier4.svg",
+          roaster: "assets/tier5.svg", grinder: "assets/tier1.svg", barista: "assets/tier2.svg",
+          demlik: "assets/tier1.svg", roastFactory: "assets/tier5.svg", beanWarehouse: "assets/tier6.svg"
+        };
+        if (byId[u.id]) return byId[u.id];
+        const byFam = { click: "assets/cup.svg", coffee: "assets/cup.svg", beans: "assets/tier0.svg",
+          milk: "assets/milk.svg", branch: "assets/tier4.svg", storage: "assets/cup.svg" };
+        return byFam[u.family] || "assets/cup.svg";
+      }
       function renderShop(d = currentDerived()) {
         let nextTarget = null;
 
@@ -2467,6 +2487,7 @@
           let descEl;
           let costEl;
           let upFill;
+          let iconEl;
 
           if (!button) {
             button = document.createElement("button");
@@ -2492,7 +2513,10 @@
             costEl.className = "cost";
             upFill = document.createElement("i");
             upFill.className = "up-fill";
-            button.append(main, costEl, upFill);
+            iconEl = document.createElement("img");
+            iconEl.className = "up-ic";
+            iconEl.alt = "";
+            button.append(iconEl, main, costEl, upFill);
             els.shop.appendChild(button);
           } else {
             nameEl = button.querySelector(".upgrade-name");
@@ -2500,7 +2524,9 @@
             descEl = button.querySelector(".upgrade-desc");
             costEl = button.querySelector(".cost");
             upFill = button.querySelector(".up-fill");
+            iconEl = button.querySelector(".up-ic");
           }
+          if (iconEl) iconEl.src = upgradeIcon(upgrade);
 
           button.hidden = false;
           button.className = `upgrade ${affordable ? "affordable" : ""} ${visible ? "" : "locked"} ${maxed ? "maxed" : ""}`;
