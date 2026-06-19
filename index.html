@@ -1110,6 +1110,18 @@
       .ra-amt{ background:var(--gold); color:#2a1c10; font-weight:900; font-size:.8rem; padding:4px 10px; border-radius:999px; flex:0 0 auto; }
       .resource-action:active .ra-ic{ transform:scale(1.3); }
 
+      /* ===== Sabit ekran + kayan içerik (AdVenture Capitalist modeli) ===== */
+      html, body{ height:100%; overflow:hidden; }
+      .app{ height:100svh; max-height:100svh; display:flex; flex-direction:column;
+        overflow:hidden; padding-top:calc(10px + env(safe-area-inset-top)); padding-bottom:0; }
+      .topbar{ flex:0 0 auto; margin-bottom:10px; }
+      .facility-hub{ position:static; flex:0 0 auto; margin-bottom:10px; }
+      /* Hub + topbar sabit; bunun altındaki HER ŞEY (makine + yatırımlar) burada kayar */
+      .layout{ flex:1 1 auto; min-height:0; display:block; grid-template-columns:none;
+        overflow-y:auto; -webkit-overflow-scrolling:touch;
+        padding:2px 2px calc(14px + env(safe-area-inset-bottom)); }
+      .play-area{ margin-bottom:12px; }
+
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
       .machine-body{ background:linear-gradient(160deg, #e0ad55 0%, #a8742f 46%, #5a3a1c 100%);
         box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.28), 0 16px 30px rgba(0,0,0,0.45); }
