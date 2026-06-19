@@ -1030,6 +1030,28 @@
         padding:10px 16px; display:flex; gap:9px; align-items:center; box-shadow:0 10px 30px #000a; animation:wpop .3s ease-out; max-width:calc(100% - 24px); }
       .ach-toast .ach-emoji{ font-size:22px; width:auto; }
       .ach-toast b{ color:#f5c97a; }
+      /* ===== Rozet vitrini (kategorili grid + ilerleme) ===== */
+      .kia-summary{ background:linear-gradient(180deg,#2c2216,#231a12); border:1px solid #f5c97a44; border-radius:14px; padding:12px 14px; margin-bottom:14px; }
+      .kia-sumtop{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+      .kia-sumtop b{ color:#f5c97a; font-size:1.15rem; }
+      .kia-sumtop span{ color:var(--muted); font-size:.78rem; }
+      .kia-bar{ height:8px; border-radius:6px; background:#3a2c1c; overflow:hidden; }
+      .kia-bar i{ display:block; height:100%; border-radius:6px; background:linear-gradient(90deg,#e0a85a,#f5c97a); transition:width .5s ease; }
+      .kia-cat{ display:flex; justify-content:space-between; align-items:center; margin:14px 2px 8px; }
+      .kia-cat-h{ font-weight:800; font-size:.82rem; color:#e7c79a; letter-spacing:.3px; }
+      .kia-cat-n{ font-size:.72rem; color:var(--muted); background:#2a2018; padding:2px 8px; border-radius:20px; }
+      .kia-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+      .kia-badge{ position:relative; background:#241c14; border:1px solid #ffffff0d; border-radius:13px; padding:11px 6px 9px; text-align:center; opacity:.5; filter:grayscale(.7); transition:.22s; overflow:hidden; }
+      .kia-badge.unlocked{ opacity:1; filter:none; border-color:#f5c97a55; background:linear-gradient(180deg,#2e2316,#241c14); box-shadow:0 4px 14px #0006, inset 0 1px 0 #ffffff10; }
+      .kia-badge.unlocked::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,#f5c97a22,transparent 60%); pointer-events:none; }
+      .kia-emoji{ font-size:25px; line-height:1; margin-bottom:6px; }
+      .kia-badge.unlocked .kia-emoji{ animation:kiaPop .4s ease-out; }
+      .kia-bn{ font-weight:800; font-size:.72rem; color:#f0ddbf; line-height:1.15; }
+      .kia-badge:not(.unlocked) .kia-bn{ color:var(--muted); }
+      .kia-bd{ font-size:.62rem; color:var(--muted); margin-top:2px; line-height:1.15; min-height:1.6em; }
+      .kia-tick{ position:absolute; top:5px; right:6px; font-size:.7rem; color:#7ec27a; font-weight:900; }
+      @keyframes kiaPop{ 0%{ transform:scale(.4); } 70%{ transform:scale(1.18); } 100%{ transform:scale(1); } }
+      @media (max-width:360px){ .kia-grid{ grid-template-columns:repeat(2,1fr); } }
 
       /* ===== Yatırım dolum barı (her birinde "ne kadar yaklaştın") ===== */
       .upgrade{ position:relative; overflow:hidden; box-shadow: inset 0 -3px 0 #ffffff08; }
@@ -1198,6 +1220,33 @@
       .spout::after{ left:calc(50% - 8px); right:auto; }
       .coffee-drop{ left:calc(50% - 4px); }
       .stage.running .machine-body{ box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.32), 0 16px 34px rgba(224,168,90,0.32); }
+
+      /* ===== Ayarlar sayfası ===== */
+      #settingsOverlay{ position:fixed; inset:0; z-index:210; background:#0c0906ee; display:none;
+        align-items:center; justify-content:center; padding:22px; backdrop-filter:blur(4px); }
+      #settingsOverlay.show{ display:flex; animation:wpop .28s ease-out; }
+      .settings-card{ background:linear-gradient(180deg,#2e2418,#241c14); border:1px solid #f5c97a;
+        border-radius:20px; padding:18px 16px 14px; max-width:360px; width:100%;
+        box-shadow:0 20px 60px #000c; }
+      .settings-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+      .settings-head h2{ margin:0; color:#f5c97a; font-size:1.2rem; }
+      .settings-x{ background:none; border:1px solid #6a5a3e; color:#cdbf9f;
+        width:32px; height:32px; border-radius:9px; font-size:1rem; cursor:pointer; line-height:1; }
+      .settings-x:hover{ border-color:#f5c97a; color:#f5c97a; }
+      .settings-row{ display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+        background:#241c14; border:1px solid #6a5a3e; border-radius:13px; padding:13px 14px;
+        margin-bottom:10px; cursor:pointer; color:#f3ead7; transition:border-color .15s, transform .05s; }
+      .settings-row:hover{ border-color:#f5c97a; }
+      .settings-row:active{ transform:scale(.985); }
+      .settings-row--danger{ border-color:#5a2a22; }
+      .settings-row--danger:hover{ border-color:#e06a4a; }
+      .settings-row .sr-ico{ font-size:1.45rem; flex:0 0 auto; }
+      .settings-row .sr-txt{ display:flex; flex-direction:column; gap:2px; }
+      .settings-row .sr-txt b{ font-size:.98rem; color:#f3ead7; }
+      .settings-row--danger .sr-txt b{ color:#f0a08a; }
+      .settings-row .sr-txt small{ color:#b3a888; font-size:.78rem; line-height:1.3; }
+      .settings-foot{ margin:6px 2px 0; color:#b3a888; font-size:.72rem; text-align:center; opacity:.8; }
+      @media (max-width:380px){ .settings-card{ border-radius:16px; } }
     </style>
   </head>
   <body>
@@ -1219,6 +1268,7 @@
           </div>
           <button class="icon-button" id="achButton" type="button" aria-label="Başarımlar" title="Başarımlar" style="font-size:18px">🏆</button>
           <button class="icon-button" id="muteButton" type="button" aria-label="Ses" title="Ses">🔊</button>
+          <button class="icon-button" id="settingsButton" type="button" aria-label="Ayarlar" title="Ayarlar" style="font-size:18px">⚙️</button>
           <button class="icon-button" id="saveButton" type="button" aria-label="Kaydet" title="Kaydet">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
@@ -1393,6 +1443,27 @@
       <button id="coachBtn" type="button">Geç</button>
     </div>
 
+    <div id="settingsOverlay" aria-hidden="true">
+      <div class="settings-card" role="dialog" aria-modal="true" aria-label="Ayarlar">
+        <div class="settings-head">
+          <h2>⚙️ Ayarlar</h2>
+          <button id="settingsClose" class="settings-x" type="button" aria-label="Kapat">✕</button>
+        </div>
+
+        <button id="replayTutBtn" class="settings-row" type="button">
+          <span class="sr-ico">🧭</span>
+          <span class="sr-txt"><b>Turu Tekrar Göster</b><small>Kaydın silinmez — eğitim baştan oynar.</small></span>
+        </button>
+
+        <button id="hardResetBtn" class="settings-row settings-row--danger" type="button">
+          <span class="sr-ico">🗑️</span>
+          <span class="sr-txt"><b>Sıfırdan Başla</b><small>Tüm ilerleme, şube ve prestij silinir. Geri alınamaz.</small></span>
+        </button>
+
+        <p class="settings-foot">Kahve İmparatorluğu • İlerlemen cihazına kaydedilir.</p>
+      </div>
+    </div>
+
     <div id="loadScreen">
       <div class="ls-art"></div>
       <div class="ls-top">
@@ -1412,10 +1483,76 @@
     <div id="achModal">
       <div class="ach-card">
         <h3>🏆 Başarımlar <button class="ach-close" id="achClose" type="button">Kapat</button></h3>
-        <p class="ach-sub" id="achProgress">0 / 0 açıldı</p>
+        <p class="ach-sub" id="achProgress">0 / 24 açıldı</p>
         <div id="achList"></div>
       </div>
     </div>
+
+    <!-- ============================================================
+         DAMLA 1/2: KB_BAL — Erken Egri Balans Konfigu
+         Namespace'li (window.KB_BAL), global cakisma yok. Oyun
+         script blogundan ONCE calisir -> 6 kanca guvenle okuyabilir.
+         KB_BAL silinirse oyun eski davranisla calismaya devam eder.
+         BALANS-INVARIANT (dogrulanmis):
+           - earlyCap (1500) yalniz BASE coffeeCap'i kucultur. currentDerived
+             effects'i base'e EKLER (d.coffeeCap += amount*level). Bu yuzden
+             gercek kural: "ilk Kahve Deposu (coffeeStore) ALIMINA kadar 1500".
+             coffeeStore maliyeti 600 kahve -> 1500 cap'e carpmadan ONCE alinabilir,
+             bu yuzden Depo karari erken anlamli olur (moment #5). Prestij DEGIL,
+             Depo alimi cap'i acar; davranis bilinçli ve test ile sabitlenmistir.
+         ============================================================ -->
+    <script>
+      window.KB_BAL = (function () {
+        "use strict";
+        var BOOT = Date.now();
+        // --- Tunable somut sayilar (tek dogruluk kaynagi) ---
+        var C = {
+          seedCoffee: 10,        // baslangic kahve: Fincan(8) aninda alinir -> moment #1 @0s
+          earlyCap: 1500,        // ilk Kahve Deposu alimina kadar coffee cap (BASE; eski 4000)
+          momentumSecs: 90,      // ilk 90sn click momentum penceresi
+          momentumMult: 3,       // erken click x3 (pencere sonunda 1'e decay)
+          luckySecs: 120,        // ilk 120sn lucky odds yukseltmesi
+          luckyEarly: 0.09,      // erken lucky ihtimali (eski 0.045)
+          earlyCostLevels: 5,    // ilk 5 level icin kart maliyeti indirimi
+          earlyCostScale: 0.85   // o leveldeki maliyet x0.85
+        };
+        function elapsed() { return (Date.now() - BOOT) / 1000; }
+        return {
+          // Test/insan icin tunable'lari oku (private C'yi expose et -> runtime'da
+          // KB_BAL.cfg.seedCoffee gibi GOZLEMLENEBILIR; ayar icin yine kaynak literal).
+          cfg: Object.assign({}, C),
+          seedCoffee: C.seedCoffee,
+          // currentDerived().coffeeCap BASE literali icin: ilk Depo alimina kadar dusuk cap.
+          // (prestigeLevel>0 guvenlik tamponu: ileri run'da asla kisitlama.)
+          capFor: function (baseCap, prestigeLevel) {
+            return (prestigeLevel > 0) ? baseCap : Math.min(baseCap, C.earlyCap);
+          },
+          // brew() tek-tik click momentum carpani (decay'li, 1'e iner).
+          clickMomentum: function () {
+            var t = elapsed();
+            if (t >= C.momentumSecs) return 1;
+            var k = 1 - t / C.momentumSecs;         // 1 -> 0
+            return 1 + (C.momentumMult - 1) * k;    // momentumMult -> 1
+          },
+          // brew() lucky ihtimali (erken pencerede yukseltilmis).
+          luckyOdds: function (baseOdds) {
+            return elapsed() < C.luckySecs ? C.luckyEarly : baseOdds;
+          },
+          // costFor() icin erken maliyet carpani.
+          costScale: function (level) {
+            return level < C.earlyCostLevels ? C.earlyCostScale : 1;
+          }
+        };
+      })();
+    </script>
+
+    <script>
+      /* KIO offline yamasi sahipligi bayragi — ana <script>'ten ONCE inline set.
+         Boot'taki "if (!window.__KIO_OWNS_OFFLINE) applyOffline();" guard'i bunu
+         gorur -> cold-load sessiz odul ATLANIR; offline akisini tamamen sayfa
+         sonundaki KIO yamasi (modal + topla/2x + app-switch) yonetir. ASCII tirnak. */
+      window.__KIO_OWNS_OFFLINE = true;
+    </script>
 
     <script>
       const saveKey = "coffee-clicker-v4";
@@ -1434,7 +1571,7 @@
       const stat = (name, amount) => ({ stat: name, amount });
 
       const freshRunState = () => ({
-        coffee: 0,
+        coffee: (window.KB_BAL ? KB_BAL.seedCoffee : 0), // KANCA 1: seed -> Fincan aninda alinir (moment #1)
         beans: 0,
         milk: 0,
         activeHeat: 0,
@@ -2038,7 +2175,7 @@
           clickBonusCap: 2,
           branchMultiplier: 1,
           prestigeGainMultiplier: 1,
-          coffeeCap: 4000,
+          coffeeCap: (window.KB_BAL ? KB_BAL.capFor(4000, state.prestigeLevel) : 4000), // KANCA 2: erken BASE cap (Depo alimina kadar 1500)
           beanCap: 2000,
           milkCap: 1200,
           unlockedBeans: levelOf("beanUnlock") > 0,
@@ -2103,7 +2240,7 @@
         const level = levelOf(upgrade.id);
         const cost = {};
         Object.entries(upgrade.baseCost).forEach(([resource, value]) => {
-          cost[resource] = Math.floor(value * Math.pow(upgrade.scale, level));
+          cost[resource] = Math.floor(value * Math.pow(upgrade.scale, level) * (window.KB_BAL ? KB_BAL.costScale(level) : 1)); // KANCA 3: ilk 5 level x0.85
         });
         return cost;
       }
@@ -2277,10 +2414,11 @@
         state.totalClicks += 1;
         state.activeHeat = Math.min(d.clickComboMax, state.activeHeat + 1);
         const clickBonus = activeClickMultiplier(d);
+        const momentum = (window.KB_BAL ? KB_BAL.clickMomentum() : 1); // KANCA 4: erken tek-tik momentum (yalnizca tek-tik kolu; burst SISMEZ)
         // Değişken/sürpriz ödül (Skinner variable-ratio + Schultz "sürpriz" dopamini)
         let lucky = 0;
-        if (Math.random() < 0.045) lucky = 5 + Math.floor(Math.random() * 11); // ~%4.5 ihtimal, ×5..×15
-        addCoffee(d.coffeePerClick * clickBonus * (lucky || 1), event, d);
+        if (Math.random() < (window.KB_BAL ? KB_BAL.luckyOdds(0.045) : 0.045)) lucky = 5 + Math.floor(Math.random() * 11); // KANCA 5: erken %9, sonra %4.5 ×5..×15
+        addCoffee(d.coffeePerClick * clickBonus * momentum * (lucky || 1), event, d);
         if (lucky) onLucky(event, lucky); else playSfx("click");
         if (d.clickBurstSeconds > 0) {
           addCoffee(d.coffeePerSecond * d.clickBurstSeconds * clickBonus, null, d);
@@ -2307,9 +2445,15 @@
         state.beans += d.beanPerSecond * totalMultiplier(d) * seconds;
         state.milk += d.milkPerSecond * totalMultiplier(d) * seconds;
         // Storage cap (Kittens): depolama dolunca taşmaz, harca veya Depo al
+        const wasUnderCap = state.coffee < d.coffeeCap;
         state.coffee = Math.min(state.coffee, d.coffeeCap);
         state.beans = Math.min(state.beans, d.beanCap);
         state.milk = Math.min(state.milk, d.milkCap);
+        // KANCA 6: erken Depo baskisi ipucu — yalniz ilk run'da, cap'e ilk degdiginde 1 kez (moment #5)
+        if (window.KB_BAL && state.prestigeLevel === 0 && wasUnderCap && state.coffee >= d.coffeeCap && !state._depoHint) {
+          state._depoHint = true;
+          if (typeof celebrate === "function") celebrate("📦 Depo dolu! Kahve Deposu al.");
+        }
         updateResourceBars(seconds, d);
         state.activeHeat = Math.max(0, state.activeHeat - seconds * 0.55);
         if (now - lastSave > 5000) {
@@ -2871,22 +3015,66 @@
         near.classList.toggle("near", pct > 0.82 || gain > 0);
       }
 
-      /* ===== Achievements (başarımlar) ===== */
+      /* ===== Achievements (başarımlar) =====
+         Her başarım: { id, cat, emoji, name, desc, check(state, derived) }.
+         `cat` vitrin gruplaması içindir (ACH_CATS ile eşleşir). check yalnızca
+         DOĞRULANMIŞ alanları kullanır: totalClicks, lifetimeCoffeeEarned,
+         prestigeLevel, metaPrestigeLevel (init=1), totalPrestiges,
+         d.branchLevel, d.unlockedBeans/Milk, d.coffeePerSecond*totalMultiplier(d),
+         activeClickMultiplier(d), playSeconds (oyun-süresi sayacı, prestijden bağımsız). */
       const ACHIEVEMENTS = [
-        { id: "firstBrew", emoji: "☕", name: "İlk Yudum", desc: "İlk kahveni demle", check: (s) => s.totalClicks >= 1 },
-        { id: "c100", emoji: "📈", name: "Mahalle Fark Etti", desc: "100 kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 100 },
-        { id: "lucky", emoji: "🍀", name: "Şanslı!", desc: "İlk şanslı fincanı yakala", check: () => gotLucky },
-        { id: "beans", emoji: "🫘", name: "Çekirdek Çağı", desc: "Çekirdek hattını aç", check: (s, d) => d.unlockedBeans },
-        { id: "milk", emoji: "🥛", name: "Sütlü Devrim", desc: "Süt hattını aç", check: (s, d) => d.unlockedMilk },
-        { id: "auto100", emoji: "⚙️", name: "Otomasyon", desc: "100 kahve/sn üretime ulaş", check: (s, d) => d.coffeePerSecond * totalMultiplier(d) >= 100 },
-        { id: "combo", emoji: "🔥", name: "Kombo Kralı", desc: "Aktif bonusu 1.5x yap", check: (s, d) => activeClickMultiplier(d) >= 1.5 },
-        { id: "branch", emoji: "🏬", name: "Franchise", desc: "İlk şubeni aç", check: (s, d) => d.branchLevel >= 1 },
-        { id: "c1m", emoji: "🎉", name: "Milyoner", desc: "1M kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 1e6 },
-        { id: "prestige1", emoji: "✨", name: "Yeniden Doğuş", desc: "İlk prestijini yap", check: (s) => s.totalPrestiges >= 1 },
-        { id: "prestige5", emoji: "🌟", name: "Prestij Ustası", desc: "Prestij Lv 5'e ulaş", check: (s) => s.prestigeLevel >= 5 },
-        { id: "meta", emoji: "👑", name: "Meta Patron", desc: "Prestij Prestiji yap", check: (s) => s.metaPrestigeLevel >= 2 }
+        // — Üretim (kahve üretimi kilometre taşları) —
+        { id: "firstBrew", cat: "uretim", emoji: "☕", name: "İlk Yudum", desc: "İlk kahveni demle", check: (s) => s.totalClicks >= 1 },
+        { id: "c100", cat: "uretim", emoji: "📈", name: "Mahalle Fark Etti", desc: "100 kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 100 },
+        { id: "c10k", cat: "uretim", emoji: "🛍️", name: "Köşe Başı", desc: "10.000 kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 1e4 },
+        { id: "c1m", cat: "uretim", emoji: "🎉", name: "Milyoner", desc: "1M kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 1e6 },
+        { id: "c100m", cat: "uretim", emoji: "🏦", name: "Kahve Baronu", desc: "100M kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 1e8 },
+        { id: "c1b", cat: "uretim", emoji: "🌍", name: "Milyar Fincan", desc: "1 milyar kahve üret", check: (s) => s.lifetimeCoffeeEarned >= 1e9 },
+        // — Otomasyon (pasif üretim hızı) —
+        { id: "auto100", cat: "otomasyon", emoji: "⚙️", name: "Otomasyon", desc: "100 kahve/sn üretime ulaş", check: (s, d) => d.coffeePerSecond * totalMultiplier(d) >= 100 },
+        { id: "auto1k", cat: "otomasyon", emoji: "🤖", name: "Tam Gaz Hat", desc: "1.000 kahve/sn üretime ulaş", check: (s, d) => d.coffeePerSecond * totalMultiplier(d) >= 1e3 },
+        { id: "auto10k", cat: "otomasyon", emoji: "🚀", name: "Fabrika Modu", desc: "10.000 kahve/sn üretime ulaş", check: (s, d) => d.coffeePerSecond * totalMultiplier(d) >= 1e4 },
+        // — Tıklama (aktif oyun) —
+        { id: "lucky", cat: "tikla", emoji: "🍀", name: "Şanslı!", desc: "İlk şanslı fincanı yakala", check: () => gotLucky },
+        { id: "combo", cat: "tikla", emoji: "🔥", name: "Kombo Kralı", desc: "Aktif bonusu 1.5x yap", check: (s, d) => activeClickMultiplier(d) >= 1.5 },
+        { id: "click500", cat: "tikla", emoji: "👆", name: "Hamarat Eller", desc: "Toplam 500 kez demle", check: (s) => s.totalClicks >= 500 },
+        { id: "click5k", cat: "tikla", emoji: "💪", name: "Tezgah Ustası", desc: "Toplam 5.000 kez demle", check: (s) => s.totalClicks >= 5000 },
+        // — İmparatorluk (hatlar, şubeler, sadakat) —
+        { id: "beans", cat: "imparatorluk", emoji: "🫘", name: "Çekirdek Çağı", desc: "Çekirdek hattını aç", check: (s, d) => d.unlockedBeans },
+        { id: "milk", cat: "imparatorluk", emoji: "🥛", name: "Sütlü Devrim", desc: "Süt hattını aç", check: (s, d) => d.unlockedMilk },
+        { id: "branch", cat: "imparatorluk", emoji: "🏬", name: "Franchise", desc: "İlk şubeni aç", check: (s, d) => d.branchLevel >= 1 },
+        { id: "branch5", cat: "imparatorluk", emoji: "🏙️", name: "Zincir Marka", desc: "5. şubeyi aç", check: (s, d) => d.branchLevel >= 5 },
+        { id: "loyal", cat: "imparatorluk", emoji: "🕰️", name: "Sadık Patron", desc: "Toplam 30 dk oyna", check: () => playSeconds >= 1800 },
+        // — Prestij (yeniden doğuş katmanları) —
+        { id: "prestige1", cat: "prestij", emoji: "✨", name: "Yeniden Doğuş", desc: "İlk prestijini yap", check: (s) => s.totalPrestiges >= 1 },
+        { id: "prestige5", cat: "prestij", emoji: "🌟", name: "Prestij Ustası", desc: "Prestij Lv 5'e ulaş", check: (s) => s.prestigeLevel >= 5 },
+        { id: "prestige10", cat: "prestij", emoji: "💫", name: "Prestij Efendisi", desc: "Prestij Lv 10'a ulaş", check: (s) => s.prestigeLevel >= 10 },
+        { id: "prestige20", cat: "prestij", emoji: "☄️", name: "Prestij Efsanesi", desc: "Prestij Lv 20'ye ulaş", check: (s) => s.prestigeLevel >= 20 },
+        { id: "meta", cat: "prestij", emoji: "👑", name: "Meta Patron", desc: "Prestij Prestiji yap", check: (s) => s.metaPrestigeLevel >= 2 },
+        { id: "meta3", cat: "prestij", emoji: "🪐", name: "Meta İmparator", desc: "Meta Prestij Lv 3'e ulaş", check: (s) => s.metaPrestigeLevel >= 3 }
+      ];
+      // Vitrin kategorileri (sıra = vitrindeki blok sırası). ACHIEVEMENTS[].cat buraya eşlenir.
+      const ACH_CATS = [
+        { key: "uretim", label: "Üretim", emoji: "☕" },
+        { key: "otomasyon", label: "Otomasyon", emoji: "⚙️" },
+        { key: "tikla", label: "Tıklama", emoji: "🔥" },
+        { key: "imparatorluk", label: "İmparatorluk", emoji: "🏬" },
+        { key: "prestij", label: "Prestij", emoji: "👑" }
       ];
       let gotLucky = false;
+      // Oyun süresi sayacı ("Sadık Patron" için). kahve-playtime-v1: prestij/reset'ten
+      // BAĞIMSIZ (kendi anahtarı). Görünmez sekmede saymaz; dt>10sn clamp (uyku/duraklama).
+      const PLAYTIME_KEY = "kahve-playtime-v1";
+      let playSeconds = (() => { const v = Number(localStorage.getItem(PLAYTIME_KEY)); return isFinite(v) && v > 0 ? v : 0; })();
+      let _ptLast = Date.now();
+      setInterval(() => {
+        const now = Date.now();
+        if (document.visibilityState !== "hidden") { const dt = (now - _ptLast) / 1000; if (dt > 0 && dt < 10) playSeconds += dt; }
+        _ptLast = now;
+        try { localStorage.setItem(PLAYTIME_KEY, String(Math.floor(playSeconds))); } catch (e) {}
+      }, 1000);
+      document.addEventListener("visibilitychange", () => { _ptLast = Date.now(); });
+
       let achUnlocked = new Set();
       try { achUnlocked = new Set(JSON.parse(localStorage.getItem("kahve-ach") || "[]")); } catch (e) {}
       function saveAch() { try { localStorage.setItem("kahve-ach", JSON.stringify([...achUnlocked])); } catch (e) {} }
@@ -2898,6 +3086,8 @@
         t.innerHTML = `<span class="ach-emoji">${a.emoji}</span><div><b>Başarım: ${a.name}</b><div class="ach-desc">${a.desc}</div></div>`;
         document.body.appendChild(t);
         setTimeout(() => { t.style.transition = "opacity .4s"; t.style.opacity = "0"; setTimeout(() => t.remove(), 400); }, 2600);
+        // Vitrin açıksa rozeti anında yansıt (tek kaynak; ayrı observer yok).
+        if (document.getElementById("achModal").classList.contains("show")) renderShowcase();
       }
       function checkAchievements(d) {
         for (const a of ACHIEVEMENTS) {
@@ -2905,21 +3095,41 @@
           try { if (a.check(state, d)) unlockAch(a); } catch (e) {}
         }
       }
-      function renderAchList() {
+      // TEK render kaynağı: hem #achList'i (kategorili kilitli-silüetli grid) hem
+      // #achProgress'i (X / 24) yazar. Eski düz-liste renderAchList yerine geçer;
+      // MutationObserver yok, ikinci tetik yok → çift-render imkansız.
+      function renderShowcase() {
         const list = document.getElementById("achList");
-        list.innerHTML = "";
-        ACHIEVEMENTS.forEach((a) => {
-          const u = achUnlocked.has(a.id);
-          const row = document.createElement("div");
-          row.className = "ach-item" + (u ? " unlocked" : "");
-          row.innerHTML = `<span class="ach-emoji">${u ? a.emoji : "🔒"}</span><div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`;
-          list.appendChild(row);
-        });
-        document.getElementById("achProgress").textContent = `${achUnlocked.size} / ${ACHIEVEMENTS.length} açıldı`;
+        if (!list) return;
+        const total = ACHIEVEMENTS.length, got = achUnlocked.size;
+        const pct = total ? Math.round((got / total) * 100) : 0;
+        let html = `<div class="kia-summary"><div class="kia-sumtop"><b>${got} / ${total}</b><span>%${pct} tamamlandı</span></div>`
+                 + `<div class="kia-bar"><i style="width:${pct}%"></i></div></div>`;
+        for (const cat of ACH_CATS) {
+          const items = ACHIEVEMENTS.filter((a) => a.cat === cat.key);
+          if (!items.length) continue;
+          const catGot = items.filter((a) => achUnlocked.has(a.id)).length;
+          html += `<div class="kia-cat"><span class="kia-cat-h">${cat.emoji} ${cat.label}</span><span class="kia-cat-n">${catGot}/${items.length}</span></div><div class="kia-grid">`;
+          for (const a of items) {
+            const u = achUnlocked.has(a.id);
+            html += `<div class="kia-badge${u ? " unlocked" : ""}">${u ? '<span class="kia-tick">✓</span>' : ""}`
+                  + `<div class="kia-emoji">${u ? a.emoji : "🔒"}</div>`
+                  + `<div class="kia-bn">${u ? a.name : "???"}</div>`
+                  + `<div class="kia-bd">${u ? a.desc : "Kilitli"}</div></div>`;
+          }
+          html += `</div>`;
+        }
+        list.innerHTML = html;
+        const prog = document.getElementById("achProgress");
+        if (prog) prog.textContent = `${got} / ${total} açıldı`;
       }
-      document.getElementById("achButton").addEventListener("click", () => { renderAchList(); document.getElementById("achModal").classList.add("show"); });
-      document.getElementById("achClose").addEventListener("click", () => document.getElementById("achModal").classList.remove("show"));
-      document.getElementById("achModal").addEventListener("click", (e) => { if (e.target.id === "achModal") document.getElementById("achModal").classList.remove("show"); });
+      // Geriye dönük ad: başka yerden çağrı kalmışsa kırılmasın.
+      const renderAchList = renderShowcase;
+      function openAchModal() { renderShowcase(); document.getElementById("achModal").classList.add("show"); }
+      function closeAchModal() { document.getElementById("achModal").classList.remove("show"); }
+      document.getElementById("achButton").addEventListener("click", openAchModal);
+      document.getElementById("achClose").addEventListener("click", closeAchModal);
+      document.getElementById("achModal").addEventListener("click", (e) => { if (e.target.id === "achModal") closeAchModal(); });
 
       /* ===== Offline ilerleme (geri dönünce ödül) ===== */
       function applyOffline() {
@@ -3018,7 +3228,13 @@
       }
       document.getElementById("hubBrew").addEventListener("click", brew);
 
-      applyOffline();
+      // Cold-load offline odulu: window.__KIO_OWNS_OFFLINE set ise (asagidaki ayri
+      // <script> yamasi yuklenecekse) bu cagri ATLANIR; odulu modal+2x ile patch
+      // yonetir ve boot'ta KENDI reconcile'ini tekrar cagirir (mustFix). Bayrak
+      // bu dosyada KB_BAL config'inden hemen SONRA, ana <script>'ten ONCE inline
+      // set edildigi icin burada zaten tanimli -> cift sayma olmaz; eski sessiz
+      // akis tek kaynaktan (KIO modal) devralinir.
+      if (!window.__KIO_OWNS_OFFLINE) applyOffline();
       setInterval(stampSeen, 4000);
       window.addEventListener("beforeunload", stampSeen);
       document.addEventListener("visibilitychange", () => { if (document.hidden) stampSeen(); });
@@ -3057,6 +3273,282 @@
         }
         requestAnimationFrame(step);
       })();
+
+      /* ============================================================= */
+      /* [D] Onboarding köprüsü — bu blok ana <script> SCOPE'unda olduğu */
+      /* için onboardKey / tutStep / coachShown / renderCoach / render / */
+      /* resetState burada doğrudan görünür. Köprüyü buraya kuruyoruz.   */
+      /* ============================================================= */
+      /* Replay = kaydı KORUR. Sadece onboard bayrağını sıfırlar + welcome */
+      /* overlay'i açar. maybeOnboard() rAF döngüsünden çağrıldığı için    */
+      /* (yukarıda tick içinde) akış replay sonrası kendiliğinden devam eder. */
+      window.__kahveReplayTutorial = function () {
+        try { localStorage.removeItem(onboardKey); } catch (e) {}
+        coachShown = -1;
+        tutStep = 0;
+        try { document.querySelectorAll(".tut-glow").forEach((e) => e.classList.remove("tut-glow")); } catch (e) {}
+        var cb = document.getElementById("coachBar");
+        if (cb) cb.classList.remove("show");
+        var wo = document.getElementById("welcomeOverlay");
+        if (wo) wo.classList.add("show");
+        try { renderCoach(); } catch (e) {}
+      };
+      /* Reset = mevcut resetState() — kendi native confirm'i var (ikinci  */
+      /* onay katmanı), freshState + tüm yardımcı kayıtları temizler,      */
+      /* tutStep'i sıfırlar ve welcome overlay'i açar.                     */
+      window.__kahveResetGame = function () {
+        try { resetState(); } catch (e) {}
+      };
+
+      /* ============================================================= */
+      /* [E] Ayarlar sayfası — namespace'li IIFE. Tek yeni global:        */
+      /* window.KahveSettings. settingsButton açar; X / backdrop / Esc    */
+      /* kapatır; replay & reset satırları [D] köprülerine bağlanır.      */
+      /* ============================================================= */
+      window.KahveSettings = (function () {
+        var overlay = document.getElementById("settingsOverlay");
+        var openBtn = document.getElementById("settingsButton");
+        var closeBtn = document.getElementById("settingsClose");
+        var replayBtn = document.getElementById("replayTutBtn");
+        var resetBtn = document.getElementById("hardResetBtn");
+
+        function isOpen() {
+          return !!overlay && overlay.classList.contains("show");
+        }
+        function open() {
+          if (!overlay) return;
+          overlay.classList.add("show");
+          overlay.setAttribute("aria-hidden", "false");
+        }
+        function close() {
+          if (!overlay) return;
+          overlay.classList.remove("show");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        if (openBtn) {
+          openBtn.addEventListener("click", function () {
+            if (isOpen()) close(); else open();
+          });
+        }
+        if (closeBtn) {
+          closeBtn.addEventListener("click", close);
+        }
+        /* Backdrop (kartın dışına) tıklayınca kapat. */
+        if (overlay) {
+          overlay.addEventListener("click", function (ev) {
+            if (ev.target === overlay) close();
+          });
+        }
+        /* Esc ile kapat. */
+        document.addEventListener("keydown", function (ev) {
+          if (ev.key === "Escape" && isOpen()) close();
+        });
+
+        /* "Turu Tekrar Göster" — kaydı silmeden eğitimi baştan oynat. */
+        if (replayBtn) {
+          replayBtn.addEventListener("click", function () {
+            close();
+            if (typeof window.__kahveReplayTutorial === "function") {
+              window.__kahveReplayTutorial();
+            }
+          });
+        }
+        /* "Sıfırdan Başla" — resetState()'in native confirm'i ikinci onayı sorar. */
+        if (resetBtn) {
+          resetBtn.addEventListener("click", function () {
+            close();
+            if (typeof window.__kahveResetGame === "function") {
+              window.__kahveResetGame();
+            }
+          });
+        }
+
+        return { open: open, close: close, isOpen: isOpen };
+      })();
+    </script>
+
+    <!-- =====================================================================
+         KIO — Offline ilerleme + "Sen yokken X kazandin" welcome-back yamasi
+         AYRI script blogu (ana script bittikten SONRA). Bu dosyada coklu script blogu
+         zaten norm (KB_BAL config blogu da boyle). Nested-script KIRILMASI YOK:
+         bu blok ana script'in DISINDA, kardesi olarak duruyor.
+
+         Bu blok offline odulunun TEK sahibi:
+           1) Cold-load: boot'taki applyOffline() __KIO_OWNS_OFFLINE bayragiyla
+              ATLANDI; burada KENDI reconcile'imizi cagiriyoruz (mustFix).
+           2) Mobil app-switch: arka plandan donunce visibilitychange/pageshow/
+              focus ile reconcile -> sayfa reload olmadan kazanc verilir.
+           3) Toplanmamis kazanc localStorage'a yazilir; topla'dan ONCE refresh
+              olursa bir sonraki acilista yeniden teklif edilir (sessiz kayip yok).
+         Modal: TOPLA veya 2X TOPLA (2x placeholder, durust etiketli — gercek ad
+         degil; App Store rewarded-ad entegrasyonu icin kanca hazir). ASCII tirnak.
+         ===================================================================== -->
+    <script>
+    (function () {
+      "use strict";
+      if (window.KIO) return;
+      var KIO = window.KIO = {};
+
+      var AWAY_MIN = 30;          // sn: altinda modal acma (tab/app flicker spam'ini eler)
+      var CAP_H    = 4;           // saat: offline kazanc tavani
+      var CAP_S    = CAP_H * 3600;
+      var SEEN_KEY = "kahve-lastSeen";              // mevcut stampSeen ile AYNI anahtar
+      var PEND_KEY = "kahve-offline-pending";       // toplanmamis kazanc kalicilastirma
+
+      function num(v) { var n = Number(v); return isFinite(n) ? n : 0; }
+      function ls(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+      function lset(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+      function ldel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+      // Oyun fonksiyonlarina guvenli erisim (hepsi ana <script> SCOPE'unda global).
+      function gd() { return (typeof currentDerived === "function") ? currentDerived() : null; }
+      function gmult(d) { return (typeof totalMultiplier === "function") ? totalMultiplier(d) : 1; }
+      function fmt(v) { return (typeof format === "function") ? format(v) : String(Math.floor(v)); }
+      function gstate() { return (typeof state !== "undefined") ? state : null; }
+      function gsave() { if (typeof saveState === "function") saveState(); }
+      function grender() { if (typeof render === "function") render(); }
+      function gcelebrate(t) { if (typeof celebrate === "function") celebrate(t); }
+      function glog(t) { if (typeof log === "function") log(t); }
+
+      // --- Offline kazanci hesapla: clamp(negatif) + 4sa cap + 30sn esik ---
+      function compute() {
+        var s = gstate(); if (!s) return null;
+        var last = num(ls(SEEN_KEY));
+        if (!last) return null;                         // ilk acilis: lastSeen yok
+        var away = (Date.now() - last) / 1000;
+        if (!isFinite(away) || away < 0) away = 0;      // cihaz saati geri alinirsa clamp
+        var used = Math.min(away, CAP_S);
+        var d = gd(); if (!d) return null;
+        var mult = gmult(d);
+        var coffee = d.coffeePerSecond * mult * used;
+        var beans  = (d.unlockedBeans ? d.beanPerSecond : 0) * mult * used;
+        var milk   = (d.unlockedMilk  ? d.milkPerSecond : 0) * mult * used;
+        return { away: away, used: used, hitCap: away > CAP_S,
+                 coffee: coffee, beans: beans, milk: milk,
+                 mins: Math.floor(used / 60) };
+      }
+
+      // --- Toplanmamis kazanci kalicilastir / oku / temizle ---
+      function persist(r) {
+        lset(PEND_KEY, JSON.stringify({ c: r.coffee, b: r.beans, m: r.milk, min: r.mins, cap: !!r.hitCap }));
+      }
+      function readPending() {
+        try {
+          var p = JSON.parse(ls(PEND_KEY));
+          if (p && (num(p.c) + num(p.b) + num(p.m)) >= 1) {
+            return { coffee: num(p.c), beans: num(p.b), milk: num(p.m),
+                     mins: num(p.min), hitCap: !!p.cap, away: AWAY_MIN, used: 0 };
+          }
+        } catch (e) {}
+        return null;
+      }
+      function clearPending() { ldel(PEND_KEY); }
+
+      // --- Modal DOM'u bir kez kur (onboarding #welcomeOverlay'i KULLANMAZ) ---
+      function ensureModal() {
+        var ov = document.getElementById("kioWelcome");
+        if (ov) return ov;
+        ov = document.createElement("div");
+        ov.id = "kioWelcome";
+        ov.setAttribute("role", "dialog");
+        ov.style.cssText = "position:fixed;inset:0;z-index:240;display:none;align-items:center;" +
+          "justify-content:center;padding:24px;background:#0c0906ee;";
+        ov.innerHTML =
+          '<div style="background:linear-gradient(180deg,#2e2418,#241c14);border:1px solid #f5c97a;' +
+          'border-radius:18px;max-width:340px;width:100%;padding:24px 22px;text-align:center;' +
+          'box-shadow:0 18px 50px #000a;">' +
+            '<div style="font-size:46px;line-height:1;margin-bottom:6px;">&#128564;</div>' +
+            '<h2 style="margin:6px 0 4px;color:#f5c97a;font-size:1.3rem;">Tekrar hos geldin patron!</h2>' +
+            '<p id="kioSub" style="margin:0 0 8px;color:#cbb89a;font-size:.9rem;"></p>' +
+            '<p id="kioBody" style="margin:0 0 6px;color:#f3e7d2;font-size:1rem;line-height:1.5;"></p>' +
+            '<p id="kioCap" style="margin:0 0 16px;color:#f5c97a;font-size:.8rem;display:none;"></p>' +
+            '<button id="kioCollect2x" type="button" style="width:100%;padding:13px;border:0;border-radius:12px;' +
+            'font-weight:800;font-size:1rem;cursor:pointer;background:linear-gradient(180deg,#f5c97a,#d49a3f);' +
+            'color:#241a0e;margin-bottom:9px;">&#9889; 2X TOPLA</button>' +
+            '<button id="kioCollect" type="button" style="width:100%;padding:12px;border:1px solid #5a4a32;' +
+            'border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;background:#2a2014;color:#f3e7d2;">' +
+            'Topla</button>' +
+          '</div>';
+        document.body.appendChild(ov);
+        ov.querySelector("#kioCollect").addEventListener("click", function () { doCollect(1); });
+        ov.querySelector("#kioCollect2x").addEventListener("click", function () { doCollect(2); });
+        return ov;
+      }
+
+      var current = null; // o an modalda gosterilen kazanc
+
+      function show(r) {
+        if (!r || (r.coffee + r.beans + r.milk) < 1) return;
+        if (r.away < AWAY_MIN && r.used > 0) return;     // taze hesapta esik; pending'de used=0 -> gecer
+        current = r;
+        persist(r);                                      // topla'dan ONCE kalicilastir (refresh guvenli)
+        var ov = ensureModal();
+        ov.querySelector("#kioSub").textContent =
+          (r.mins >= 1 ? r.mins + " dakika" : "kisa sure") + " yoktun, kahve makinesi calisti:";
+        var parts = ["&#9749; " + fmt(r.coffee) + " kahve"];
+        if (r.beans >= 1) parts.push("&#129466; " + fmt(r.beans));
+        if (r.milk  >= 1) parts.push("&#129371; " + fmt(r.milk));
+        ov.querySelector("#kioBody").innerHTML = "<b style=\"color:#f5c97a\">+" + parts.join(" &middot; +").replace("+&#129466;", "&#129466;").replace("+&#129371;", "&#129371;") + "</b>";
+        var capEl = ov.querySelector("#kioCap");
+        if (r.hitCap) { capEl.style.display = "block"; capEl.innerHTML = "&#9203; " + CAP_H + " saat tavanina ulastin — daha sik ugra, daha cok kazan!"; }
+        else { capEl.style.display = "none"; }
+        ov.style.display = "flex";
+      }
+
+      function hide() { var ov = document.getElementById("kioWelcome"); if (ov) ov.style.display = "none"; }
+
+      function doCollect(mult) {
+        var r = current; if (!r) { hide(); return; }
+        var s = gstate(); if (!s) { hide(); return; }
+        var c = r.coffee * mult, b = r.beans * mult, m = r.milk * mult;
+        s.coffee = num(s.coffee) + c;
+        s.runCoffeeEarned = num(s.runCoffeeEarned) + c;
+        s.lifetimeCoffeeEarned = num(s.lifetimeCoffeeEarned) + c;
+        s.beans = num(s.beans) + b;
+        s.milk = num(s.milk) + m;
+        current = null;
+        clearPending();
+        gsave();
+        // lastSeen'i taze yap ki ayni kazanc tekrar teklif edilmesin
+        lset(SEEN_KEY, String(Date.now()));
+        grender();
+        hide();
+        gcelebrate((mult > 1 ? "&#9889; 2X! +" : "&#9749; +") + fmt(c) + " kahve toplandi");
+        glog((r.mins >= 1 ? r.mins + " dk" : "kisa sure") + " yoktun" + (mult > 1 ? " (2x)" : "") + ": +" + fmt(c) + " kahve.");
+      }
+
+      // --- Cold-load + arka plandan donus reconcile (modal tek giris noktasi) ---
+      function reconcile() {
+        var ov = document.getElementById("kioWelcome");
+        if (ov && ov.style.display === "flex") return;   // zaten acik
+        var r = compute();
+        if (r && (r.coffee + r.beans + r.milk) >= 1 && r.away >= AWAY_MIN) { show(r); return; }
+        var p = readPending();                            // taze yoksa: toplanmamis bekleyen var mi?
+        if (p) show(p);
+      }
+      KIO.reconcile = reconcile;
+      KIO.compute = compute;
+
+      // --- mustFix: boot'taki applyOffline ATLANDIGI icin cold-load'u BURADA tetikle ---
+      function boot() {
+        // Onboarding modali aciksa once onu birak (yeni oyuncu); kisa erteleme juice.
+        setTimeout(reconcile, 900);
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot);
+      } else {
+        boot();
+      }
+
+      // --- Mobil app-switch: arka plandan donunce reconcile (reload gerekmez) ---
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) reconcile();                // donus: kazanci ver
+        // gizlenirken stampSeen ana blokta zaten cagriliyor (L3138 civari).
+      });
+      window.addEventListener("pageshow", reconcile);
+      window.addEventListener("focus", reconcile);
+    })();
     </script>
   </body>
 </html>
