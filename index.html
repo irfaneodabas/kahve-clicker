@@ -1139,7 +1139,7 @@
               <strong id="activeBonus">1.00x</strong>
             </div>
             <div class="stat">
-              <span>Seviye</span>
+              <span>Çağ</span>
               <strong id="cafeLevel">Masa</strong>
             </div>
           </section>
@@ -2116,6 +2116,7 @@
         updatePrestigeBar(d);
         checkCupMilestones();
         checkAchievements(d);
+        checkPhase(d);
         maybeOnboard();
       }
 
@@ -2587,6 +2588,26 @@
         setTimeout(() => { celebrate(`😴 Sen yokken +${format(oc)} kahve`); log(`${mins} dk yoktun, üretim toplandı: +${format(oc)} kahve.`); }, 700);
       }
       function stampSeen() { try { localStorage.setItem("kahve-lastSeen", String(Date.now())); } catch (e) {} }
+
+      /* ===== Çağ / faz geçişi (Universal Paperclips phase-shift + Melvor kimlik) ===== */
+      let seenPhases = new Set();
+      try { seenPhases = new Set(JSON.parse(localStorage.getItem("kahve-phases") || "[]")); } catch (e) {}
+      let phaseInit = false;
+      function checkPhase(d) {
+        const p = cafeLevel(d);
+        if (!phaseInit) {
+          phaseInit = true;
+          if (!seenPhases.has(p)) { seenPhases.add(p); localStorage.setItem("kahve-phases", JSON.stringify([...seenPhases])); }
+          return;
+        }
+        if (!seenPhases.has(p)) {
+          seenPhases.add(p);
+          localStorage.setItem("kahve-phases", JSON.stringify([...seenPhases]));
+          celebrate(`🏛️ Yeni Çağ: ${p}`);
+          playSfx("prestige"); fxFlash("#f5c97a");
+        }
+      }
+
       applyOffline();
       setInterval(stampSeen, 4000);
       window.addEventListener("beforeunload", stampSeen);
