@@ -1024,11 +1024,13 @@
       .ach-toast b{ color:#f5c97a; }
 
       /* ===== Yatırım dolum barı (her birinde "ne kadar yaklaştın") ===== */
-      .upgrade{ position:relative; overflow:hidden; }
-      .up-fill{ position:absolute; left:0; bottom:0; height:3px; width:0%;
-        background:linear-gradient(90deg,#8a5e22,#f5c97a); opacity:0;
-        transition:width .3s ease, opacity .25s; pointer-events:none; }
-      .upgrade.affordable .up-fill{ height:4px; background:linear-gradient(90deg,#4f9a3e,#a8e88a); box-shadow:0 0 9px #6fcf6f88; }
+      .upgrade{ position:relative; overflow:hidden; box-shadow: inset 0 -6px 0 #ffffff0f; }
+      .upgrade.affordable{ box-shadow: inset 3px 0 0 #6fcf6f, inset 0 -6px 0 #ffffff0f; }
+      .up-fill{ position:absolute; left:0; bottom:0; height:6px; width:0%; z-index:2;
+        background:linear-gradient(90deg,#a8741f,#f5c97a); opacity:1;
+        transition:width .3s ease; pointer-events:none; }
+      .upgrade.affordable .up-fill{ background:linear-gradient(90deg,#4f9a3e,#a8e88a); box-shadow:0 0 10px #6fcf6f99; }
+      .upgrade.locked .up-fill, .upgrade.maxed .up-fill{ opacity:0; }
 
       /* ===== Daha canlı fincan: yüzey dalgası + parıltı ===== */
       .coffee-fill{ overflow:hidden; }
