@@ -1087,6 +1087,13 @@
       .hub-cta-label{ font-size:.62rem; font-weight:900; letter-spacing:1px; color:var(--muted); }
       .hub-cta-pill{ background:var(--gold); color:#2a1c10; font-weight:900; font-size:.82rem;
         padding:5px 11px; border-radius:999px; font-variant-numeric:tabular-nums; }
+
+      /* ===== Darboğaz olan kaynak kartı (3 kaynak daha net) ===== */
+      .resource{ transition:box-shadow .25s; }
+      .resource.bottleneck{ border-radius:12px; animation:bnpulse 1.3s ease-in-out infinite; }
+      .resource.bottleneck .resource-label::after{ content:"⚠ DARBOĞAZ"; margin-left:auto; color:#e8584a;
+        font-size:.58rem; font-weight:900; letter-spacing:.5px; white-space:nowrap; }
+      @keyframes bnpulse{ 0%,100%{ box-shadow:inset 0 0 0 2px #e8584a55 } 50%{ box-shadow:inset 0 0 0 2px #e8584a } }
     </style>
   </head>
   <body>
@@ -1263,8 +1270,8 @@
         <img src="assets/emblem.svg" alt="" class="welcome-emblem">
         <h2>Kahve Dükkânına Hoş Geldin! ☕</h2>
         <p>Küçük bir fincandan koca bir kahve imparatorluğuna.<br>
-        <b>Demle → yatırım yap → otomatikleştir → çekirdek &amp; süt aç → şube → prestij.</b><br>
-        Her şey adım adım açılır — acele yok, patron.</p>
+        3 kaynağın var: <b>☕ Kahve · 🫘 Çekirdek · 🥛 Süt</b>.<br>
+        Biri azalınca <b>darboğaz</b> olur — onu çözersen büyürsün. Her şey adım adım açılır, acele yok patron.</p>
         <button id="welcomeStart" class="welcome-start" type="button">Hadi başlayalım</button>
       </div>
     </div>
@@ -2376,6 +2383,8 @@
         });
 
         els.nextTarget.textContent = targetText(nextTarget);
+        bottleneckRes = (nextTarget && nextTarget.missing && nextTarget.missing.length) ? nextTarget.missing[0].resource : null;
+        highlightBottleneck();
       }
 
       function missingResources(cost) {
@@ -2530,17 +2539,22 @@
       const TUT = [
         null, // 0 = hoş geldin modalı
         {
-          msg: "👆 <b>Kahve Demle</b>'ye birkaç kez bas — ilk kahveni kazan.",
+          msg: "👆 <b>1/4 — Demle:</b> büyük <b>Kahve Demle</b>'ye birkaç kez bas, ilk ☕ kahveni kazan.",
           target: () => els.brewButton,
           done: () => state.totalClicks >= 5
         },
         {
-          msg: "🛒 Sağdaki <b>Yatırımlar</b>'dan ilk geliştirmeni al (örn. Demleme Hızı). Üretim otomatikleşir.",
+          msg: "🛒 <b>2/4 — Otomatikleştir:</b> <b>Yatırımlar</b>'dan ilk geliştirmeni al. Artık tıklamadan, kendi kendine kahve akar.",
           target: () => document.querySelector(".shop-area"),
           done: () => Object.keys(state.upgrades).length >= 1
         },
         {
-          msg: "🎉 Harika! Kahve artık kendi kendine akıyor. Çekirdek → Süt → Şube sırayla açılır, sonunda <b>Prestij</b> ile kalıcı çarpan kazanırsın. İyi eğlenceler!",
+          msg: "⚠️ <b>3/4 — Darboğaz:</b> bir kaynak azalınca <b>kartı kırmızı yanar</b>. Üstteki <b>“Sonraki hedef”</b> sana neyin eksik olduğunu ve <b>2 çözüm yolunu</b> söyler — onu çöz, akış rahatlasın.",
+          target: () => document.querySelector(".shop-head"),
+          done: () => Object.keys(state.upgrades).length >= 2
+        },
+        {
+          msg: "🎉 <b>4/4 — Sır bu:</b> <b>☕ Kahve → 🫘 Çekirdek → 🥛 Süt</b> sırayla açılır, her biri yeni bir darboğaz. Çöz → büyü → sonunda <b>✨ Prestij</b> ile baştan ama daha güçlü başla. İyi eğlenceler!",
           target: () => null,
           final: true,
           done: () => false
@@ -2765,6 +2779,17 @@
           localStorage.setItem("kahve-phases", JSON.stringify([...seenPhases]));
           celebrate(`🏛️ Yeni Çağ: ${p}`);
           playSfx("prestige"); fxFlash("#f5c97a");
+        }
+      }
+
+      /* ===== Darboğaz vurgusu: hangi kaynak seni yavaşlatıyorsa kırmızı yanar ===== */
+      let bottleneckRes = null;
+      function highlightBottleneck() {
+        const map = { coffee: els.coffee, beans: els.beans, milk: els.milk };
+        for (const k in map) {
+          const el = map[k];
+          const card = el && el.closest ? el.closest(".resource") : null;
+          if (card && card.classList) card.classList.toggle("bottleneck", k === bottleneckRes);
         }
       }
 
