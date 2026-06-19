@@ -1146,7 +1146,10 @@
       html, body{ height:100%; overflow:hidden; }
       .app{ height:100svh; max-height:100svh; display:flex; flex-direction:column;
         overflow:hidden; padding-top:calc(10px + env(safe-area-inset-top)); padding-bottom:0; }
-      .topbar{ flex:0 0 auto; margin-bottom:10px; }
+      .topbar{ flex:0 0 auto; margin-bottom:10px; flex-direction:column; align-items:stretch; gap:8px; }
+      .topbar h1{ font-size:1.4rem; line-height:1.05; white-space:nowrap; }
+      .topbar .subtitle{ display:none; }
+      .topbar .utility{ justify-content:flex-start; flex-wrap:wrap; gap:8px; }
       .facility-hub{ position:static; flex:0 0 auto; margin-bottom:10px; }
       /* Hub + topbar sabit; bunun altındaki HER ŞEY (makine + yatırımlar) burada kayar */
       .layout{ flex:1 1 auto; min-height:0; display:block; grid-template-columns:none;
