@@ -1122,6 +1122,33 @@
         padding:2px 2px calc(14px + env(safe-area-inset-bottom)); }
       .play-area{ margin-bottom:12px; }
 
+      /* ===== Markalı yüklenme ekranı ===== */
+      #loadScreen{ position:fixed; inset:0; z-index:400; overflow:hidden;
+        background:radial-gradient(circle at 50% 38%, #3a2814, #1a1410 78%);
+        display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+        transition:opacity .5s ease; }
+      #loadScreen.gone{ opacity:0; pointer-events:none; }
+      #loadScreen .ls-art{ position:absolute; inset:0;
+        background:url("assets/splash.jpg") center/cover no-repeat;
+        -webkit-mask-image:linear-gradient(180deg, transparent, #000 18%, #000 72%, transparent);
+                mask-image:linear-gradient(180deg, transparent, #000 18%, #000 72%, transparent); }
+      #loadScreen::before{ content:""; position:absolute; inset:0; z-index:0;
+        background:radial-gradient(circle at 50% 36%, rgba(245,201,122,0.18), transparent 55%); }
+      .ls-top{ position:relative; z-index:2; text-align:center; padding-top:calc(7vh + env(safe-area-inset-top)); }
+      .ls-emblem{ width:74px; height:74px; filter:drop-shadow(0 4px 12px #000b); }
+      .ls-title{ margin:6px 0 0; font-size:clamp(1.8rem, 8vw, 2.6rem); line-height:.98; letter-spacing:1px;
+        color:#f5c97a; font-weight:900; text-shadow:0 3px 0 #5a3a1c, 0 6px 14px #000; }
+      .ls-title span{ font-size:.62em; color:#e0a85a; letter-spacing:3px; }
+      .ls-bottom{ position:relative; z-index:2; width:min(420px, 84%); padding-bottom:calc(7vh + env(safe-area-inset-bottom)); }
+      .ls-tip{ text-align:center; color:#f0e6d8; font-size:.92rem; font-weight:600; margin-bottom:12px; min-height:2.6em;
+        text-shadow:0 2px 6px #000; }
+      .ls-bar{ height:14px; border-radius:99px; background:#0e0a06; border:1px solid #5a3a1c; overflow:hidden;
+        box-shadow:inset 0 2px 4px #000a; }
+      .ls-bar i{ display:block; height:100%; width:0%; border-radius:99px;
+        background:linear-gradient(90deg, #b9802f, #f5c97a); box-shadow:0 0 10px #f5c97a88; transition:width .2s ease; }
+      .ls-row{ display:flex; justify-content:space-between; margin-top:7px; font-size:.78rem; font-weight:800; color:#caa874; }
+      .ls-ver{ opacity:.7; }
+
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
       .machine-body{ background:linear-gradient(160deg, #e0ad55 0%, #a8742f 46%, #5a3a1c 100%);
         box-shadow: inset 0 -14px 0 rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.28), 0 16px 30px rgba(0,0,0,0.45); }
@@ -1329,6 +1356,19 @@
     <div id="coachBar">
       <span id="coachMsg"></span>
       <button id="coachBtn" type="button">Geç</button>
+    </div>
+
+    <div id="loadScreen">
+      <div class="ls-art"></div>
+      <div class="ls-top">
+        <img class="ls-emblem" src="assets/emblem.svg" alt="">
+        <h1 class="ls-title">KAHVE<br><span>İMPARATORLUĞU</span></h1>
+      </div>
+      <div class="ls-bottom">
+        <div class="ls-tip" id="lsTip">Yükleniyor…</div>
+        <div class="ls-bar"><i id="lsBar"></i></div>
+        <div class="ls-row"><span id="lsPct">0%</span><span class="ls-ver">Sürüm 1.0</span></div>
+      </div>
     </div>
 
     <div id="fxFlash"></div>
@@ -2930,6 +2970,38 @@
 
       render();
       requestAnimationFrame(tick);
+
+      /* ===== Markalı yüklenme ekranı: bar 0→100% + dönen ipucu + fade ===== */
+      (function () {
+        const ls = document.getElementById("loadScreen");
+        if (!ls) return;
+        const tips = [
+          "Demle → biriktir → yatırım yap → otomatikleşsin.",
+          "Darboğaz olunca kart kırmızı yanar — çöz, büyü.",
+          "Depo al, daha çok kahve biriktir.",
+          "Şanslı Fincan'ı yakala, üretim x15 patlasın!",
+          "Prestij: baştan başla ama kalıcı çarpanla daha güçlü.",
+          "Çekirdek → Süt → Şube sırayla açılır."
+        ];
+        const tipEl = document.getElementById("lsTip");
+        const setTip = () => { if (tipEl) tipEl.textContent = "İpucu: " + tips[Math.floor(Math.random() * tips.length)]; };
+        setTip();
+        const tipTimer = setInterval(setTip, 1400);
+        const bar = document.getElementById("lsBar");
+        const pctEl = document.getElementById("lsPct");
+        const t0 = performance.now();
+        function step(now) {
+          const p = Math.min(100, ((now - t0) / 2200) * 100);
+          if (bar) bar.style.width = p.toFixed(0) + "%";
+          if (pctEl) pctEl.textContent = Math.floor(p) + "%";
+          if (p < 100) requestAnimationFrame(step);
+          else {
+            clearInterval(tipTimer);
+            setTimeout(() => { ls.classList.add("gone"); setTimeout(() => ls.remove(), 600); }, 250);
+          }
+        }
+        requestAnimationFrame(step);
+      })();
     </script>
   </body>
 </html>
