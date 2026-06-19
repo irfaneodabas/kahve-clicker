@@ -1022,6 +1022,30 @@
         padding:10px 16px; display:flex; gap:9px; align-items:center; box-shadow:0 10px 30px #000a; animation:wpop .3s ease-out; max-width:calc(100% - 24px); }
       .ach-toast .ach-emoji{ font-size:22px; width:auto; }
       .ach-toast b{ color:#f5c97a; }
+
+      /* ===== Yatırım dolum barı (her birinde "ne kadar yaklaştın") ===== */
+      .upgrade{ position:relative; overflow:hidden; }
+      .up-fill{ position:absolute; left:0; bottom:0; height:3px; width:0%;
+        background:linear-gradient(90deg,#8a5e22,#f5c97a); opacity:0;
+        transition:width .3s ease, opacity .25s; pointer-events:none; }
+      .upgrade.affordable .up-fill{ height:4px; background:linear-gradient(90deg,#4f9a3e,#a8e88a); box-shadow:0 0 9px #6fcf6f88; }
+
+      /* ===== Daha canlı fincan: yüzey dalgası + parıltı ===== */
+      .coffee-fill{ overflow:hidden; }
+      .coffee-fill::before{ content:""; position:absolute; left:-25%; right:-25%; top:-5px; height:11px; border-radius:50%;
+        background:rgba(255,255,255,0.22); animation:cwave 2.3s ease-in-out infinite; }
+      .coffee-fill::after{ content:""; position:absolute; inset:0;
+        background:linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+        background-size:220% 100%; animation:cshine 3.2s linear infinite; }
+      @keyframes cwave{ 0%,100%{ transform:translateX(-10%) } 50%{ transform:translateX(10%) } }
+      @keyframes cshine{ 0%{ background-position:120% 0 } 100%{ background-position:-120% 0 } }
+
+      /* ===== Makine: nefes alma + üretim parıltısı ===== */
+      .machine-body{ animation:mbreathe 3.4s ease-in-out infinite; }
+      @keyframes mbreathe{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-2px) } }
+      .stage.running .machine-body{ box-shadow: inset 0 -14px 0 rgba(0,0,0,0.12), 0 16px 30px rgba(224,168,90,0.28); }
+      .stage.running .machine-face::before{ animation:facepulse 1.4s ease-in-out infinite; }
+      @keyframes facepulse{ 0%,100%{ filter:brightness(1) } 50%{ filter:brightness(1.4) } }
     </style>
   </head>
   <body>
@@ -2186,6 +2210,7 @@
           let levelEl;
           let descEl;
           let costEl;
+          let upFill;
 
           if (!button) {
             button = document.createElement("button");
@@ -2209,13 +2234,16 @@
 
             costEl = document.createElement("div");
             costEl.className = "cost";
-            button.append(main, costEl);
+            upFill = document.createElement("i");
+            upFill.className = "up-fill";
+            button.append(main, costEl, upFill);
             els.shop.appendChild(button);
           } else {
             nameEl = button.querySelector(".upgrade-name");
             levelEl = button.querySelector(".level");
             descEl = button.querySelector(".upgrade-desc");
             costEl = button.querySelector(".cost");
+            upFill = button.querySelector(".up-fill");
           }
 
           button.hidden = false;
@@ -2237,6 +2265,21 @@
               line.textContent = `${format(amount)} ${resourceName(resource)}`;
               costEl.appendChild(line);
             });
+          }
+
+          // Her yatırımda "ne kadar yaklaştın" dolum barı (bağlayıcı kaynak oranı)
+          if (upFill) {
+            if (visible && !maxed) {
+              let ratio = 1;
+              Object.entries(cost).forEach(([res, amt]) => {
+                ratio = Math.min(ratio, amt > 0 ? state[res] / amt : 1);
+              });
+              upFill.style.width = (Math.max(0, Math.min(1, ratio)) * 100).toFixed(1) + "%";
+              upFill.style.opacity = "1";
+            } else {
+              upFill.style.width = "0%";
+              upFill.style.opacity = "0";
+            }
           }
         });
 
