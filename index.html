@@ -8,6 +8,14 @@
     <meta name="theme-color" content="#1a1410">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="assets/emblem.svg">
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(function () {});
+        });
+      }
+    </script>
     <title>Kahve İmparatorluğu</title>
     <style>
       :root {

@@ -1,0 +1,14 @@
+{
+  "name": "Kahve İmparatorluğu",
+  "short_name": "Kahve",
+  "description": "Bir fincandan imparatorluğa — idle kahve oyunu",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1410",
+  "theme_color": "#1a1410",
+  "icons": [
+    { "src": "assets/emblem.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
