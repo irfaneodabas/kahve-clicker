@@ -2382,10 +2382,30 @@
       }
 
       function targetText(target) {
-        if (!target) return "Tüm hatlar acik";
+        if (!target) return "Tüm hatlar açık";
         if (target.missing.length === 0) return `Hazır: ${target.title}`;
         const main = target.missing[0];
-        return `Darboğaz: ${format(main.missing)} ${resourceName(main.resource)}`;
+        return `Darboğaz: ${format(main.missing)} ${resourceName(main.resource)} → ${bottleneckSolutions(main.resource)}`;
+      }
+
+      // Kittens ilkesi #3: her darboğaza birden çok çözüm göster
+      function bottleneckSolutions(resource) {
+        const manual = { coffee: "👆 Demle", beans: "👆 Çekirdek Topla", milk: "👆 Süt Hazırla" }[resource] || "";
+        const fams = { coffee: ["coffee"], beans: ["beans"], milk: ["milk"] }[resource] || [];
+        let best = null;
+        upgrades.forEach((u) => {
+          if (!fams.includes(u.family)) return;
+          if (u.max && levelOf(u.id) >= u.max) return;
+          if (!isVisible(u)) return;
+          if (levelOf(u.id) === 0 && (typeof revealed === "undefined" || !revealed.has(u.id))) return;
+          const c = costFor(u);
+          const total = (c.coffee || 0) + (c.beans || 0) * 10 + (c.milk || 0) * 50;
+          if (!best || total < best.total) best = { title: u.title, total };
+        });
+        const parts = [];
+        if (manual) parts.push(manual);
+        if (best) parts.push("🏭 " + best.title);
+        return parts.join(" / ") || "yatırım yap";
       }
 
       function log(message) {
