@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#1a1410">
+    <meta name="theme-color" content="var(--paper)">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="assets/emblem.svg">
     <link rel="manifest" href="manifest.json">
@@ -879,7 +879,7 @@
       body{
         background:
           radial-gradient(circle at 50% -12%, #2a201744, transparent 30rem),
-          linear-gradient(160deg, #1f1812 0%, #160f0a 62%, #1a1410 100%);
+          linear-gradient(160deg, var(--panel) 0%, #160f0a 62%, var(--paper) 100%);
         color:var(--ink);
       }
       /* Mobil-öncelikli: telefon genişliği, tek kolon */
@@ -893,9 +893,9 @@
       .play-area,.shop-area,.stats-strip,.log{
         background:var(--panel); border-color:var(--line); backdrop-filter:none;
       }
-      .stat{ background:#2a2018; }
-      .dev-speed{ background:#2a2018; border-color:var(--line); }
-      .icon-button{ background:#2a2018; border-color:var(--line); color:var(--gold); }
+      .stat{ background:var(--sky); }
+      .dev-speed{ background:var(--sky); border-color:var(--line); }
+      .icon-button{ background:var(--sky); border-color:var(--line); color:var(--gold); }
       .icon-button:hover{ border-color:var(--gold); }
       .machine-face{ background:#3a2e22; border-color:rgba(245,201,122,0.25); }
       .stage{
@@ -911,17 +911,17 @@
       .cup{ background:#efe2cc; border-color:#fff7ea; }
 
       /* Aksiyon / upgrade / prestij kartları → koyu */
-      .resource-action{ background:#2a2018; border-color:var(--line); color:var(--gold); min-height:64px; }
+      .resource-action{ background:var(--sky); border-color:var(--line); color:var(--gold); min-height:64px; }
       .resource-action:hover:not(:disabled){ border-color:var(--gold); }
-      .upgrade{ background:#241c16; color:var(--ink); }
-      .upgrade:hover:not(:disabled){ background:#2e241c; }
+      .upgrade{ background:var(--panel); color:var(--ink); }
+      .upgrade:hover:not(:disabled){ background:var(--sky); }
       .level{ background:rgba(245,201,122,0.14); color:var(--gold); }
       .prestige-card{
-        background:linear-gradient(135deg, rgba(224,168,90,0.16), rgba(245,201,122,0.10)), #241c16;
+        background:linear-gradient(135deg, rgba(224,168,90,0.16), rgba(245,201,122,0.10)), var(--panel);
         color:var(--ink);
       }
       .prestige-card:hover:not(:disabled){
-        background:linear-gradient(135deg, rgba(224,168,90,0.26), rgba(245,201,122,0.16)), #241c16;
+        background:linear-gradient(135deg, rgba(224,168,90,0.26), rgba(245,201,122,0.16)), var(--panel);
       }
       /* Altın rozet/pill → koyu metin */
       .pill,.prestige-card b{ background:var(--gold); color:#2a1c10; }
@@ -939,7 +939,7 @@
       /* Kaynak dolum barı (yenilenme hızına göre dolar) */
       .res-bar{ margin-top:8px; height:5px; border-radius:99px; background:#3a2e2466; overflow:hidden; }
       .res-bar i{ display:block; height:100%; width:0%; border-radius:99px;
-        background:linear-gradient(90deg,#e0a85a,#f5c97a); transition:width .09s linear; }
+        background:linear-gradient(90deg,var(--coffee-2),var(--gold)); transition:width .09s linear; }
 
       /* Basılabilir butonlar — dokunma geri bildirimi */
       button{ touch-action:manipulation; }
@@ -955,21 +955,21 @@
         align-items:center; justify-content:center; padding:22px; backdrop-filter:blur(4px); }
       #welcomeOverlay.show{ display:flex; animation:wpop .35s ease-out; }
       @keyframes wpop{ 0%{opacity:0; transform:scale(.92)} 100%{opacity:1; transform:scale(1)} }
-      .welcome-card{ background:linear-gradient(180deg,#2e2418,#241c14); border:1px solid #f5c97a;
+      .welcome-card{ background:linear-gradient(180deg,var(--panel),var(--panel)); border:1px solid var(--gold);
         border-radius:20px; padding:26px 22px; max-width:360px; text-align:center; box-shadow:0 20px 60px #000c; }
       .welcome-emblem{ width:84px; height:84px; margin-bottom:4px; filter:drop-shadow(0 4px 10px #000a); }
-      .welcome-card h2{ margin:6px 0 10px; color:#f5c97a; font-size:1.4rem; line-height:1.15; }
+      .welcome-card h2{ margin:6px 0 10px; color:var(--gold); font-size:1.4rem; line-height:1.15; }
       .welcome-card p{ margin:0 0 18px; color:var(--ink); font-size:.95rem; line-height:1.55; }
-      .welcome-card b{ color:#f5c97a; }
+      .welcome-card b{ color:var(--gold); }
       .welcome-start{ width:100%; padding:14px; border:0; border-radius:12px; font-weight:800; font-size:1rem;
-        cursor:pointer; background:linear-gradient(180deg,#f5c97a,#e0a85a); color:#2a1c10; }
+        cursor:pointer; background:linear-gradient(180deg,var(--gold),var(--coffee-2)); color:#2a1c10; }
       #coachBar{ position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:150;
         width:min(440px, calc(100% - 24px)); display:none; align-items:center; gap:12px;
-        background:linear-gradient(180deg,#322715,#241c12); border:1px solid #f5c97a;
+        background:linear-gradient(180deg,var(--sky),var(--panel)); border:1px solid var(--gold);
         border-radius:14px; padding:13px 15px; box-shadow:0 12px 34px #000b; }
       #coachBar.show{ display:flex; animation:wpop .3s ease-out; }
       #coachMsg{ flex:1; font-size:.9rem; line-height:1.45; color:var(--ink); }
-      #coachMsg b{ color:#f5c97a; }
+      #coachMsg b{ color:var(--gold); }
       #coachBar button{ flex:0 0 auto; background:none; border:1px solid var(--line); color:var(--muted);
         font-weight:700; padding:7px 13px; border-radius:9px; cursor:pointer; font-size:.82rem; }
       .tut-glow{ animation:tutglow 1.1s ease-in-out infinite; border-radius:14px; position:relative; z-index:60; }
@@ -977,17 +977,17 @@
 
       /* ===== Dopamin katmanı: flash + kutlama + şanslı + near-miss ===== */
       #muteButton{ font-size:18px; }
-      #fxFlash{ position:fixed; inset:0; z-index:90; pointer-events:none; background:#f5c97a; opacity:0; transition:opacity .35s ease; }
+      #fxFlash{ position:fixed; inset:0; z-index:90; pointer-events:none; background:var(--gold); opacity:0; transition:opacity .35s ease; }
       #celebrate{ position:fixed; left:50%; top:30%; transform:translateX(-50%); z-index:160; pointer-events:none;
         display:flex; flex-direction:column; gap:8px; align-items:center; }
-      .celebrate-pop{ background:linear-gradient(180deg,#f5c97a,#e0a85a); color:#2a1c10; font-weight:900;
+      .celebrate-pop{ background:linear-gradient(180deg,var(--gold),var(--coffee-2)); color:#2a1c10; font-weight:900;
         padding:12px 22px; border-radius:14px; font-size:1.1rem; box-shadow:0 12px 34px #000b; white-space:nowrap;
         animation:celpop 1.6s ease-out forwards; }
       @keyframes celpop{ 0%{transform:scale(.5);opacity:0} 14%{transform:scale(1.12);opacity:1} 80%{transform:scale(1);opacity:1} 100%{transform:scale(1) translateY(-16px);opacity:0} }
       .float-text.lucky{ color:#8af08a !important; font-size:1.55rem; text-shadow:0 2px 7px #000; }
       .prog-near{ height:7px; border-radius:99px; background:#3a2e2466; overflow:hidden; margin:-2px 18px 12px; }
       .prog-near i{ display:block; height:100%; width:0%; border-radius:99px;
-        background:linear-gradient(90deg,#b9802f,#f5c97a); transition:width .25s ease; }
+        background:linear-gradient(90deg,#b9802f,var(--gold)); transition:width .25s ease; }
       .prog-near.near{ box-shadow:0 0 12px #f5c97a99; }
       .prog-near.near i{ animation:nearpulse 1s ease-in-out infinite; }
       @keyframes nearpulse{ 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.45)} }
@@ -1016,33 +1016,33 @@
       /* ===== Achievements (başarımlar) ===== */
       #achModal{ position:fixed; inset:0; z-index:170; background:#0c0906ee; display:none; align-items:center; justify-content:center; padding:18px; backdrop-filter:blur(4px); }
       #achModal.show{ display:flex; }
-      .ach-card{ background:#241c16; border:1px solid var(--line); border-radius:18px; max-width:390px; width:100%; max-height:82vh; overflow:auto; padding:18px; box-shadow:0 20px 60px #000c; }
-      .ach-card h3{ margin:0 0 4px; color:#f5c97a; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+      .ach-card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; max-width:390px; width:100%; max-height:82vh; overflow:auto; padding:18px; box-shadow:0 20px 60px #000c; }
+      .ach-card h3{ margin:0 0 4px; color:var(--gold); display:flex; justify-content:space-between; align-items:center; gap:10px; }
       .ach-sub{ color:var(--muted); font-size:.82rem; margin:0 0 12px; }
       .ach-close{ background:none; border:1px solid var(--line); color:var(--muted); border-radius:9px; padding:6px 12px; cursor:pointer; font-weight:700; }
-      .ach-item{ display:flex; gap:11px; align-items:center; padding:11px; border-radius:12px; background:#2a2018; margin-bottom:8px; opacity:.45; transition:.2s; }
+      .ach-item{ display:flex; gap:11px; align-items:center; padding:11px; border-radius:12px; background:var(--sky); margin-bottom:8px; opacity:.45; transition:.2s; }
       .ach-item.unlocked{ opacity:1; border:1px solid #6a8a5a66; }
       .ach-emoji{ font-size:26px; flex:0 0 auto; width:34px; text-align:center; }
       .ach-name{ font-weight:800; font-size:.95rem; }
       .ach-desc{ font-size:.8rem; color:var(--muted); margin-top:2px; }
       .ach-toast{ position:fixed; left:50%; bottom:74px; transform:translateX(-50%); z-index:165;
-        background:linear-gradient(180deg,#322715,#241c12); border:1px solid #f5c97a; border-radius:12px;
+        background:linear-gradient(180deg,var(--sky),var(--panel)); border:1px solid var(--gold); border-radius:12px;
         padding:10px 16px; display:flex; gap:9px; align-items:center; box-shadow:0 10px 30px #000a; animation:wpop .3s ease-out; max-width:calc(100% - 24px); }
       .ach-toast .ach-emoji{ font-size:22px; width:auto; }
-      .ach-toast b{ color:#f5c97a; }
+      .ach-toast b{ color:var(--gold); }
       /* ===== Rozet vitrini (kategorili grid + ilerleme) ===== */
-      .kia-summary{ background:linear-gradient(180deg,#2c2216,#231a12); border:1px solid #f5c97a44; border-radius:14px; padding:12px 14px; margin-bottom:14px; }
+      .kia-summary{ background:linear-gradient(180deg,var(--panel),var(--panel)); border:1px solid #f5c97a44; border-radius:14px; padding:12px 14px; margin-bottom:14px; }
       .kia-sumtop{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
-      .kia-sumtop b{ color:#f5c97a; font-size:1.15rem; }
+      .kia-sumtop b{ color:var(--gold); font-size:1.15rem; }
       .kia-sumtop span{ color:var(--muted); font-size:.78rem; }
       .kia-bar{ height:8px; border-radius:6px; background:#3a2c1c; overflow:hidden; }
-      .kia-bar i{ display:block; height:100%; border-radius:6px; background:linear-gradient(90deg,#e0a85a,#f5c97a); transition:width .5s ease; }
+      .kia-bar i{ display:block; height:100%; border-radius:6px; background:linear-gradient(90deg,var(--coffee-2),var(--gold)); transition:width .5s ease; }
       .kia-cat{ display:flex; justify-content:space-between; align-items:center; margin:14px 2px 8px; }
       .kia-cat-h{ font-weight:800; font-size:.82rem; color:#e7c79a; letter-spacing:.3px; }
-      .kia-cat-n{ font-size:.72rem; color:var(--muted); background:#2a2018; padding:2px 8px; border-radius:20px; }
+      .kia-cat-n{ font-size:.72rem; color:var(--muted); background:var(--sky); padding:2px 8px; border-radius:20px; }
       .kia-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-      .kia-badge{ position:relative; background:#241c14; border:1px solid #ffffff0d; border-radius:13px; padding:11px 6px 9px; text-align:center; opacity:.5; filter:grayscale(.7); transition:.22s; overflow:hidden; }
-      .kia-badge.unlocked{ opacity:1; filter:none; border-color:#f5c97a55; background:linear-gradient(180deg,#2e2316,#241c14); box-shadow:0 4px 14px #0006, inset 0 1px 0 #ffffff10; }
+      .kia-badge{ position:relative; background:var(--panel); border:1px solid #ffffff0d; border-radius:13px; padding:11px 6px 9px; text-align:center; opacity:.5; filter:grayscale(.7); transition:.22s; overflow:hidden; }
+      .kia-badge.unlocked{ opacity:1; filter:none; border-color:#f5c97a55; background:linear-gradient(180deg,var(--panel),var(--panel)); box-shadow:0 4px 14px #0006, inset 0 1px 0 #ffffff10; }
       .kia-badge.unlocked::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,#f5c97a22,transparent 60%); pointer-events:none; }
       .kia-emoji{ font-size:25px; line-height:1; margin-bottom:6px; }
       .kia-badge.unlocked .kia-emoji{ animation:kiaPop .4s ease-out; }
@@ -1108,12 +1108,12 @@
       .hub-spark.flash{ animation:hubSpark .6s ease-out; }
       @keyframes hubSpark{ 0%{ box-shadow:0 0 0 0 #f5c97a88 } 100%{ box-shadow:0 0 0 14px #f5c97a00 } }
       .hub-info{ flex:1; min-width:0; }
-      .hub-phase{ font-weight:900; font-size:1.02rem; color:#f5c97a; letter-spacing:.2px; }
+      .hub-phase{ font-weight:900; font-size:1.02rem; color:var(--gold); letter-spacing:.2px; }
       .hub-res{ font-size:.82rem; color:var(--ink); opacity:.85; margin-top:2px; font-variant-numeric:tabular-nums;
         white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .hub-bar{ height:6px; border-radius:99px; background:#3a2e2455; overflow:hidden; margin-top:7px; }
       .hub-bar i{ display:block; height:100%; width:0%; border-radius:99px;
-        background:linear-gradient(90deg,#b9802f,#f5c97a); transition:width .3s ease; }
+        background:linear-gradient(90deg,#b9802f,var(--gold)); transition:width .3s ease; }
       .hub-bar.near i{ animation:nearpulse 1s ease-in-out infinite; }
       .hub-cta{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; }
       .hub-cta-label{ font-size:.62rem; font-weight:900; letter-spacing:1px; color:var(--muted); }
@@ -1159,7 +1159,7 @@
 
       /* ===== Markalı yüklenme ekranı ===== */
       #loadScreen{ position:fixed; inset:0; z-index:400; overflow:hidden;
-        background:radial-gradient(circle at 50% 38%, #3a2814, #1a1410 78%);
+        background:radial-gradient(circle at 50% 38%, #3a2814, var(--paper) 78%);
         display:flex; flex-direction:column; align-items:center; justify-content:space-between;
         transition:opacity .5s ease; }
       #loadScreen.gone{ opacity:0; pointer-events:none; }
@@ -1172,15 +1172,15 @@
       .ls-top{ position:relative; z-index:2; text-align:center; padding-top:calc(7vh + env(safe-area-inset-top)); }
       .ls-emblem{ width:74px; height:74px; filter:drop-shadow(0 4px 12px #000b); }
       .ls-title{ margin:6px 0 0; font-size:clamp(1.8rem, 8vw, 2.6rem); line-height:.98; letter-spacing:1px;
-        color:#f5c97a; font-weight:900; text-shadow:0 3px 0 #5a3a1c, 0 6px 14px #000; }
-      .ls-title span{ font-size:.62em; color:#e0a85a; letter-spacing:3px; }
+        color:var(--gold); font-weight:900; text-shadow:0 3px 0 #5a3a1c, 0 6px 14px #000; }
+      .ls-title span{ font-size:.62em; color:var(--coffee-2); letter-spacing:3px; }
       .ls-bottom{ position:relative; z-index:2; width:min(420px, 84%); padding-bottom:calc(7vh + env(safe-area-inset-bottom)); }
       .ls-tip{ text-align:center; color:#f0e6d8; font-size:.92rem; font-weight:600; margin-bottom:12px; min-height:2.6em;
         text-shadow:0 2px 6px #000; }
       .ls-bar{ height:14px; border-radius:99px; background:#0e0a06; border:1px solid #5a3a1c; overflow:hidden;
         box-shadow:inset 0 2px 4px #000a; }
       .ls-bar i{ display:block; height:100%; width:0%; border-radius:99px;
-        background:linear-gradient(90deg, #b9802f, #f5c97a); box-shadow:0 0 10px #f5c97a88; transition:width .2s ease; }
+        background:linear-gradient(90deg, #b9802f, var(--gold)); box-shadow:0 0 10px #f5c97a88; transition:width .2s ease; }
       .ls-row{ display:flex; justify-content:space-between; margin-top:7px; font-size:.78rem; font-weight:800; color:#caa874; }
       .ls-ver{ opacity:.7; }
 
@@ -1206,7 +1206,7 @@
         transition:transform .08s ease, box-shadow .08s ease; }
       .mini-actions .resource-action:active{ transform:translateY(3px); box-shadow:0 3px 7px #0008; }
       .mini-actions .ra-label{ color:#3a2410; text-shadow:0 1px 0 #ffe9b8aa; }
-      .mini-actions .ra-amt{ background:#2a1c10; color:#f5c97a; }
+      .mini-actions .ra-amt{ background:#2a1c10; color:var(--gold); }
       .mini-actions .ra-ic{ filter:drop-shadow(0 1px 2px #0007); }
 
       /* ===== Espresso makinesi: kahve paletine boya (teal kaldırıldı) + cila ===== */
@@ -1228,18 +1228,18 @@
       #settingsOverlay{ position:fixed; inset:0; z-index:210; background:#0c0906ee; display:none;
         align-items:center; justify-content:center; padding:22px; backdrop-filter:blur(4px); }
       #settingsOverlay.show{ display:flex; animation:wpop .28s ease-out; }
-      .settings-card{ background:linear-gradient(180deg,#2e2418,#241c14); border:1px solid #f5c97a;
+      .settings-card{ background:linear-gradient(180deg,var(--panel),var(--panel)); border:1px solid var(--gold);
         border-radius:20px; padding:18px 16px 14px; max-width:360px; width:100%;
         box-shadow:0 20px 60px #000c; }
       .settings-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-      .settings-head h2{ margin:0; color:#f5c97a; font-size:1.2rem; }
+      .settings-head h2{ margin:0; color:var(--gold); font-size:1.2rem; }
       .settings-x{ background:none; border:1px solid #6a5a3e; color:#cdbf9f;
         width:32px; height:32px; border-radius:9px; font-size:1rem; cursor:pointer; line-height:1; }
-      .settings-x:hover{ border-color:#f5c97a; color:#f5c97a; }
+      .settings-x:hover{ border-color:var(--gold); color:var(--gold); }
       .settings-row{ display:flex; align-items:center; gap:12px; width:100%; text-align:left;
-        background:#241c14; border:1px solid #6a5a3e; border-radius:13px; padding:13px 14px;
+        background:var(--panel); border:1px solid #6a5a3e; border-radius:13px; padding:13px 14px;
         margin-bottom:10px; cursor:pointer; color:#f3ead7; transition:border-color .15s, transform .05s; }
-      .settings-row:hover{ border-color:#f5c97a; }
+      .settings-row:hover{ border-color:var(--gold); }
       .settings-row:active{ transform:scale(.985); }
       .settings-row--danger{ border-color:#5a2a22; }
       .settings-row--danger:hover{ border-color:#e06a4a; }
@@ -2276,8 +2276,8 @@
         state.upgrades[id] = nextLevel;
         announceUpgrade(upgrade, nextLevel);
         const isHook = (upgrade.milestones || []).some((m) => m.level === nextLevel);
-        if (isHook) { playSfx("milestone"); fxFlash("#f5c97a"); celebrate(`✨ ${upgrade.title}!`); }
-        else if (upgrade.unlocks) { playSfx("milestone"); fxFlash("#f5c97a"); celebrate("🔓 Yeni hat açıldı!"); }
+        if (isHook) { playSfx("milestone"); fxFlash("var(--gold)"); celebrate(`✨ ${upgrade.title}!`); }
+        else if (upgrade.unlocks) { playSfx("milestone"); fxFlash("var(--gold)"); celebrate("🔓 Yeni hat açıldı!"); }
         else playSfx("buy");
         saveState();
         render();
@@ -2358,7 +2358,7 @@
         saveState();
         render();
         log(`Prestij alındı. Kalıcı çarpan ${nextMultiplier.toFixed(2)}x.`);
-        playSfx("prestige"); fxFlash("#e0a85a"); celebrate(`✨ Prestij! Kalıcı çarpan ${nextMultiplier.toFixed(2)}x`);
+        playSfx("prestige"); fxFlash("var(--coffee-2)"); celebrate(`✨ Prestij! Kalıcı çarpan ${nextMultiplier.toFixed(2)}x`);
       }
 
       function metaPrestigeReset() {
@@ -2856,7 +2856,7 @@
           bar.style.opacity = "1";
           bar.style.background = pct >= 0.999
             ? "linear-gradient(90deg,#e8584a,#ff9a7a)"   // DOLU → kırmızı
-            : "linear-gradient(90deg,#e0a85a,#f5c97a)";
+            : "linear-gradient(90deg,var(--coffee-2),var(--gold))";
         }
       }
 
@@ -2960,7 +2960,7 @@
       function fxFlash(color) {
         const f = document.getElementById("fxFlash");
         if (!f) return;
-        f.style.background = color || "#f5c97a";
+        f.style.background = color || "var(--gold)";
         f.style.opacity = "0.45";
         setTimeout(() => (f.style.opacity = "0"), 80);
       }
@@ -2997,7 +2997,7 @@
             state.milestones[key] = true;
             celebrate(`🎉 ${format(t)} fincan!`);
             playSfx("milestone");
-            fxFlash("#f5c97a");
+            fxFlash("var(--gold)");
           }
         }
       }
@@ -3083,7 +3083,7 @@
       function saveAch() { try { localStorage.setItem("kahve-ach", JSON.stringify([...achUnlocked])); } catch (e) {} }
       function unlockAch(a) {
         achUnlocked.add(a.id); saveAch();
-        playSfx("milestone"); fxFlash("#f5c97a");
+        playSfx("milestone"); fxFlash("var(--gold)");
         const t = document.createElement("div");
         t.className = "ach-toast";
         t.innerHTML = `<span class="ach-emoji">${a.emoji}</span><div><b>Başarım: ${a.name}</b><div class="ach-desc">${a.desc}</div></div>`;
@@ -3171,7 +3171,7 @@
           seenPhases.add(p);
           localStorage.setItem("kahve-phases", JSON.stringify([...seenPhases]));
           celebrate(`🏛️ Yeni Çağ: ${p}`);
-          playSfx("prestige"); fxFlash("#f5c97a");
+          playSfx("prestige"); fxFlash("var(--gold)");
         }
       }
 
@@ -3458,16 +3458,16 @@
         ov.style.cssText = "position:fixed;inset:0;z-index:240;display:none;align-items:center;" +
           "justify-content:center;padding:24px;background:#0c0906ee;";
         ov.innerHTML =
-          '<div style="background:linear-gradient(180deg,#2e2418,#241c14);border:1px solid #f5c97a;' +
+          '<div style="background:linear-gradient(180deg,var(--panel),var(--panel));border:1px solid var(--gold);' +
           'border-radius:18px;max-width:340px;width:100%;padding:24px 22px;text-align:center;' +
           'box-shadow:0 18px 50px #000a;">' +
             '<div style="font-size:46px;line-height:1;margin-bottom:6px;">&#128564;</div>' +
-            '<h2 style="margin:6px 0 4px;color:#f5c97a;font-size:1.3rem;">Tekrar hos geldin patron!</h2>' +
+            '<h2 style="margin:6px 0 4px;color:var(--gold);font-size:1.3rem;">Tekrar hos geldin patron!</h2>' +
             '<p id="kioSub" style="margin:0 0 8px;color:#cbb89a;font-size:.9rem;"></p>' +
             '<p id="kioBody" style="margin:0 0 6px;color:#f3e7d2;font-size:1rem;line-height:1.5;"></p>' +
-            '<p id="kioCap" style="margin:0 0 16px;color:#f5c97a;font-size:.8rem;display:none;"></p>' +
+            '<p id="kioCap" style="margin:0 0 16px;color:var(--gold);font-size:.8rem;display:none;"></p>' +
             '<button id="kioCollect2x" type="button" style="width:100%;padding:13px;border:0;border-radius:12px;' +
-            'font-weight:800;font-size:1rem;cursor:pointer;background:linear-gradient(180deg,#f5c97a,#d49a3f);' +
+            'font-weight:800;font-size:1rem;cursor:pointer;background:linear-gradient(180deg,var(--gold),#d49a3f);' +
             'color:#241a0e;margin-bottom:9px;">&#9889; 2X TOPLA</button>' +
             '<button id="kioCollect" type="button" style="width:100%;padding:12px;border:1px solid #5a4a32;' +
             'border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;background:#2a2014;color:#f3e7d2;">' +
@@ -3492,7 +3492,7 @@
         var parts = ["&#9749; " + fmt(r.coffee) + " kahve"];
         if (r.beans >= 1) parts.push("&#129466; " + fmt(r.beans));
         if (r.milk  >= 1) parts.push("&#129371; " + fmt(r.milk));
-        ov.querySelector("#kioBody").innerHTML = "<b style=\"color:#f5c97a\">+" + parts.join(" &middot; +").replace("+&#129466;", "&#129466;").replace("+&#129371;", "&#129371;") + "</b>";
+        ov.querySelector("#kioBody").innerHTML = "<b style=\"color:var(--gold)\">+" + parts.join(" &middot; +").replace("+&#129466;", "&#129466;").replace("+&#129371;", "&#129371;") + "</b>";
         var capEl = ov.querySelector("#kioCap");
         if (r.hitCap) { capEl.style.display = "block"; capEl.innerHTML = "&#9203; " + CAP_H + " saat tavanina ulastin — daha sik ugra, daha cok kazan!"; }
         else { capEl.style.display = "none"; }
@@ -3558,20 +3558,20 @@
     <style>
       .kx-modal{ position:fixed; inset:0; z-index:240; background:rgba(12,9,6,.82); display:none; align-items:center; justify-content:center; padding:18px; backdrop-filter:blur(4px); }
       .kx-modal.show{ display:flex; }
-      .kx-card{ background:#241c16; border:1px solid #f5c97a; border-radius:18px; max-width:380px; width:100%; max-height:84vh; overflow:auto; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.75); }
-      .kx-card h3{ color:#f5c97a; margin:0 0 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:1.1rem; }
+      .kx-card{ background:var(--panel); border:1px solid var(--gold); border-radius:18px; max-width:380px; width:100%; max-height:84vh; overflow:auto; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.75); }
+      .kx-card h3{ color:var(--gold); margin:0 0 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:1.1rem; }
       .kx-close{ background:none; border:1px solid #3a2e24; color:#a89070; border-radius:9px; padding:6px 12px; cursor:pointer; font-weight:700; flex:0 0 auto; }
-      .kx-btn{ width:100%; padding:13px; border:0; border-radius:12px; font-weight:800; cursor:pointer; background:linear-gradient(180deg,#f5c97a,#e0a85a); color:#2a1c10; margin-top:8px; font-size:.95rem; }
-      .kx-btn.sec{ background:#2a2018; color:#f5c97a; border:1px solid #3a2e24; }
+      .kx-btn{ width:100%; padding:13px; border:0; border-radius:12px; font-weight:800; cursor:pointer; background:linear-gradient(180deg,var(--gold),var(--coffee-2)); color:#2a1c10; margin-top:8px; font-size:.95rem; }
+      .kx-btn.sec{ background:var(--sky); color:var(--gold); border:1px solid #3a2e24; }
       .kx-days{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0 14px; }
-      .kx-day{ background:#2a2018; border:1px solid #3a2e24; border-radius:12px; padding:10px 4px; text-align:center; }
+      .kx-day{ background:var(--sky); border:1px solid #3a2e24; border-radius:12px; padding:10px 4px; text-align:center; }
       .kx-day.done{ opacity:.45; }
-      .kx-day.today{ border-color:#f5c97a; box-shadow:0 0 10px rgba(245,201,122,.33); }
-      .kx-day .d{ font-weight:900; color:#f5c97a; font-size:.78rem; }
+      .kx-day.today{ border-color:var(--gold); box-shadow:0 0 10px rgba(245,201,122,.33); }
+      .kx-day .d{ font-weight:900; color:var(--gold); font-size:.78rem; }
       .kx-day .r{ font-size:1.35rem; line-height:1.4; }
       .kx-stat{ display:flex; justify-content:space-between; gap:12px; padding:9px 2px; border-bottom:1px solid rgba(58,46,36,.45); font-size:.92rem; color:#e8dcc8; }
-      .kx-stat b{ color:#f5c97a; font-variant-numeric:tabular-nums; }
-      textarea.kx-io{ width:100%; height:64px; background:#1a1410; border:1px solid #3a2e24; color:#f0e6d8; border-radius:10px; padding:8px; font-size:.72rem; margin-top:8px; resize:none; box-sizing:border-box; }
+      .kx-stat b{ color:var(--gold); font-variant-numeric:tabular-nums; }
+      textarea.kx-io{ width:100%; height:64px; background:var(--paper); border:1px solid #3a2e24; color:#f0e6d8; border-radius:10px; padding:8px; font-size:.72rem; margin-top:8px; resize:none; box-sizing:border-box; }
       .kx-bump{ animation:kxbump .34s ease-out; display:inline-block; }
       @keyframes kxbump{ 0%{ transform:scale(1) } 42%{ transform:scale(1.16) } 100%{ transform:scale(1) } }
     </style>
@@ -3637,7 +3637,7 @@
         if(res==="coffee"){ if(typeof addCoffee==="function"){ addCoffee(amt, null, d); } else { st.coffee+=amt; st.runCoffeeEarned=(st.runCoffeeEarned||0)+amt; st.lifetimeCoffeeEarned=(st.lifetimeCoffeeEarned||0)+amt; } }
         else { st[res]=(st[res]||0)+amt; }
         dsave({last:today(), streak:streak}); SAVE(); REND();
-        SFX(it.big ? "prestige" : "milestone"); FLASH("#f5c97a"); CEL("🎁 Günlük ödül: +"+FMT(amt)+" "+it.r);
+        SFX(it.big ? "prestige" : "milestone"); FLASH("var(--gold)"); CEL("🎁 Günlük ödül: +"+FMT(amt)+" "+it.r);
         renderDaily();
       }
       // açılışta: welcome kapalıysa ve bugün alınmadıysa göster
@@ -3685,6 +3685,173 @@
 
       KX.renderStats=renderStats; KX.renderDaily=renderDaily;
     })();
+    </script>
+
+    <!-- ============ KahveILT: ikonlar + temalar + dil (TR/EN) ============ -->
+    <style>
+      /* ===== Gorsel temalar ===== */
+      :root[data-theme="espresso"]{ color-scheme:dark; --ink:#f0e6d8; --muted:#a89070; --paper:#1a1410; --panel:#241c16; --line:#3a2e24; --coffee:#c8884a; --coffee-2:#e0a85a; --teal:#e0a85a; --teal-dark:#b9802f; --mint:#6fcf6f; --coral:#e8a07a; --gold:#f5c97a; --sky:#2e241c; --shadow:0 14px 34px rgba(0,0,0,0.55); }
+      :root[data-theme="latte"]{ color-scheme:light; --ink:#3b2a1c; --muted:#8d775f; --paper:#f3e7d3; --panel:#fffaf1; --line:#e6d6bd; --coffee:#a7663c; --coffee-2:#c8884a; --teal:#b97e2f; --teal-dark:#8a5b1d; --mint:#5c9a52; --coral:#d98a6a; --gold:#b9802f; --sky:#efe0c8; --shadow:0 14px 34px rgba(120,80,40,0.18); }
+      :root[data-theme="matcha"]{ color-scheme:light; --ink:#21342a; --muted:#6e8068; --paper:#e7f0dd; --panel:#f5faee; --line:#cfe0bf; --coffee:#7a9a4a; --coffee-2:#8fb060; --teal:#5f9a3a; --teal-dark:#46732a; --mint:#3f8f4f; --coral:#cf8a5a; --gold:#5f9a33; --sky:#dcebcb; --shadow:0 14px 34px rgba(60,90,40,0.16); }
+      :root[data-theme="zen"]{ color-scheme:light; --ink:#322e29; --muted:#8a8175; --paper:#eceae3; --panel:#f7f5ef; --line:#dcd6ca; --coffee:#9a8a76; --coffee-2:#b0a089; --teal:#7e8a80; --teal-dark:#5d685f; --mint:#6f9f6f; --coral:#c5a08e; --gold:#9a7f48; --sky:#e3ddd2; --shadow:0 14px 34px rgba(70,65,55,0.12); }
+
+      /* ikon img'leri */
+      img.kic{ height:1.18em; width:1.18em; object-fit:contain; vertical-align:-0.22em; display:inline-block; }
+      .icon-button img.kic{ height:24px; width:24px; vertical-align:middle; }
+      .topbar .brand-mark + h1 img.kic, h1 img.kic{ height:1em; width:1em; }
+      .cost img.kic, .cost-ic img.kic{ height:1.25em; width:1.25em; }
+      .kx-day .r img.kic{ height:1.4rem; width:1.4rem; vertical-align:-0.3em; }
+
+      /* kx modallari tema degiskenlerine bagla (latte/matcha/zen'de dogru gorunsun) */
+      .kx-card{ background:var(--panel); border-color:var(--gold); box-shadow:var(--shadow); }
+      .kx-card h3{ color:var(--gold); }
+      .kx-close{ border-color:var(--line); color:var(--muted); }
+      .kx-btn{ background:linear-gradient(180deg,var(--coffee-2),var(--teal-dark)); color:#1a1006; }
+      .kx-btn.sec{ background:var(--sky); color:var(--gold); border-color:var(--line); }
+      .kx-day{ background:var(--sky); border-color:var(--line); }
+      .kx-day.today{ border-color:var(--gold); }
+      .kx-day .d{ color:var(--gold); }
+      .kx-stat{ color:var(--ink); border-bottom-color:var(--line); }
+      .kx-stat b{ color:var(--gold); }
+      textarea.kx-io{ background:var(--sky); border-color:var(--line); color:var(--ink); }
+
+      /* tema secici + dil toggle (ayarlar) */
+      .kilt-sec{ margin:14px 0 4px; }
+      .kilt-sec > .kilt-label{ font-size:.82rem; color:var(--muted); font-weight:700; margin:0 0 8px; text-transform:uppercase; letter-spacing:.04em; }
+      .kilt-themes{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+      .kilt-theme{ border:2px solid var(--line); border-radius:12px; padding:8px; cursor:pointer; display:flex; align-items:center; gap:9px; background:transparent; text-align:left; }
+      .kilt-theme.on{ border-color:var(--gold); }
+      .kilt-sw{ width:30px; height:30px; border-radius:8px; flex:0 0 auto; border:1px solid rgba(0,0,0,.2); position:relative; overflow:hidden; }
+      .kilt-sw::after{ content:""; position:absolute; right:3px; bottom:3px; width:11px; height:11px; border-radius:50%; background:var(--swg); }
+      .kilt-tn{ font-weight:800; color:var(--ink); font-size:.9rem; }
+      .kilt-lang{ display:flex; gap:8px; }
+      .kilt-lang button{ flex:1; padding:10px; border-radius:10px; border:2px solid var(--line); background:transparent; color:var(--ink); font-weight:800; cursor:pointer; }
+      .kilt-lang button.on{ border-color:var(--gold); color:var(--gold); }
+
+    </style>
+    <script>
+    (function(){
+      "use strict";
+      if (window.KahveILT) return; var ILT = window.KahveILT = {};
+      var ICON_BASE = "assets/icons/";
+      var EMAP = {"☕": "coffee", "🫘": "beans", "🥛": "milk", "👆": "point", "⚠": "warning", "⚙": "settings", "✨": "sparkles", "🎁": "gift", "🔊": "sound-on", "🎉": "party", "🔥": "fire", "👑": "crown", "📊": "stats", "🏆": "trophy", "🌟": "star", "⛁": "storage", "🚀": "rocket", "🔇": "sound-off", "🍀": "clover", "🏬": "store", "🧭": "compass", "🗑": "trash", "🔓": "unlock", "📦": "box", "🏭": "factory", "🛒": "cart", "📈": "trend", "🛍": "bags", "🏦": "bank", "🌍": "globe", "🤖": "robot", "💪": "muscle", "🏙": "city", "🕰": "clock", "💫": "sparkles", "☄": "comet", "🪐": "planet", "🔒": "lock", "😴": "sleep", "🏛": "temple", "📤": "export", "📥": "import"};
+      var DICT = {"Büyük Fincan": "Bigger Cup", "+1 kahve/tıklama": "+1 coffee/click", "Hızlı El": "Quick Hands", "+kombo limiti ve aktif tik bonusu": "+combo cap and active-click bonus", "Demleme Hızı": "Brew Speed", "+1 kahve/sn": "+1 coffee/sec", "Barista": "Barista", "+4 kahve/sn": "+4 coffee/sec", "Çekirdek Rafı": "Bean Shelf", "Çekirdek toplamayi açar": "Unlocks bean gathering", "Çekirdek Sepeti": "Bean Basket", "+2 çekirdek/tıklama": "+2 beans/click", "Kavurma Makinesi": "Roasting Machine", "+1.5 çekirdek/sn": "+1.5 beans/sec", "Değirmen Hattı": "Grinder Line", "+8 kahve/sn": "+8 coffee/sec", "Çekirdek Tedarikçisi": "Bean Supplier", "+5 çekirdek/sn": "+5 beans/sec", "Süt Dolabı": "Milk Fridge", "Süt hazırlamayı açar": "Unlocks milk prep", "Süt Bidonu": "Milk Churn", "+2 süt/tıklama": "+2 milk/click", "Köpürtücü": "Frother", "+1.5 süt/sn": "+1.5 milk/sec", "Mandıra Anlaşması": "Dairy Deal", "+5 süt/sn": "+5 milk/sec", "Rush Saati": "Rush Hour", "Tıklama pasif üretimi tetikler, aktif bonus tavanını açar": "Clicking triggers passive output and raises the active-bonus cap", "Latte Tezgahı": "Latte Bar", "+28 kahve/sn": "+28 coffee/sec", "Çekirdek Deposu": "Bean Warehouse", "+18 çekirdek/sn": "+18 beans/sec", "Soğuk Zincir": "Cold Chain", "+14 süt/sn": "+14 milk/sec", "Espresso Hattı": "Espresso Line", "+70 kahve/sn": "+70 coffee/sec", "Şube Aç": "Open a Branch", "+0.50x genel çarpan ve yeni döngü": "+0.50x overall multiplier and a fresh cycle", "Şube Barista Ekibi": "Branch Barista Crew", "+180 kahve/sn": "+180 coffee/sec", "Toptan Çekirdek Sözleşmesi": "Wholesale Bean Contract", "+60 çekirdek/sn": "+60 beans/sec", "Süt Kooperatifi": "Milk Co-op", "+45 süt/sn": "+45 milk/sec", "Kavurma Fabrikası": "Roasting Factory", "+500 kahve/sn": "+500 coffee/sec", "Altın Tamper": "Golden Tamper", "Fincan hook'undan sonra click gücü": "Click power once the Cup hook lands", "Kavurma Laboratuvarı": "Roasting Lab", "Kavurma hook'undan sonra çekirdek bilimi": "Bean science once the Roasting hook lands", "Krema Laboratuvarı": "Cream Lab", "Köpürtücü hook'undan sonra süt bilimi": "Milk science once the Frother hook lands", "Espresso Singularity": "Espresso Singularity", "Espresso hook'undan sonra gec oyun kahvesi": "Late-game coffee once the Espresso hook lands", "Kahve Deposu": "Coffee Store", "Kahve depolama kapasitesi +6000": "Coffee storage capacity +6000", "Çekirdek Ambarı": "Bean Silo", "Çekirdek kapasitesi +4000": "Bean capacity +4000", "Süt Soğutucu": "Milk Chiller", "Süt kapasitesi +3000": "Milk capacity +3000", "Masa": "Table", "Tezgah": "Counter", "Kafe": "Cafe", "Kafe+": "Cafe+", "Şube": "Branch", "Zincir": "Chain", "Prestij": "Prestige", "Meta": "Meta", "Masa Çağı": "Table Era", "Tezgah Çağı": "Counter Era", "Kafe Çağı": "Cafe Era", "Büyük Kafe Çağı": "Big Cafe Era", "Şube Çağı": "Branch Era", "Zincir Çağı": "Chain Era", "Prestij Çağı": "Prestige Era", "Meta Çağ": "Meta Era", "Çağ": "Era", "kahve/sn": "coffee/sec", "/sn": "/sec", "/tıklama": "/click", "Lv": "Lv", "MAX": "MAX", "kahve": "coffee", "çekirdek": "beans", "süt": "milk", "Kahve Demle": "Brew Coffee", "Çekirdek Topla": "Gather Beans", "Süt Hazırla": "Prep Milk", "DEMLE": "BREW", "Yatırımlar": "Investments", "Sonraki hedef: 15 kahve": "Next goal: 15 coffee", "Toplam Hız": "Total Rate", "Şube Çarpanı": "Branch Multiplier", "Prestij Çarpanı": "Prestige Multiplier", "Meta Prestij": "Meta Prestige", "Aktif Bonus": "Active Bonus", "Kafe Günlüğü": "Cafe Log", "Yeni demlik çalışmaya başladı.": "A fresh brewer just kicked in.", "Prestij Sıfırlama": "Prestige Reset", "50K run kahvesinden sonra açılır.": "Unlocks after 50K coffee this run.", "+0 seviye": "+0 levels", "Prestij Prestiji": "Prestige of Prestige", "Prestij Lv 3 ile açılır.": "Unlocks at Prestige Lv 3.", "Kahve Clicker": "Coffee Clicker", "Küçük fincandan otomatik kafe zincirine.": "From a little cup to a self-running cafe chain.", "Kahve İmparatorluğu": "Coffee Empire", "Kahve Dükkânına Hoş Geldin! ☕": "Welcome to the Coffee Shop! ☕", "Küçük bir fincandan koca bir kahve imparatorluğuna.": "From one little cup to a whole coffee empire.", "3 kaynağın var: <b>☕ Kahve · 🫘 Çekirdek · 🥛 Süt</b>.": "You've got 3 resources: <b>☕ Coffee · 🫘 Beans · 🥛 Milk</b>.", "Biri azalınca <b>darboğaz</b> olur — onu çözersen büyürsün. Her şey adım adım açılır, acele yok patron.": "When one runs low you hit a <b>bottleneck</b> — clear it and you grow. Everything unlocks step by step, no rush, boss.", "Hadi başlayalım": "Let's get started", "Geç": "Skip", "Anladım 🚀": "Got it 🚀", "⚙️ Ayarlar": "⚙️ Settings", "Turu Tekrar Göster": "Replay the Tour", "Kaydın silinmez — eğitim baştan oynar.": "Your save stays — the tutorial just plays again.", "Sıfırdan Başla": "Start Over", "Tüm ilerleme, şube ve prestij silinir. Geri alınamaz.": "Wipes all progress, branches, and prestige. Can't be undone.", "Kahve İmparatorluğu • İlerlemen cihazına kaydedilir.": "Coffee Empire • Your progress is saved on this device.", "Yükleniyor…": "Loading…", "Sürüm 1.0": "Version 1.0", "🏆 Başarımlar": "🏆 Achievements", "Kapat": "Close", "0 / 24 açıldı": "0 / 24 unlocked", "👆 <b>1/4 — Demle:</b> büyük <b>Kahve Demle</b>'ye birkaç kez bas, ilk ☕ kahveni kazan.": "👆 <b>1/4 — Brew:</b> tap the big <b>Brew Coffee</b> button a few times and earn your first ☕ coffee.", "🛒 <b>2/4 — Otomatikleştir:</b> <b>Yatırımlar</b>'dan ilk geliştirmeni al. Artık tıklamadan, kendi kendine kahve akar.": "🛒 <b>2/4 — Automate:</b> grab your first upgrade from <b>Investments</b>. Now coffee flows on its own, no clicking needed.", "⚠️ <b>3/4 — Darboğaz:</b> bir kaynak azalınca <b>kartı kırmızı yanar</b>. Üstteki <b>“Sonraki hedef”</b> sana neyin eksik olduğunu ve <b>2 çözüm yolunu</b> söyler — onu çöz, akış rahatlasın.": "⚠️ <b>3/4 — Bottleneck:</b> when a resource runs low its <b>card glows red</b>. The <b>“Next goal”</b> up top tells you what's missing and <b>2 ways to fix it</b> — clear it and the flow eases up.", "🎉 <b>4/4 — Sır bu:</b> <b>☕ Kahve → 🫘 Çekirdek → 🥛 Süt</b> sırayla açılır, her biri yeni bir darboğaz. Çöz → büyü → sonunda <b>✨ Prestij</b> ile baştan ama daha güçlü başla. İyi eğlenceler!": "🎉 <b>4/4 — Here's the secret:</b> <b>☕ Coffee → 🫘 Beans → 🥛 Milk</b> unlock in order, each a new bottleneck. Clear it → grow → and eventually <b>✨ Prestige</b> to restart stronger than before. Have fun!", "İlk Yudum": "First Sip", "İlk kahveni demle": "Brew your first coffee", "Mahalle Fark Etti": "The Neighborhood Noticed", "100 kahve üret": "Produce 100 coffee", "Köşe Başı": "Corner Spot", "10.000 kahve üret": "Produce 10,000 coffee", "Milyoner": "Millionaire", "1M kahve üret": "Produce 1M coffee", "Kahve Baronu": "Coffee Baron", "100M kahve üret": "Produce 100M coffee", "Milyar Fincan": "A Billion Cups", "1 milyar kahve üret": "Produce 1 billion coffee", "Otomasyon": "Automation", "100 kahve/sn üretime ulaş": "Reach 100 coffee/sec output", "Tam Gaz Hat": "Full-Throttle Line", "1.000 kahve/sn üretime ulaş": "Reach 1,000 coffee/sec output", "Fabrika Modu": "Factory Mode", "10.000 kahve/sn üretime ulaş": "Reach 10,000 coffee/sec output", "Şanslı!": "Lucky!", "İlk şanslı fincanı yakala": "Catch your first lucky cup", "Kombo Kralı": "Combo King", "Aktif bonusu 1.5x yap": "Push the active bonus to 1.5x", "Hamarat Eller": "Busy Hands", "Toplam 500 kez demle": "Brew 500 times total", "Tezgah Ustası": "Counter Master", "Toplam 5.000 kez demle": "Brew 5,000 times total", "Çekirdek Çağı": "Bean Era", "Çekirdek hattını aç": "Unlock the bean line", "Sütlü Devrim": "The Milk Revolution", "Süt hattını aç": "Unlock the milk line", "Franchise": "Franchise", "İlk şubeni aç": "Open your first branch", "Zincir Marka": "Chain Brand", "5. şubeyi aç": "Open your 5th branch", "Sadık Patron": "Loyal Boss", "Toplam 30 dk oyna": "Play for 30 minutes total", "Yeniden Doğuş": "Rebirth", "İlk prestijini yap": "Do your first prestige", "Prestij Ustası": "Prestige Master", "Prestij Lv 5'e ulaş": "Reach Prestige Lv 5", "Prestij Efendisi": "Prestige Lord", "Prestij Lv 10'a ulaş": "Reach Prestige Lv 10", "Prestij Efsanesi": "Prestige Legend", "Prestij Lv 20'ye ulaş": "Reach Prestige Lv 20", "Meta Patron": "Meta Boss", "Prestij Prestiji yap": "Pull off a Prestige of Prestige", "Meta İmparator": "Meta Emperor", "Meta Prestij Lv 3'e ulaş": "Reach Meta Prestige Lv 3", "Üretim": "Production", "Tıklama": "Clicking", "İmparatorluk": "Empire", "🔓 Yeni hat açıldı!": "🔓 New line unlocked!", "📦 Depo dolu! Kahve Deposu al.": "📦 Storage's full! Grab a Coffee Store.", "İpucu:": "Tip:", "Demle → biriktir → yatırım yap → otomatikleşsin.": "Brew → stockpile → invest → let it automate.", "Darboğaz olunca kart kırmızı yanar — çöz, büyü.": "On a bottleneck the card glows red — clear it, grow.", "Depo al, daha çok kahve biriktir.": "Grab a store, stockpile more coffee.", "Şanslı Fincan'ı yakala, üretim x15 patlasın!": "Catch a Lucky Cup and blow output up x15!", "Prestij: baştan başla ama kalıcı çarpanla daha güçlü.": "Prestige: restart, but stronger with a permanent multiplier.", "Çekirdek → Süt → Şube sırayla açılır.": "Beans → Milk → Branch unlock in order.", "Başarımlar": "Achievements", "%${pct} tamamlandı": "${pct}% complete", "${got} / ${total} açıldı": "${got} / ${total} unlocked", "???": "???", "Kilitli": "Locked", "Başarım: ${a.name}": "Achievement: ${a.name}", "🏛️ Yeni Çağ: ${p}": "🏛️ New Age: ${p}", "😴 Sen yokken +${format(oc)} kahve": "😴 While you were away: +${format(oc)} coffee", "Developer hız": "Developer speed", "Dev": "Dev", "1x": "1x", "10x": "10x", "100x": "100x", "Ses": "Sound", "Ayarlar": "Settings", "Kaydet": "Save", "Temizle": "Reset", "Demle": "Brew", "☕ 0": "☕ 0", "+1": "+1", "Kahve alani": "Coffee area", "Kahve": "Coffee", "1/sn": "1/sec", "Çekirdek": "Beans", "0/sn": "0/sec", "Süt": "Milk", "+2": "+2", "İstatistikler": "Stats", "1 kahve/sn": "1 coffee/sec", "1.00x": "1.00x", "Kafe günlüğü": "Cafe log", "Mağaza": "Shop", "Lv 1": "Lv 1", "0%": "0%", "Fincan etkisi x10": "Cup effect x10", "Büyük Fincan hook açıldı. Click yeniden sahnede.": "Bigger Cup hook unlocked. Clicking is back in the spotlight.", "Click tüm kahve x2": "Click doubles all coffee", "Fincan ikinci hook. Aktif tıklama kahveyi ikiye katladi.": "Cup's second hook. Active clicking now doubles your coffee.", "Fincan büyüdü. İlk darboğaz kahve.": "The cup got bigger. Your first bottleneck is coffee.", "Kombo etkisi x10": "Combo effect x10", "Hızlı El hook açıldı. Aktif oynayan kafe one geciyor.": "Quick Hands hook unlocked. Hands-on players pull ahead.", "Click ailesi x25": "Click family x25", "Hızlı El ikinci hook. Click ailesi bir süre oyunun kralı.": "Quick Hands' second hook. The click family rules for a while.", "Tıklama ritmi ısındı.": "Your clicking rhythm is heating up.", "Demlik etkisi x10": "Brewer effect x10", "Demlik hook açıldı. Eski yatırım yeniden en iyi aday.": "Brewer hook unlocked. That old investment is the top pick again.", "Kahve üretimi x10": "Coffee output x10", "Demlik ikinci hook. Tüm kahve üretimi x10.": "Brewer's second hook. All coffee output x10.", "Demlik hizlandi. Kahve akışı rahatlıyor.": "The brewer sped up. Coffee is flowing more easily.", "Barista etkisi x10": "Barista effect x10", "Barista hook açıldı. Kadro bir anda büyüdü.": "Barista hook unlocked. Your crew just grew overnight.", "Barista vardiyası x3": "Barista shift x3", "Barista ikinci hook. Vardiya sistemi uc katlandi.": "Barista's second hook. The shift system tripled.", "Barista vardiyaya girdi.": "The barista clocked in.", "Çekirdek rafi açıldı. Şimdi darboğaz çekirdek.": "The bean shelf is open. Now beans are the bottleneck.", "Sepet etkisi x10": "Basket effect x10", "Çekirdek Sepeti hook açıldı. Elle çekirdek toplamak tekrar tatli.": "Bean Basket hook unlocked. Hand-picking beans is sweet again.", "Çekirdek click x25": "Bean click x25", "Sepet ikinci hook. Çekirdek click patladı.": "Basket's second hook. Bean clicking just exploded.", "Çekirdek sepeti genişledi.": "The bean basket got roomier.", "Kavurma etkisi x10": "Roasting effect x10", "Kavurma Makinesi hook açıldı. Çekirdek akışı kirildi.": "Roasting Machine hook unlocked. The bean flow broke wide open.", "Çekirdek üretimi x10": "Bean output x10", "Kavurma ikinci hook. Tüm çekirdek üretimi x10.": "Roasting's second hook. All bean output x10.", "Çekirdekler kendi kendine kavruluyor.": "The beans are roasting themselves now.", "Değirmen etkisi x10": "Grinder effect x10", "Değirmen hook açıldı. Kahve tekrar çekirdekleri yiyor.": "Grinder hook unlocked. Coffee is eating through beans again.", "Kahve + çekirdek x5": "Coffee + beans x5", "Değirmen ikinci hook. Kahve ve çekirdek beraber büyüdü.": "Grinder's second hook. Coffee and beans grew together.", "Değirmen kahveyi tekrar darboğaz yapti.": "The grinder made coffee the bottleneck again.", "Tedarik etkisi x10": "Supply effect x10", "Tedarikçi hook açıldı. Çekirdek tarafinda yeni tavan.": "Supplier hook unlocked. A new ceiling on the bean side.", "Tedarik x25": "Supply x25", "Tedarikçi ikinci hook. Çekirdek stoku devlesiyor.": "Supplier's second hook. Your bean stock is ballooning.", "Tedarikçi geldi. Çekirdek sıkışması çözülüyor.": "The supplier showed up. The bean crunch is easing.", "Süt dolabı doldu. Darboğaz artık süt.": "The milk fridge is stocked. Milk is the bottleneck now.", "Bidon etkisi x10": "Jug effect x10", "Süt Bidonu hook açıldı. Elle süt hazırlama yeniden canli.": "Milk Jug hook unlocked. Hand-prepping milk is lively again.", "Süt click x25": "Milk click x25", "Süt Bidonu ikinci hook. Elle süt hazırlama patladı.": "Milk Jug's second hook. Hand-prepping milk just exploded.", "Süt bidonu büyüdü.": "The milk jug got bigger.", "Köpük etkisi x10": "Foam effect x10", "Köpürtücü hook açıldı. Süt artık akiskan.": "Frother hook unlocked. Milk is flowing freely now.", "Süt üretimi x10": "Milk output x10", "Köpürtücü ikinci hook. Tüm süt üretimi x10.": "Frother's second hook. All milk output x10.", "Köpük isi otomatikleşti.": "Frothing is on autopilot now.", "Mandıra etkisi x10": "Dairy effect x10", "Mandıra hook açıldı. Süt darboğazı büyük kirildi.": "Dairy hook unlocked. The milk bottleneck cracked wide open.", "Süt x25": "Milk x25", "Mandıra ikinci hook. Süt ekonomisi baska oyuna döndü.": "Dairy's second hook. The milk economy is a whole different game.", "Mandıra anlasmasi süt darboğazını kiriyor.": "The dairy deal is breaking the milk bottleneck.", "Rush pik x6": "Rush peak x6", "Rush Saati hook açıldı. Click artık gec oyunda da is yapiyor.": "Rush Hour hook unlocked. Clicking earns its keep in the late game too.", "Tıkla, her sey x2": "Click, everything x2", "Rush ikinci hook. Aktif oyun tüm üretimi ikiye katliyor.": "Rush's second hook. Playing hands-on doubles all output.", "Rush saati başladı. Click geri döndü.": "Rush hour is on. Clicking is back.", "Latte etkisi x10": "Latte effect x10", "Latte hook açıldı. Kahve hedefi büyük sicradi.": "Latte hook unlocked. Your coffee target took a big jump.", "Kahve x25": "Coffee x25", "Latte ikinci hook. Kahve makinesi deliriyor.": "Latte's second hook. The coffee machine is going wild.", "Latte tezgahi açıldı. Kahve hedefi büyüdü.": "The latte counter opened. Your coffee target grew.", "Depo etkisi x10": "Warehouse effect x10", "Çekirdek Deposu hook açıldı. Tedarik oyunu degisti.": "Bean Warehouse hook unlocked. The supply game just changed.", "Çekirdek x25": "Beans x25", "Çekirdek Deposu ikinci hook. Depo zinciri kuruldu.": "Bean Warehouse's second hook. A warehouse chain is set up.", "Depo kuruldu. Çekirdek tekrar yetişir hale geldi.": "The warehouse is up. Beans can keep up again.", "Soğuk zincir x10": "Cold chain x10", "Soğuk Zincir hook açıldı. Süt tekrar avantajli yatırım.": "Cold Chain hook unlocked. Milk is a smart investment again.", "Süt x100": "Milk x100", "Soğuk Zincir ikinci hook. Nadir süt x100 patlamasi.": "Cold Chain's second hook. A rare milk x100 burst.", "Soğuk zincir süt akışına nefes verdi.": "The cold chain gave the milk flow some breathing room.", "Espresso etkisi x10": "Espresso effect x10", "Espresso hook açıldı. Kahve bir süre kral.": "Espresso hook unlocked. Coffee is king for a while.", "Kahve x100": "Coffee x100", "Espresso ikinci hook. Nadir kahve x100 patlamasi.": "Espresso's second hook. A rare coffee x100 burst.", "Espresso hatti kahveyi patlatti.": "The espresso line blew coffee wide open.", "Şube etkisi x2": "Branch effect x2", "Şube hook açıldı. Franchise kokusu geldi.": "Branch hook unlocked. You can smell the franchise coming.", "Tüm üretim x100": "All output x100", "Şube beşinci hook. Nadir franchise x100 patlamasi.": "Branch's fifth hook. A rare franchise x100 burst.", "Şube açıldı. Yeni yatırım döngüsü başladı.": "A branch opened. A new investment cycle begins.", "Şube ekip x10": "Branch crew x10", "Şube ekibi hook açıldı. Kahve tekrar en hızlı yol.": "Branch crew hook unlocked. Coffee is the fastest path again.", "Şube ekibi ikinci hook. Tüm kahve x25.": "Branch crew's second hook. All coffee x25.", "Şube ekibi kahve tarafini buyuttu.": "The branch crew scaled up the coffee side.", "Sözleşme x10": "Contract x10", "Toptan Çekirdek hook açıldı. Çekirdek ekonomisi patladı.": "Wholesale Bean hook unlocked. The bean economy exploded.", "Çekirdek x100": "Beans x100", "Toptan Çekirdek ikinci hook. Nadir çekirdek x100.": "Wholesale Bean's second hook. A rare beans x100.", "Toptan çekirdek sozlesmesi imzalandı.": "The wholesale bean contract is signed.", "Kooperatif x10": "Co-op x10", "Süt Kooperatifi hook açıldı. Süt yine darboğaz degil.": "Milk Co-op hook unlocked. Milk isn't the bottleneck anymore.", "Süt Kooperatifi ikinci hook. Tüm süt x25.": "Milk Co-op's second hook. All milk x25.", "Süt kooperatifi şubeleri besliyor.": "The milk co-op is feeding all your branches.", "Fabrika x10": "Factory x10", "Kavurma Fabrikası hook açıldı. Prestij yolu kısaldı.": "Roasting Factory hook unlocked. The road to prestige got shorter.", "Kavurma Fabrikası ikinci hook. Tüm üretim x10.": "Roasting Factory's second hook. All output x10.", "Fabrika açıldı. Artık prestij kokusu var.": "The factory opened. You can smell prestige now.", "Click x100": "Click x100", "Altın Tamper hook. Nadir click x100.": "Golden Tamper hook. A rare click x100.", "Altın Tamper açıldı. Click oyuna geri girdi.": "The Golden Tamper unlocked. Clicking is back in the game.", "Kavurma Lab hook. Çekirdek ekonomisi x100.": "Roasting Lab hook. Bean economy x100.", "Kavurma laboratuvari kuruldu.": "The roasting lab is built.", "Krema Lab hook. Süt ekonomisi x100.": "Cream Lab hook. Milk economy x100.", "Krema laboratuvari açıldı.": "The cream lab is open.", "Tüm üretim x25": "All output x25", "Espresso Singularity hook. Tüm üretim x25.": "Espresso Singularity hook. All output x25.", "Espresso Singularity açıldı.": "Espresso Singularity unlocked.", "Daha çok kahve depolayabilirsin.": "You can stockpile more coffee now.", "Çekirdek ambarı genişledi.": "The bean silo got bigger.", "Süt soğutucu kuruldu.": "The milk cooler is installed.", "Tüm kayıt, şube ve prestij silinsin mi?": "Wipe all your save, branches and prestige?", "Kafe tamamen temizlendi.": "The cafe was wiped clean.", "Hook Lv ${next.level}: ${next.label}": "Hook Lv ${next.level}: ${next.label}", "Hook aktif: ${last.label}": "Hook active: ${last.label}", "Hook açıldı: ${upgrade.title}.": "Hook unlocked: ${upgrade.title}.", "${upgrade.title} gelişti.": "${upgrade.title} leveled up.", "✨ ${upgrade.title}!": "✨ ${upgrade.title}!", "Prestij için ${format(Math.max(0, nextPrestigeCoffeeTarget() - state.runCoffeeEarned))} run kahvesi daha lazım.": "You need ${format(Math.max(0, nextPrestigeCoffeeTarget() - state.runCoffeeEarned))} more run coffee to prestige.", "Prestij sıfırlaması +${gain} seviye verecek. Tüm run basa doner, kalıcı çarpan ${nextMultiplier.toFixed(2)}x olur. Devam?": "A prestige reset gives +${gain} levels. The whole run restarts and your permanent multiplier becomes ${nextMultiplier.toFixed(2)}x. Go ahead?", "Prestij alındı. Kalıcı çarpan ${nextMultiplier.toFixed(2)}x.": "Prestige claimed. Permanent multiplier ${nextMultiplier.toFixed(2)}x.", "✨ Prestij! Kalıcı çarpan ${nextMultiplier.toFixed(2)}x": "✨ Prestige! Permanent multiplier ${nextMultiplier.toFixed(2)}x", "Prestij Prestiji için Prestij Lv ${requirement} lazım.": "You need Prestige Lv ${requirement} for a Prestige of Prestige.", "Prestij Prestiji Lv ${nextMeta} olacak. Prestij seviyesi ve run tamamen sıfırlanır, yeni prestij kazanımı ${nextGainMult.toFixed(0)}x olur. Devam?": "This makes Prestige of Prestige Lv ${nextMeta}. Your prestige level and run fully reset, and new prestige gains become ${nextGainMult.toFixed(0)}x. Go ahead?", "Prestij Prestiji Lv ${nextMeta}. Bundan sonra prestij kazanımı ${nextGainMult.toFixed(0)}x.": "Prestige of Prestige Lv ${nextMeta}. From now on prestige gains are ${nextGainMult.toFixed(0)}x.", "🌟 Meta Prestij Lv ${nextMeta}!": "🌟 Meta Prestige Lv ${nextMeta}!", "Mahalle ilk fincanlari fark etti.": "The neighborhood noticed your first cups.", "Küçük kuyruk oluşmaya başladı.": "A little line is starting to form.", "Çekirdek tedariği oyuna girdi.": "Bean supply just entered the game.", "Menüye sütlü kahveler eklendi.": "Milky coffees made it onto the menu.", "İlk şube açıldı.": "Your first branch opened.", "Aktif tıklama kombosu ısındı.": "Your active click combo is heating up.", "Prestij sıfırlaması hazır.": "A prestige reset is ready.", "${format(coffeeRate)} kahve/sn": "${format(coffeeRate)} coffee/sec", "+${gain} seviye": "+${gain} levels", "${format(state.runCoffeeEarned)} run kahvesi. Sıfırla, kalıcı çarpan ${nextMultiplier.toFixed(2)}x olsun.": "${format(state.runCoffeeEarned)} run coffee. Reset to make your permanent multiplier ${nextMultiplier.toFixed(2)}x.", "${format(prestigeThreshold - state.runCoffeeEarned)} run kahvesi sonra açılır.": "Unlocks in ${format(prestigeThreshold - state.runCoffeeEarned)} run coffee.", "Sonraki prestij seviyesi için ${format(nextTarget - state.runCoffeeEarned)} run kahvesi daha.": "${format(nextTarget - state.runCoffeeEarned)} more run coffee for the next prestige level.", "Lv ${state.metaPrestigeLevel} -> ${targetLevel}": "Lv ${state.metaPrestigeLevel} -> ${targetLevel}", "Hazır. Prestij kazanımı ${metaPrestigeGainMultiplier(targetLevel).toFixed(0)}x olur, prestij sıfırlanır.": "Ready. Prestige gains become ${metaPrestigeGainMultiplier(targetLevel).toFixed(0)}x and prestige resets.", "Prestij Lv ${requirement} lazım. Şu an Lv ${state.prestigeLevel}.": "You need Prestige Lv ${requirement}. You're at Lv ${state.prestigeLevel}.", "Lv ${level}": "Lv ${level}", "${upgrade.desc} | ${hookInfo}": "${upgrade.desc} | ${hookInfo}", "Tamam": "Done", "Bekliyor": "Pending", "Tüm hatlar açık": "All lines unlocked", "Hazır: ${target.title}": "Ready: ${target.title}", "Darboğaz: ${format(main.missing)} ${resourceName(main.resource)} → ${bottleneckSolutions(main.resource)}": "Bottleneck: ${format(main.missing)} ${resourceName(main.resource)} → ${bottleneckSolutions(main.resource)}", "👆 Demle": "👆 Brew", "👆 Çekirdek Topla": "👆 Collect Beans", "👆 Süt Hazırla": "👆 Prep Milk", "🏭": "🏭", "yatırım yap": "make an investment", "Meta ${state.metaPrestigeLevel}": "Meta ${state.metaPrestigeLevel}", "Prestij ${state.prestigeLevel}": "Prestige ${state.prestigeLevel}", "Dev hız ${state.devSpeed}x.": "Dev speed ${state.devSpeed}x.", "Kafe kaydedildi.": "Cafe saved.", "/sn · ⛁": "/sec · ⛁", "DOLU": "FULL", "🍀 ŞANSLI ×${mult}!": "🍀 LUCKY ×${mult}!", "🎉 ${format(t)} fincan!": "🎉 ${format(t)} cups!", "${mins} dk yoktun, üretim toplandı: +${format(oc)} kahve.": "You were away ${mins} min — output collected: +${format(oc)} coffee.", "Çağı": "Age", "Tekrar hos geldin patron!": "Welcome back, boss!", "⚡ 2X TOPLA": "⚡ COLLECT 2X", "Topla": "Collect", "dakika": "minutes", "kisa sure": "a short while", "yoktun, kahve makinesi calisti:": "away, your coffee machine kept running:", "⏳ ${CAP_H} saat tavanina ulastin — daha sik ugra, daha cok kazan!": "⏳ You hit the ${CAP_H}-hour cap — drop by more often, earn more!", "⚡ 2X! +": "⚡ 2X! +", "☕ +": "☕ +", "kahve toplandi": "coffee collected", "dk": "min", "yoktun": "away", "(2x)": "(2x)", ": +": ": +", "kahve.": "coffee.", "🎁 Günlük Ödül": "🎁 Daily Reward", "📊 İstatistikler": "📊 Stats", "📤 Kaydı Dışa Aktar": "📤 Export Save", "📥 Kaydı İçe Aktar": "📥 Import Save", "Günlük Ödül": "Daily Reward", "Üst üste": "On a streak of", "gün 🔥": "days 🔥", ". gün ödülünü al: +": ". day's reward: +", "Bugünkü ödül alındı ✓ Yarın gel patron!": "Today's reward claimed ✓ Come back tomorrow, boss!", "🎁 Günlük ödül: +": "🎁 Daily reward: +", "Toplam üretilen kahve": "Total coffee made", "Bu turdaki kahve": "Coffee this run", "Toplam tıklama": "Total clicks", "Kahve / sn": "Coffee / sec", "Çekirdek / sn": "Beans / sec", "Süt / sn": "Milk / sec", "Prestij sayısı": "Prestige count", "Prestij seviyesi": "Prestige level", "Meta prestij": "Meta prestige", "Açılan başarım": "Achievements unlocked", "Oynama süresi": "Time played", "sa": "h", "Kayıt kodu kutuda — kopyala": "Save code is in the box — copy it", "Kayıt kodunu yapıştır, tekrar bas": "Paste your save code, then tap again", "Kayıt yüklendi, yeniden başlıyor": "Save loaded, restarting", "⚠ Geçersiz kayıt kodu": "⚠ Invalid save code", "Tüm üretim x10": "All output x10", "Prestij için ${format(...)} run kahvesi daha lazım.": "You need ${format(...)} more run coffee for prestige.", "${format(...)} run kahvesi sonra açılır.": "Unlocks after ${format(...)} run coffee.", "Sonraki prestij seviyesi için ${format(...)} run kahvesi daha.": "${format(...)} more run coffee for the next prestige level.", "${format(rate)}/sn · ⛁${format(cap)}": "${format(rate)}/sec · ⛁${format(cap)}", "${p} Çağı": "${p} Age", "⚡ 2X! +${fmt(c)} kahve toplandi": "⚡ 2X! +${fmt(c)} coffee collected", "☕ +${fmt(c)} kahve toplandi": "☕ +${fmt(c)} coffee collected", "yoktun: +${fmt(c)} kahve.": "you were away: +${fmt(c)} coffee.", "Üst üste ${streak} gün 🔥": "${streak} days in a row 🔥", "G${it.d}": "D${it.d}", "${slot}. gün ödülünü al: +${FMT(amt)} ${it.r}": "Claim day ${slot} reward: +${FMT(amt)} ${it.r}", "🎁 Günlük ödül: +${FMT(amt)} ${it.r}": "🎁 Daily reward: +${FMT(amt)} ${it.r}", "${r.mins} dakika yoktun, kahve makinesi calisti:": "You were away ${r.mins} minutes — the coffee machine kept running:", "kisa sure yoktun, kahve makinesi calisti:": "You were away a short while — the coffee machine kept running:", "☕ ${fmt(r.coffee)} kahve": "☕ ${fmt(r.coffee)} coffee", "${r.mins} dk yoktun: +${fmt(c)} kahve.": "You were away ${r.mins} min: +${fmt(c)} coffee.", "kisa sure yoktun: +${fmt(c)} kahve.": "You were away a short while: +${fmt(c)} coffee.", "kisa sure yoktun (2x): +${fmt(c)} kahve.": "You were away a short while (2x): +${fmt(c)} coffee.", "${h}sa ${m}dk": "${h}h ${m}m", "${m}dk": "${m}m"};
+      var HTMLD = {"3 kaynağın var: <b>☕ Kahve · 🫘 Çekirdek · 🥛 Süt</b>.": "You've got 3 resources: <b>☕ Coffee · 🫘 Beans · 🥛 Milk</b>.", "Biri azalınca <b>darboğaz</b> olur — onu çözersen büyürsün. Her şey adım adım açılır, acele yok patron.": "When one runs low you hit a <b>bottleneck</b> — clear it and you grow. Everything unlocks step by step, no rush, boss.", "👆 <b>1/4 — Demle:</b> büyük <b>Kahve Demle</b>'ye birkaç kez bas, ilk ☕ kahveni kazan.": "👆 <b>1/4 — Brew:</b> tap the big <b>Brew Coffee</b> button a few times and earn your first ☕ coffee.", "🛒 <b>2/4 — Otomatikleştir:</b> <b>Yatırımlar</b>'dan ilk geliştirmeni al. Artık tıklamadan, kendi kendine kahve akar.": "🛒 <b>2/4 — Automate:</b> grab your first upgrade from <b>Investments</b>. Now coffee flows on its own, no clicking needed.", "⚠️ <b>3/4 — Darboğaz:</b> bir kaynak azalınca <b>kartı kırmızı yanar</b>. Üstteki <b>“Sonraki hedef”</b> sana neyin eksik olduğunu ve <b>2 çözüm yolunu</b> söyler — onu çöz, akış rahatlasın.": "⚠️ <b>3/4 — Bottleneck:</b> when a resource runs low its <b>card glows red</b>. The <b>“Next goal”</b> up top tells you what's missing and <b>2 ways to fix it</b> — clear it and the flow eases up.", "🎉 <b>4/4 — Sır bu:</b> <b>☕ Kahve → 🫘 Çekirdek → 🥛 Süt</b> sırayla açılır, her biri yeni bir darboğaz. Çöz → büyü → sonunda <b>✨ Prestij</b> ile baştan ama daha güçlü başla. İyi eğlenceler!": "🎉 <b>4/4 — Here's the secret:</b> <b>☕ Coffee → 🫘 Beans → 🥛 Milk</b> unlock in order, each a new bottleneck. Clear it → grow → and eventually <b>✨ Prestige</b> to restart stronger than before. Have fun!"};
+      var FRAG = [["çekirdek/sn", "beans/sec"], ["kahve/sn", "coffee/sec"], ["süt/sn", "milk/sec"], ["çekirdek/tıklama", "beans/click"], ["kahve/tıklama", "coffee/click"], ["süt/tıklama", "milk/click"], ["/tıklama", "/click"], ["Sonraki hedef", "Next goal"], ["Toplam Hız", "Total Rate"], ["bekleyen", "pending"], ["/sn", "/sec"]];
+      var lang = (function(){ try{ return localStorage.getItem("kahve-lang") || "tr"; }catch(e){ return "tr"; } })();
+      ILT.lang = lang;
+      try { document.documentElement.lang = (lang === "en") ? "en" : "tr"; } catch(e) {}
+
+      // ---- tema ----
+      var THEMES = [
+        {key:"espresso", name:"Espresso", paper:"#1a1410", gold:"#f5c97a"},
+        {key:"latte",    name:"Latte",    paper:"#f3e7d3", gold:"#b9802f"},
+        {key:"matcha",   name:"Matcha",   paper:"#e7f0dd", gold:"#5f9a33"},
+        {key:"zen",      name:"Zen",      paper:"#eceae3", gold:"#9a7f48"}
+      ];
+      function curTheme(){ try{ return localStorage.getItem("kahve-theme") || "espresso"; }catch(e){ return "espresso"; } }
+      function applyTheme(k){ try{ document.documentElement.setAttribute("data-theme", k); localStorage.setItem("kahve-theme", k); }catch(e){} updateThemeUI(k); }
+      ILT.applyTheme = applyTheme;
+      applyTheme(curTheme());
+
+      // ---- emoji -> ikon + TR->EN cevirisi (DOM transform) ----
+      var EKEYS = Object.keys(EMAP).sort(function(a,b){ return b.length - a.length; });
+      var ERE = new RegExp("(" + EKEYS.map(function(e){ return e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("|") + ")️?", "g");
+
+      function translateText(t){
+        if (lang !== "en") return t;
+        var key = t.replace(/^\s+|\s+$/g, "");
+        if (key && Object.prototype.hasOwnProperty.call(DICT, key)) {
+          var lead = (t.match(/^\s*/) || [""])[0], trail = (t.match(/\s*$/) || [""])[0];
+          return lead + DICT[key] + trail;
+        }
+        var out = t;
+        for (var i=0;i<FRAG.length;i++){ if (out.indexOf(FRAG[i][0]) >= 0) out = out.split(FRAG[i][0]).join(FRAG[i][1]); }
+        return out;
+      }
+
+      function transformTextNode(tn){
+        var orig = tn.nodeValue;
+        if (!orig || !orig.trim()) return;
+        var t = translateText(orig);
+        ERE.lastIndex = 0;
+        if (!ERE.test(t)) { if (t !== orig) tn.nodeValue = t; return; }
+        ERE.lastIndex = 0;
+        var frag = document.createDocumentFragment(), last = 0, m;
+        while ((m = ERE.exec(t))) {
+          if (m.index > last) frag.appendChild(document.createTextNode(t.slice(last, m.index)));
+          var name = EMAP[m[1]];
+          if (name) { var img = document.createElement("img"); img.className = "kic"; img.src = ICON_BASE + name + ".svg"; img.alt = ""; img.setAttribute("aria-hidden","true"); frag.appendChild(img); }
+          else frag.appendChild(document.createTextNode(m[0]));
+          last = m.index + m[0].length;
+        }
+        if (last < t.length) frag.appendChild(document.createTextNode(t.slice(last)));
+        if (tn.parentNode) tn.parentNode.replaceChild(frag, tn);
+      }
+
+      function walk(node){
+        if (node.nodeType === 3) { transformTextNode(node); return; }
+        if (node.nodeType !== 1) return;
+        var tag = node.tagName;
+        if (tag === "SCRIPT" || tag === "STYLE" || tag === "TEXTAREA" || tag === "IMG" || tag === "INPUT") return;
+        if (node.classList && node.classList.contains("kic")) return;
+        // onboarding/rich-text (<b> iceren kisa dugumler): innerHTML icinde substring cevirisi
+        if (lang === "en" && node.textContent.length < 520 && node.getElementsByTagName("b").length) {
+          var h = node.innerHTML, ch = false;
+          for (var hk in HTMLD) { if (h.indexOf(hk) >= 0) { h = h.split(hk).join(HTMLD[hk]); ch = true; } }
+          if (ch) node.innerHTML = h;
+        }
+        var kids = Array.prototype.slice.call(node.childNodes);
+        for (var i=0;i<kids.length;i++) walk(kids[i]);
+      }
+
+      var obs = new MutationObserver(function(muts){
+        obs.disconnect();
+        for (var i=0;i<muts.length;i++){
+          var mu = muts[i];
+          if (mu.type === "characterData") transformTextNode(mu.target);
+          else { var an = mu.addedNodes; for (var j=0;j<an.length;j++) walk(an[j]); }
+        }
+        obs.observe(document.body, {childList:true, subtree:true, characterData:true});
+      });
+      function start(){ try{ walk(document.body); }catch(e){} obs.observe(document.body, {childList:true, subtree:true, characterData:true}); }
+      ILT.reprocess = start;
+
+      // ---- ayarlar: tema secici + dil toggle ----
+      function updateThemeUI(k){
+        var els = document.querySelectorAll(".kilt-theme"); for (var i=0;i<els.length;i++){ els[i].classList.toggle("on", els[i].getAttribute("data-k") === k); }
+      }
+      function injectSettings(){
+        var card = document.querySelector("#settingsOverlay .settings-card"); if (!card || card.querySelector(".kilt-sec")) return;
+        var foot = card.querySelector(".settings-foot");
+        // tema
+        var tsec = document.createElement("div"); tsec.className = "kilt-sec";
+        tsec.innerHTML = '<p class="kilt-label">Görsel Tema</p><div class="kilt-themes"></div>';
+        var grid = tsec.querySelector(".kilt-themes");
+        THEMES.forEach(function(th){
+          var b = document.createElement("button"); b.type = "button"; b.className = "kilt-theme"; b.setAttribute("data-k", th.key);
+          b.innerHTML = '<span class="kilt-sw" style="background:'+th.paper+';--swg:'+th.gold+'"></span><span class="kilt-tn">'+th.name+'</span>';
+          b.addEventListener("click", function(){ applyTheme(th.key); });
+          grid.appendChild(b);
+        });
+        // dil
+        var lsec = document.createElement("div"); lsec.className = "kilt-sec";
+        lsec.innerHTML = '<p class="kilt-label">Dil / Language</p><div class="kilt-lang"><button type="button" data-l="tr">Türkçe</button><button type="button" data-l="en">English</button></div>';
+        Array.prototype.forEach.call(lsec.querySelectorAll("button"), function(b){
+          if (b.getAttribute("data-l") === lang) b.classList.add("on");
+          b.addEventListener("click", function(){ var nl = b.getAttribute("data-l"); if (nl === lang) return; try{ localStorage.setItem("kahve-lang", nl); }catch(e){} location.reload(); });
+        });
+        if (foot) { card.insertBefore(tsec, foot); card.insertBefore(lsec, foot); }
+        else { card.appendChild(tsec); card.appendChild(lsec); }
+        updateThemeUI(curTheme());
+      }
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ injectSettings(); start(); });
+      else { injectSettings(); start(); }
+      // ayarlar gec acilirsa diye buton tiklaminda da garanti
+      var sb = document.getElementById("settingsButton"); if (sb) sb.addEventListener("click", function(){ setTimeout(injectSettings, 30); });
+    })();
+
     </script>
   </body>
 </html>
