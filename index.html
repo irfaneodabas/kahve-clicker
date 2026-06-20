@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="var(--paper)">
+    <meta name="apple-mobile-web-app-title" content="Kahve">
+    <meta name="theme-color" content="#1a1410">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="assets/emblem.svg">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
     <link rel="manifest" href="manifest.json">
     <script>
       if ("serviceWorker" in navigator) {
@@ -3750,7 +3753,7 @@
         {key:"zen",      name:"Zen",      paper:"#eceae3", gold:"#9a7f48"}
       ];
       function curTheme(){ try{ return localStorage.getItem("kahve-theme") || "espresso"; }catch(e){ return "espresso"; } }
-      function applyTheme(k){ try{ document.documentElement.setAttribute("data-theme", k); localStorage.setItem("kahve-theme", k); }catch(e){} updateThemeUI(k); }
+      function applyTheme(k){ try{ document.documentElement.setAttribute("data-theme", k); localStorage.setItem("kahve-theme", k); }catch(e){} try{ var th=THEMES.filter(function(t){return t.key===k;})[0]; var mt=document.querySelector('meta[name="theme-color"]'); if(th&&mt) mt.setAttribute("content", th.paper); }catch(e){} updateThemeUI(k); }
       ILT.applyTheme = applyTheme;
       applyTheme(curTheme());
 
