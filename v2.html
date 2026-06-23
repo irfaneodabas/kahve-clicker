@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1410">
+    <title>Kahve İmparatorluğu</title>
+    <style>
+      :root{
+        --bg:#1a1410; --panel:#241c16; --panel2:#2a2018; --line:#3a2e24;
+        --ink:#f0e6d8; --muted:#a89070; --gold:#f5c97a; --gold2:#e0a85a;
+        --green:#5fbf63; --green2:#3f8f43; --red:#e8584a;
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink);
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; overflow:hidden; user-select:none; }
+      .app{ height:100svh; max-width:480px; margin:0 auto; display:flex; flex-direction:column;
+        padding-top:calc(6px + env(safe-area-inset-top)); will-change:transform; }
+      .app.shake{ animation:scrShake .32s ease-in-out; }
+      @keyframes scrShake{ 0%,100%{transform:translate(0,0)} 12%{transform:translate(-6px,2px)} 30%{transform:translate(5px,-2px)} 48%{transform:translate(-4px,1px)} 66%{transform:translate(3px,2px)} 84%{transform:translate(-2px,-1px)} }
+
+      /* ÜST */
+      .topbar{ flex:0 0 auto; padding:4px 10px 8px; }
+      .cash-row{ display:flex; align-items:center; gap:9px; padding:4px 2px 8px; }
+      .cash-coin{ width:32px; height:32px; flex:0 0 auto; }
+      .cash-val{ font-size:1.85rem; font-weight:900; letter-spacing:.3px; font-variant-numeric:tabular-nums; }
+      .cash-val.glow{ animation:cashGlow .45s ease-out; }
+      @keyframes cashGlow{ 0%{ text-shadow:0 0 0 transparent } 35%{ text-shadow:0 0 18px var(--gold) } 100%{ text-shadow:0 0 0 transparent } }
+      .melek-badge{ margin-left:auto; display:flex; align-items:center; gap:5px; background:var(--panel2);
+        border:1px solid var(--line); border-radius:20px; padding:4px 10px 4px 6px; }
+      .melek-badge img{ width:20px; height:20px; }
+      .melek-badge b{ color:var(--gold); font-size:.9rem; font-variant-numeric:tabular-nums; }
+      .melek-badge.pulse{ animation:badgePulse 1s ease-in-out infinite; }
+      @keyframes badgePulse{ 0%,100%{ box-shadow:0 0 0 0 transparent } 50%{ box-shadow:0 0 0 3px rgba(245,201,122,.25) } }
+      .cps{ font-size:.66rem; color:var(--muted); text-align:right; line-height:1.2; padding:0 2px 4px; }
+      .cps b{ color:var(--gold); }
+      .goal{ background:linear-gradient(180deg,var(--panel2),var(--panel)); border:1px solid var(--line);
+        border-radius:11px; padding:8px 11px; display:flex; align-items:center; gap:9px; margin-bottom:7px; }
+      .goal-ic{ width:24px; height:24px; flex:0 0 auto; }
+      .goal-txt{ font-size:.78rem; line-height:1.25; }
+      .goal-txt b{ color:var(--gold); }
+      .buyamt{ display:flex; gap:6px; }
+      .buyamt button{ flex:1; padding:7px; border-radius:9px; border:1px solid var(--line);
+        background:var(--panel); color:var(--muted); font-weight:800; font-size:.8rem; cursor:pointer; }
+      .buyamt button.on{ border-color:var(--gold); color:var(--gold); background:var(--panel2); }
+
+      .view{ flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+        display:flex; flex-direction:column; gap:8px; padding:6px 10px 12px; }
+
+      /* İŞ BAR */
+      .biz{ position:relative; display:flex; align-items:center; gap:11px; min-height:72px;
+        background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:9px 10px; overflow:hidden; }
+      .biz.locked{ opacity:.45; }
+      .biz.settle{ animation:settle .26s ease-out; }
+      @keyframes settle{ 0%{ transform:translateX(4px) } 100%{ transform:translateX(0) } }
+      .biz.rowshake{ animation:rowShake .2s ease-in-out; }
+      @keyframes rowShake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+      .biz > .biz-fill{ position:absolute; left:0; top:0; bottom:0; width:0%; z-index:0;
+        background:linear-gradient(90deg, rgba(245,201,122,.18), rgba(224,168,90,.05)); pointer-events:none; }
+      .biz > .biz-wipe{ position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0;
+        background:linear-gradient(90deg,transparent, rgba(245,201,122,.45), transparent); background-size:200% 100%; }
+      .biz > .biz-wipe.go{ animation:wipe .6s ease-out; }
+      @keyframes wipe{ 0%{ opacity:1; background-position:-120% 0 } 100%{ opacity:0; background-position:160% 0 } }
+      .biz > .biz-ic, .biz > .biz-mid, .biz > .biz-buy{ position:relative; z-index:1; }
+      .biz-ic{ width:54px; height:54px; flex:0 0 auto; border-radius:50%; position:relative;
+        background:var(--panel2); border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+        cursor:pointer; will-change:transform; }
+      .biz-ic img{ width:32px; height:32px; pointer-events:none; }
+      .biz-ic.spring{ animation:tapSpring .28s cubic-bezier(.34,1.8,.64,1); }
+      @keyframes tapSpring{ 0%{transform:scale(1)} 22%{transform:scale(.86) rotate(-3deg)} 60%{transform:scale(1.07)} 100%{transform:scale(1)} }
+      .biz-ic.hired{ animation:cardFlip .45s ease-out; }
+      @keyframes cardFlip{ 0%{transform:rotateY(0)} 50%{transform:rotateY(180deg) scale(.9)} 100%{transform:rotateY(360deg)} }
+      .biz-ic .ring{ position:absolute; inset:-2px; pointer-events:none; }
+      .biz-ic .ring circle{ fill:none; stroke-width:3; }
+      .biz-ic .owned{ position:absolute; bottom:-7px; left:50%; transform:translateX(-50%);
+        background:var(--gold); color:#1a1006; font-size:.66rem; font-weight:900; border-radius:8px;
+        padding:1px 7px; min-width:22px; text-align:center; box-shadow:0 1px 3px #0007; }
+      .biz-ic .owned.bump{ animation:badgePop .3s ease-out; }
+      @keyframes badgePop{ 0%{transform:translateX(-50%) scale(1)} 45%{transform:translateX(-50%) scale(1.4)} 100%{transform:translateX(-50%) scale(1)} }
+      .biz-ic.mgron{ box-shadow:0 0 0 2px var(--gold) inset; }
+      .biz-mid{ flex:1 1 auto; min-width:0; }
+      .biz-name{ font-weight:800; font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .biz-rev{ font-size:.82rem; color:var(--gold); font-weight:700; font-variant-numeric:tabular-nums; }
+      .biz-rev.flash{ animation:revFlash .4s ease-out; }
+      @keyframes revFlash{ 0%{color:var(--gold)} 40%{color:#fff} 100%{color:var(--gold)} }
+      .biz-time{ font-size:.66rem; color:var(--muted); margin-top:1px; }
+      .biz-buy{ flex:0 0 auto; width:94px; border:0; border-radius:11px; padding:8px 4px;
+        background:linear-gradient(180deg,var(--green),var(--green2)); color:#06220a; font-weight:900;
+        cursor:pointer; text-align:center; line-height:1.18; }
+      .biz-buy:active{ transform:scale(.94) translateY(2px); box-shadow:inset 0 2px 0 rgba(255,255,255,.4); }
+      .biz-buy:disabled{ background:var(--panel2); color:var(--muted); cursor:default; transform:none; box-shadow:none; }
+      .biz-buy .lbl{ font-size:.6rem; opacity:.85; display:block; letter-spacing:.02em; }
+      .biz-buy .cost{ font-size:.92rem; font-variant-numeric:tabular-nums; }
+
+      /* MÜDÜR */
+      .mgr{ display:flex; align-items:center; gap:11px; min-height:64px; background:var(--panel);
+        border:1px solid var(--line); border-radius:14px; padding:9px 10px; }
+      .mgr.locked{ opacity:.45; }
+      .mgr-ic{ width:46px; height:46px; flex:0 0 auto; border-radius:50%; background:var(--panel2);
+        border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+      .mgr-ic img{ width:28px; height:28px; }
+      .mgr-mid{ flex:1 1 auto; min-width:0; }
+      .mgr-name{ font-weight:800; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .mgr-sub{ font-size:.72rem; color:var(--muted); }
+      .mgr-buy{ flex:0 0 auto; width:104px; border:0; border-radius:11px; padding:9px 4px;
+        background:linear-gradient(180deg,var(--gold),var(--gold2)); color:#2a1c10; font-weight:900;
+        cursor:pointer; text-align:center; line-height:1.15; }
+      .mgr-buy:active{ transform:scale(.95); }
+      .mgr-buy:disabled{ background:var(--panel2); color:var(--muted); }
+      .mgr-buy.owned{ background:transparent; border:1px solid var(--green); color:var(--green); }
+      .mgr-buy .lbl{ font-size:.6rem; opacity:.85; display:block; }
+      .mgr-buy .cost{ font-size:.86rem; }
+
+      /* MELEKLER ekranı */
+      .angel-wrap{ padding:8px 4px; text-align:center; }
+      .angel-hero{ background:linear-gradient(180deg,#2e2416,#241c14); border:1px solid var(--gold);
+        border-radius:18px; padding:20px 16px; margin-bottom:14px; }
+      .angel-hero img{ width:64px; height:64px; }
+      .angel-count{ font-size:2rem; font-weight:900; color:var(--gold); margin:6px 0 2px; }
+      .angel-bonus{ color:var(--ink); font-size:.92rem; }
+      .angel-bonus b{ color:var(--green); }
+      .angel-btn{ width:100%; border:0; border-radius:14px; padding:16px; font-weight:900; font-size:1.05rem;
+        cursor:pointer; background:linear-gradient(180deg,var(--gold),var(--gold2)); color:#2a1c10; }
+      .angel-btn:disabled{ background:var(--panel2); color:var(--muted); }
+      .angel-btn.ready{ animation:badgePulse 1.1s ease-in-out infinite; }
+      .angel-prog{ height:8px; border-radius:99px; background:var(--panel2); overflow:hidden; margin:12px 0 6px; }
+      .angel-prog i{ display:block; height:100%; background:linear-gradient(90deg,var(--gold2),var(--gold)); width:0%; }
+      .angel-note{ color:var(--muted); font-size:.78rem; line-height:1.4; margin-top:10px; }
+
+      /* NAV */
+      .nav{ flex:0 0 auto; display:flex; border-top:1px solid var(--line); background:var(--panel);
+        padding-bottom:env(safe-area-inset-bottom); }
+      .nav button{ flex:1; background:none; border:0; color:var(--muted); padding:10px 4px 9px;
+        font-size:.7rem; font-weight:700; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; position:relative; }
+      .nav button img{ width:22px; height:22px; opacity:.6; }
+      .nav button.on{ color:var(--gold); }
+      .nav button.on img{ opacity:1; }
+      .nav .dot{ position:absolute; top:6px; right:50%; margin-right:-18px; width:8px; height:8px; border-radius:50%;
+        background:var(--gold); display:none; }
+      .nav .dot.show{ display:block; animation:badgePulse 1s ease-in-out infinite; }
+
+      /* PARÇACIK + FLOAT + BLOOM */
+      .coin{ position:fixed; width:9px; height:9px; border-radius:50%; z-index:60; pointer-events:none;
+        background:radial-gradient(circle at 35% 30%, var(--gold), var(--gold2)); box-shadow:0 0 4px rgba(245,201,122,.6); will-change:transform; }
+      .coin.go{ animation:coinFly .45s ease-out forwards; }
+      @keyframes coinFly{ to{ transform:translate(var(--dx),var(--dy)) scale(.6); opacity:0; } }
+      .float{ position:fixed; z-index:50; pointer-events:none; font-weight:900; color:var(--gold);
+        font-size:.95rem; text-shadow:0 2px 6px #000a; animation:floatUp .9s ease-out forwards; }
+      @keyframes floatUp{ 0%{ transform:translate(0,0); opacity:0 } 15%{ opacity:1 } 100%{ transform:translate(var(--jx,0),-48px); opacity:0 } }
+      .biglabel{ position:fixed; z-index:70; pointer-events:none; font-weight:900; color:var(--gold);
+        font-size:2rem; text-shadow:0 3px 12px #000c; animation:x2Pop .9s ease-out forwards; }
+      @keyframes x2Pop{ 0%{transform:scale(0)} 40%{transform:scale(1.3)} 60%{transform:scale(1)} 100%{transform:translateY(-34px);opacity:0} }
+      .flash{ position:fixed; z-index:55; pointer-events:none; border-radius:50%;
+        background:radial-gradient(circle, rgba(245,201,122,.75), transparent 65%); animation:flashOut .5s ease-out forwards; }
+      @keyframes flashOut{ 0%{ transform:scale(.4); opacity:.9 } 100%{ transform:scale(2.2); opacity:0 } }
+      #bloom{ position:fixed; inset:0; z-index:90; pointer-events:none; opacity:0;
+        background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.95), rgba(245,201,122,.7) 30%, transparent 70%); }
+      #bloom.go{ animation:bloom 1.4s ease-out forwards; }
+      @keyframes bloom{ 0%{ opacity:0; transform:scale(.6) } 12%{ opacity:1 } 40%{ opacity:.7 } 100%{ opacity:0; transform:scale(1.4) } }
+      .feather{ position:fixed; z-index:88; pointer-events:none; width:14px; height:14px; border-radius:50% 50% 50% 0;
+        background:linear-gradient(180deg,#fff,var(--gold)); will-change:transform; }
+      .feather.go{ animation:featherFall 1.3s ease-in forwards; }
+      @keyframes featherFall{ to{ transform:translateY(var(--fy)) rotate(var(--fr)); opacity:0 } }
+
+      /* yeni: mute + boost + notify + golden bean + offline modal */
+      .topright{ margin-left:auto; display:flex; align-items:center; gap:6px; }
+      .topright .melek-badge{ margin-left:0; }
+      .mutebtn{ width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--panel2); color:var(--gold); font-size:1rem; cursor:pointer; flex:0 0 auto; }
+      .boost-badge{ display:flex; align-items:center; gap:3px; background:linear-gradient(180deg,var(--gold),var(--gold2)); color:#2a1c10; border-radius:20px; padding:4px 10px; font-size:.82rem; font-weight:900; animation:badgePulse .8s ease-in-out infinite; }
+      .notify{ height:0; overflow:hidden; transition:height .25s ease; color:var(--gold); font-size:.78rem; font-weight:700; text-align:center; }
+      .notify.show{ height:22px; padding:2px 0; }
+      .goldbean{ position:fixed; width:48px; height:48px; z-index:80; cursor:pointer; filter:drop-shadow(0 0 10px var(--gold));
+        animation:beanFloat 8s linear forwards, beanBob 1.1s ease-in-out infinite; }
+      @keyframes beanFloat{ 0%{ opacity:0; transform:scale(.4) } 8%{ opacity:1; transform:scale(1) } 92%{ opacity:1 } 100%{ opacity:0 } }
+      @keyframes beanBob{ 0%,100%{ margin-top:0 } 50%{ margin-top:-10px } }
+      .modal-bg{ position:fixed; inset:0; z-index:120; background:rgba(12,9,6,.84); display:flex; align-items:center; justify-content:center; padding:22px; backdrop-filter:blur(4px); }
+      .modal{ background:linear-gradient(180deg,#2e2416,#241c14); border:1px solid var(--gold); border-radius:20px; padding:24px 20px; text-align:center; max-width:340px; width:100%; box-shadow:0 20px 60px #000c; animation:tapSpring .4s ease-out; }
+      .modal h3{ color:var(--gold); margin:10px 0 6px; font-size:1.2rem; }
+      .modal p{ color:var(--muted); font-size:.9rem; margin:0 0 12px; }
+      .modal-amt{ font-size:1.8rem; font-weight:900; color:var(--gold); margin:6px 0 16px; font-variant-numeric:tabular-nums; }
+      .modal-btn{ width:100%; border:0; border-radius:14px; padding:15px; font-weight:900; font-size:1.05rem; cursor:pointer; background:linear-gradient(180deg,var(--gold),var(--gold2)); color:#2a1c10; }
+    </style>
+  </head>
+  <body>
+    <div id="bloom"></div>
+    <div class="app" id="app">
+      <div class="topbar">
+        <div class="cash-row">
+          <img class="cash-coin" src="assets/icons/coffee.svg" alt="">
+          <span class="cash-val" id="cashVal">0</span>
+          <span class="topright">
+            <span class="boost-badge" id="boostBadge" style="display:none">×<b id="boostMx">7</b> <b id="boostT">0</b>s</span>
+            <span class="melek-badge" id="melekBadge" style="display:none"><img src="assets/icons/sparkles.svg" alt=""><b id="melekCount">0</b></span>
+            <button class="mutebtn" id="muteBtn" type="button" aria-label="Ses">🔊</button>
+          </span>
+        </div>
+        <div class="notify" id="notify"></div>
+        <div class="cps">Üretim: <b id="cpsVal">0</b> ₿/sn</div>
+        <div class="goal">
+          <img class="goal-ic" id="goalIc" src="assets/icons/star.svg" alt="">
+          <div class="goal-txt" id="goalTxt">Başla!</div>
+        </div>
+        <div class="buyamt" id="buyAmt">
+          <button data-n="1" class="on">×1</button>
+          <button data-n="10">×10</button>
+          <button data-n="100">×100</button>
+          <button data-n="max">MAX</button>
+        </div>
+      </div>
+
+      <div class="view" id="viewBiz"></div>
+      <div class="view" id="viewMgr" style="display:none"></div>
+      <div class="view" id="viewMlk" style="display:none"></div>
+
+      <div class="nav" id="nav">
+        <button data-v="biz" class="on"><img src="assets/icons/store.svg" alt="">İşler</button>
+        <button data-v="mgr"><img src="assets/icons/point.svg" alt="">Müdürler</button>
+        <button data-v="mlk"><span class="dot" id="mlkDot"></span><img src="assets/icons/sparkles.svg" alt="">Melekler</button>
+      </div>
+    </div>
+
+    <script>
+      "use strict";
+      /* ====== VERİ MODELİ (kendi sayılarımız; AdVenture eğri şekli referans) ====== */
+      const BUSINESSES = [
+        { id:"b1", name:"El Değirmeni",    icon:"beans",   baseCost:4,         coef:1.07, rev:1,         time:1.0,  mgrCost:800,        mgrName:"Çırak Cem" },
+        { id:"b2", name:"Kahve Arabası",   icon:"coffee",  baseCost:55,        coef:1.15, rev:55,        time:3.0,  mgrCost:9000,       mgrName:"Barista Bora" },
+        { id:"b3", name:"Köşe Kafe",       icon:"store",   baseCost:640,       coef:1.14, rev:480,       time:6.0,  mgrCost:60000,      mgrName:"Şef Selin" },
+        { id:"b4", name:"Drive-thru",      icon:"cart",    baseCost:7600,      coef:1.13, rev:3800,      time:12.0, mgrCost:350000,     mgrName:"Müdür Murat" },
+        { id:"b5", name:"Kavurmacı",       icon:"factory", baseCost:92000,     coef:1.12, rev:46000,     time:24.0, mgrCost:1000000,    mgrName:"Usta Umut" },
+        { id:"b6", name:"Şube Zinciri",    icon:"bank",    baseCost:1100000,   coef:1.11, rev:550000,    time:48.0, mgrCost:8000000,    mgrName:"Patron Pınar" },
+        { id:"b7", name:"Toptancı",        icon:"trend",   baseCost:13000000,  coef:1.10, rev:6800000,   time:96.0, mgrCost:90000000,   mgrName:"Tüccar Tan" },
+        { id:"b8", name:"Kahve İmparatoru",icon:"crown",   baseCost:155000000, coef:1.09, rev:82000000,  time:192.0,mgrCost:800000000,  mgrName:"İmparator İlay" },
+      ];
+      const MILESTONES = [25, 50, 100, 200, 300, 400, 500];
+      const RING_LEN = 2 * Math.PI * 27;
+      const SAVE_KEY = "kahve-v2-save";
+      const ANGEL_SEED = 1e9;
+
+      function freshState(){
+        const s = { cash:0, lifetime:0, angels:0, owned:{}, mgr:{}, prog:{}, running:{} };
+        BUSINESSES.forEach(b => { s.owned[b.id]=0; s.mgr[b.id]=false; s.prog[b.id]=0; s.running[b.id]=false; });
+        return s;
+      }
+      function load(){ try{ const r=JSON.parse(localStorage.getItem(SAVE_KEY)); if(r&&r.owned) return Object.assign(freshState(), r); }catch(e){} return freshState(); }
+      let state = load();
+      function save(){ try{ state.lastSeen=Date.now(); localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
+
+      const ix = Object.fromEntries(BUSINESSES.map((b,i)=>[b.id,i]));
+      function milestoneMult(o){ let m=1; for(const t of MILESTONES) if(o>=t) m*=2; return m; }
+      function nextMilestone(o){ for(const t of MILESTONES) if(o<t) return t; return null; }
+      function angelMult(){ return 1 + state.angels*0.02; }
+      function totalAngels(lt){ return Math.floor(150 * Math.sqrt(Math.max(0,lt)/ANGEL_SEED)); }
+      function pendingAngels(){ return Math.max(0, totalAngels(state.lifetime) - state.angels); }
+      function lifetimeForAngels(n){ const a=(n)/150; return a*a*ANGEL_SEED; }
+      function revPerCycle(b){ const o=state.owned[b.id]; return o<=0?0:b.rev*o*milestoneMult(o)*angelMult()*boostFactor(); }
+      function buyCost(b,n){ const k=state.owned[b.id]; return b.baseCost*Math.pow(b.coef,k)*(Math.pow(b.coef,n)-1)/(b.coef-1); }
+      function maxAffordable(b){ const base=b.baseCost*Math.pow(b.coef,state.owned[b.id]); const inner=1+state.cash*(b.coef-1)/base; return inner<=1?0:Math.max(0,Math.floor(Math.log(inner)/Math.log(b.coef))); }
+      function buyN(b){ return buyAmt==="max" ? Math.max(1,maxAffordable(b)) : buyAmt; }
+      function isUnlocked(b){ const i=ix[b.id]; return i===0 || state.owned[BUSINESSES[i-1].id]>0; }
+      function cpsTotal(){ let c=0; for(const b of BUSINESSES) if(state.owned[b.id]>0 && (state.mgr[b.id]||state.running[b.id])) c+=revPerCycle(b)/b.time; return c; }
+
+      /* ====== SES ====== */
+      const SFX_EXT = "mp3";
+      const SFX_IDS = ["tap","buy","mgr","milestone","angel","coin"];
+      const audioPool = {};
+      let muted=false, lastCoinSnd=0;
+      function loadSfx(){ SFX_IDS.forEach(id=>{ try{ const a=new Audio(`assets/sfx-v2/${id}.${SFX_EXT}`); a.preload="auto"; a.volume=id==="angel"?.6:id==="milestone"?.5:.4; audioPool[id]=a; }catch(e){} }); }
+      function sfx(id){ if(muted) return; if(id==="coin"){ const now=performance.now(); if(now-lastCoinSnd<120) return; lastCoinSnd=now; } const a=audioPool[id]; if(!a) return; try{ const n=a.cloneNode(); n.volume=a.volume; if(id==="tap") n.playbackRate=1+(Math.random()*0.08-0.04); n.play().catch(()=>{}); }catch(e){} }
+
+      /* ====== JUICE HELPER ====== */
+      function springIcon(el){ el.classList.remove("spring"); void el.offsetWidth; el.classList.add("spring"); }
+      function spawnCoins(anchor, count){
+        if(!anchor) return; const r=anchor.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+        count=Math.min(count, 20);
+        for(let i=0;i<count;i++){ const c=document.createElement("div"); c.className="coin";
+          c.style.left=(cx-4.5)+"px"; c.style.top=(cy-4.5)+"px";
+          c.style.setProperty("--dx",(Math.random()*80-40).toFixed(0)+"px");
+          c.style.setProperty("--dy",(40+Math.random()*40).toFixed(0)+"px");
+          document.body.appendChild(c); void c.offsetWidth; c.classList.add("go");
+          setTimeout(()=>c.remove(), 470); }
+      }
+      function floatGain(anchor, amt){ if(!anchor||amt<=0) return; const r=anchor.getBoundingClientRect();
+        const f=document.createElement("div"); f.className="float"; f.textContent="+"+fmt(amt);
+        f.style.left=(r.left+r.width/2-10)+"px"; f.style.top=(r.top-6)+"px"; f.style.setProperty("--jx",(Math.random()*40-20).toFixed(0)+"px");
+        document.body.appendChild(f); setTimeout(()=>f.remove(),900); }
+      function screenShake(){ const a=document.getElementById("app"); a.classList.remove("shake"); void a.offsetWidth; a.classList.add("shake"); }
+      function flashAt(anchor){ if(!anchor) return; const r=anchor.getBoundingClientRect(); const f=document.createElement("div"); f.className="flash";
+        f.style.left=(r.left-15)+"px"; f.style.top=(r.top-15)+"px"; f.style.width=(r.width+30)+"px"; f.style.height=(r.height+30)+"px";
+        document.body.appendChild(f); setTimeout(()=>f.remove(),520); }
+      function bigLabel(anchor, txt){ if(!anchor) return; const r=anchor.getBoundingClientRect(); const d=document.createElement("div"); d.className="biglabel"; d.textContent=txt;
+        d.style.left=(r.left+r.width/2-20)+"px"; d.style.top=(r.top-10)+"px"; document.body.appendChild(d); setTimeout(()=>d.remove(),920); }
+
+      /* ====== AKSİYON ====== */
+      let buyAmt = 1, curView = "biz";
+      function tapBiz(b){ if(state.owned[b.id]>0 && !state.running[b.id]) state.running[b.id]=true; }
+      function onMilestone(b, m){
+        const x=e[b.id]; const anchor = x?x.ic:null;
+        screenShake(); flashAt(anchor); spawnCoins(anchor, 14); bigLabel(anchor, "×2");
+        if(x){ x.rev.classList.remove("flash"); void x.rev.offsetWidth; x.rev.classList.add("flash"); }
+        sfx("milestone");
+      }
+      function buyBiz(b){
+        const n=buyN(b), c=buyCost(b,n); if(n<=0||state.cash<c) return;
+        const prevO=state.owned[b.id];
+        state.cash-=c; state.owned[b.id]+=n; const newO=state.owned[b.id];
+        if(!state.running[b.id]) state.running[b.id]=true;
+        save(); renderBiz();
+        const x=e[b.id];
+        if(x){ x.row.classList.add("settle"); setTimeout(()=>x.row.classList.remove("settle"),280);
+          x.owned.classList.add("bump"); setTimeout(()=>x.owned.classList.remove("bump"),320);
+          if(x.wipe){ x.wipe.classList.remove("go"); void x.wipe.offsetWidth; x.wipe.classList.add("go"); }
+          spawnCoins(x.ic, Math.min(4+Math.floor(n/3),14));
+          if(buyAmt==="max"){ x.row.classList.add("rowshake"); setTimeout(()=>x.row.classList.remove("rowshake"),200); } }
+        sfx("buy");
+        MILESTONES.forEach(m=>{ if(prevO<m && newO>=m) onMilestone(b,m); });
+      }
+      function buyMgr(b){ if(state.mgr[b.id]||state.owned[b.id]<=0||state.cash<b.mgrCost) return; state.cash-=b.mgrCost; state.mgr[b.id]=true; state.running[b.id]=true; save(); renderMgr(); sfx("mgr"); }
+      function doPrestige(){
+        const gain=pendingAngels(); if(gain<=0) return;
+        state.angels+=gain;
+        const lt=state.lifetime, ang=state.angels;
+        state=freshState(); state.lifetime=lt; state.angels=ang;
+        state.owned.b1=1; state.running.b1=true;
+        save(); displayCash=0;
+        // KUTLAMA
+        const bloom=document.getElementById("bloom"); bloom.classList.remove("go"); void bloom.offsetWidth; bloom.classList.add("go");
+        screenShake();
+        for(let i=0;i<14;i++){ const f=document.createElement("div"); f.className="feather";
+          f.style.left=(Math.random()*window.innerWidth)+"px"; f.style.top="-20px";
+          f.style.setProperty("--fy",(window.innerHeight*0.6+Math.random()*window.innerHeight*0.4)+"px");
+          f.style.setProperty("--fr",(Math.random()*720-360)+"deg");
+          f.style.animationDelay=(Math.random()*0.5)+"s"; document.body.appendChild(f); void f.offsetWidth; f.classList.add("go");
+          setTimeout(()=>f.remove(),1900); }
+        const mb=document.getElementById("melekBadge"); if(mb){ bigLabel(mb, "+"+gain+" 👼"); }
+        sfx("angel");
+        renderBiz(); renderMlk(); switchView("mlk");
+      }
+
+      /* ====== FORMAT ====== */
+      const SUF=["","K","M","B","T","aa","bb","cc","dd","ee","ff","gg"];
+      function fmt(v){ if(v<1000) return (v<10&&v%1!==0)?v.toFixed(1):Math.floor(v).toString(); let i=0; while(v>=1000&&i<SUF.length-1){v/=1000;i++;} return (v<10?v.toFixed(2):v<100?v.toFixed(1):Math.floor(v).toString())+SUF[i]; }
+
+      /* ====== TICK ====== */
+      let lastT=performance.now();
+      function tick(now){
+        const dt=Math.min(0.25,(now-lastT)/1000); lastT=now;
+        for(const b of BUSINESSES){
+          if(state.owned[b.id]>0 && state.running[b.id]){
+            state.prog[b.id]+=dt;
+            if(state.prog[b.id]>=b.time){
+              const cy=Math.floor(state.prog[b.id]/b.time); const gain=revPerCycle(b)*cy;
+              state.cash+=gain; state.lifetime+=gain;
+              if(state.mgr[b.id]) state.prog[b.id]-=cy*b.time; else { state.prog[b.id]=0; state.running[b.id]=false; }
+              if(curView==="biz"){ floatGain(e[b.id]&&e[b.id].ic, gain); sfx("coin"); }
+            }
+          }
+        }
+        paint(); requestAnimationFrame(tick);
+      }
+
+      /* ====== RENDER ====== */
+      const viewBiz=document.getElementById("viewBiz"), viewMgr=document.getElementById("viewMgr"), viewMlk=document.getElementById("viewMlk");
+      const e={};
+      function renderBiz(){
+        viewBiz.innerHTML="";
+        BUSINESSES.forEach(b=>{
+          const row=document.createElement("div"); row.className="biz";
+          row.innerHTML=`
+            <div class="biz-fill" data-fill="${b.id}"></div>
+            <div class="biz-wipe" data-wipe="${b.id}"></div>
+            <div class="biz-ic" data-tap="${b.id}">
+              <svg class="ring" viewBox="0 0 56 56"><circle cx="28" cy="28" r="27" stroke="#3a2e24"></circle>
+                <circle cx="28" cy="28" r="27" stroke="#f5c97a" data-ring="${b.id}" stroke-dasharray="${RING_LEN}" stroke-dashoffset="${RING_LEN}" transform="rotate(-90 28 28)" stroke-linecap="round"></circle></svg>
+              <img src="assets/icons/${b.icon}.svg" alt=""><span class="owned" data-owned="${b.id}">0</span></div>
+            <div class="biz-mid"><div class="biz-name">${b.name}</div><div class="biz-rev" data-rev="${b.id}">+0</div><div class="biz-time">${b.time}s</div></div>
+            <button class="biz-buy" data-buy="${b.id}"><span class="lbl">SATIN AL</span><span class="cost" data-cost="${b.id}">—</span></button>`;
+          viewBiz.appendChild(row);
+        });
+        BUSINESSES.forEach(b=>{
+          e[b.id]={ row:viewBiz.querySelector(`[data-fill="${b.id}"]`).parentElement, fill:viewBiz.querySelector(`[data-fill="${b.id}"]`),
+            wipe:viewBiz.querySelector(`[data-wipe="${b.id}"]`), ring:viewBiz.querySelector(`[data-ring="${b.id}"]`),
+            owned:viewBiz.querySelector(`[data-owned="${b.id}"]`), rev:viewBiz.querySelector(`[data-rev="${b.id}"]`),
+            cost:viewBiz.querySelector(`[data-cost="${b.id}"]`), buy:viewBiz.querySelector(`[data-buy="${b.id}"]`), ic:viewBiz.querySelector(`[data-tap="${b.id}"]`) };
+          e[b.id].ic.addEventListener("click",()=>{ tapBiz(b); springIcon(e[b.id].ic); spawnCoins(e[b.id].ic,4); sfx("tap"); });
+          e[b.id].buy.addEventListener("click",()=>buyBiz(b));
+        });
+        paint();
+      }
+      function renderMgr(){
+        viewMgr.innerHTML="";
+        BUSINESSES.forEach(b=>{ const owned=state.mgr[b.id], unlocked=state.owned[b.id]>0;
+          const row=document.createElement("div"); row.className="mgr"+(unlocked?"":" locked");
+          row.innerHTML=`<div class="mgr-ic"><img src="assets/icons/${b.icon}.svg" alt=""></div>
+            <div class="mgr-mid"><div class="mgr-name">${b.mgrName}</div><div class="mgr-sub">${b.name} otomatik çalışır</div></div>
+            <button class="mgr-buy ${owned?"owned":""}" data-mgrbuy="${b.id}" ${owned?"disabled":""}>${owned?'<span class="cost">✓ AKTİF</span>':`<span class="lbl">MÜDÜR</span><span class="cost">${fmt(b.mgrCost)}</span>`}</button>`;
+          viewMgr.appendChild(row); });
+        viewMgr.querySelectorAll("[data-mgrbuy]").forEach(btn=>{ const b=BUSINESSES[ix[btn.dataset.mgrbuy]]; btn.addEventListener("click",()=>buyMgr(b)); });
+      }
+      function renderMlk(){
+        const pend=pendingAngels(), bonus=Math.round(state.angels*2);
+        const nextN=totalAngels(state.lifetime)+1, ltNeed=lifetimeForAngels(state.angels+pend+1), ltCur=state.lifetime;
+        let btn, prog="";
+        if(pend>0){ btn=`<button class="angel-btn ready" id="prestigeBtn">Yeniden Demle ☕  +${pend} Melek</button>`; }
+        else { const prevLt=lifetimeForAngels(totalAngels(ltCur)+0), need=lifetimeForAngels(totalAngels(ltCur)+1);
+          const frac=Math.max(0,Math.min(1,(ltCur-prevLt)/(need-prevLt||1)));
+          btn=`<button class="angel-btn" id="prestigeBtn" disabled>Sonraki melek için ${fmt(Math.max(0,need-ltCur))} ₿ daha</button>`;
+          prog=`<div class="angel-prog"><i style="width:${(frac*100).toFixed(0)}%"></i></div>`; }
+        viewMlk.innerHTML=`<div class="angel-wrap">
+          <div class="angel-hero"><img src="assets/icons/sparkles.svg" alt="">
+            <div class="angel-count">${state.angels} Melek</div>
+            <div class="angel-bonus">Tüm gelir <b>+%${bonus}</b> kalıcı</div></div>
+          ${btn}${prog}
+          <div class="angel-note">Sıfırdan başla — <b>işler, müdürler ve para sıfırlanır</b> ama melekler ve kalıcı bonusun korunur. Kahve Melekleri her biri tüm gelire +%2 ekler.</div>
+        </div>`;
+        const pb=document.getElementById("prestigeBtn"); if(pb&&pend>0) pb.addEventListener("click",doPrestige);
+      }
+      let displayCash=state.cash;
+      function paint(){
+        displayCash += (state.cash-displayCash)*0.2; if(Math.abs(state.cash-displayCash)<1) displayCash=state.cash;
+        document.getElementById("cashVal").textContent=fmt(displayCash);
+        document.getElementById("cpsVal").textContent=fmt(cpsTotal());
+        const mb=document.getElementById("melekBadge"); if(state.angels>0){ mb.style.display="flex"; document.getElementById("melekCount").textContent=state.angels; } else mb.style.display="none";
+        document.getElementById("mlkDot").classList.toggle("show", pendingAngels()>0);
+        const bbd=document.getElementById("boostBadge"); if(performance.now()<boostUntil){ bbd.style.display="flex"; document.getElementById("boostMx").textContent=boostMult; document.getElementById("boostT").textContent=Math.ceil((boostUntil-performance.now())/1000); } else bbd.style.display="none";
+        if(curView==="biz") for(const b of BUSINESSES){
+          const x=e[b.id]; if(!x) continue; const o=state.owned[b.id], unlocked=isUnlocked(b);
+          x.row.classList.toggle("locked",!unlocked); x.ic.classList.toggle("mgron",state.mgr[b.id]);
+          x.owned.textContent=o; x.rev.textContent="+"+fmt(revPerCycle(b));
+          const nm=nextMilestone(o), prev=MILESTONES.filter(t=>t<=o).pop()||0, frac=nm?(o-prev)/(nm-prev):1;
+          x.ring.setAttribute("stroke-dashoffset", RING_LEN*(1-Math.max(0,Math.min(1,frac))));
+          x.fill.style.width=(o>0?state.prog[b.id]/b.time*100:0)+"%";
+          const n=buyN(b), c=buyCost(b,n), aff=unlocked&&state.cash>=c&&n>0;
+          x.buy.disabled=!aff;
+          x.buy.querySelector(".lbl").textContent=unlocked?`SATIN AL ×${buyAmt==="max"?n:buyAmt}`:"KİLİTLİ";
+          x.cost.textContent=unlocked?fmt(c):"—";
+        }
+        updateGoal();
+      }
+      function updateGoal(){ let txt="";
+        const fu=BUSINESSES.find(b=> isUnlocked(b) && state.owned[b.id]===0);
+        if(fu) txt=`Aç: ilk <b>${fu.name}</b>`;
+        else { let best=null; for(const b of BUSINESSES){ const o=state.owned[b.id], nm=nextMilestone(o); if(o>0&&nm){ const need=nm-o; if(!best||need<best.need) best={b,nm,need}; } }
+          txt = best ? `Hedef: <b>${best.b.name}</b> ${best.nm} adet (×2) — ${best.need} kaldı` : `Her şey maksimumda 👑`; }
+        document.getElementById("goalTxt").innerHTML=txt;
+      }
+
+      /* nav */
+      function switchView(v){ curView=v; document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));
+        viewBiz.style.display=v==="biz"?"flex":"none"; viewMgr.style.display=v==="mgr"?"flex":"none"; viewMlk.style.display=v==="mlk"?"flex":"none";
+        if(v==="mgr") renderMgr(); if(v==="mlk") renderMlk(); }
+      document.getElementById("nav").addEventListener("click",ev=>{ const b=ev.target.closest("button"); if(b) switchView(b.dataset.v); });
+      document.getElementById("buyAmt").addEventListener("click",ev=>{ const b=ev.target.closest("button"); if(!b) return;
+        buyAmt=b.dataset.n==="max"?"max":parseInt(b.dataset.n,10); document.querySelectorAll("#buyAmt button").forEach(x=>x.classList.toggle("on",x===b)); paint(); });
+
+      /* ====== BOOST / GOLDEN ÇEKİRDEK / TIME WARP ====== */
+      let boostMult=1, boostUntil=0;
+      function boostFactor(){ return performance.now()<boostUntil ? boostMult : 1; }
+      function startBoost(mult, sec){ boostMult=mult; boostUntil=performance.now()+sec*1000; sfx("milestone"); screenShake(); notify("☕ Yoğun Saat! Tüm gelir ×"+mult); }
+      function timeWarp(hours){ const g=cpsTotal()*hours*3600; if(g<=0) return; state.cash+=g; state.lifetime+=g; bigLabel(document.getElementById("cashVal"),"+"+fmt(g)); screenShake(); sfx("milestone"); save(); }
+
+      function notify(msg){ const n=document.getElementById("notify"); if(!n) return; n.textContent=msg; n.classList.add("show"); clearTimeout(notify._t); notify._t=setTimeout(()=>n.classList.remove("show"),3500); }
+
+      function spawnBean(){
+        if(document.querySelector(".goldbean")) return;
+        const el=document.createElement("img"); el.src="assets/icons/beans.svg"; el.className="goldbean"; el.alt="";
+        el.style.left=(8+Math.random()*72)+"vw"; el.style.top=(22+Math.random()*50)+"vh";
+        el.addEventListener("click",()=>collectBean(el),{once:true});
+        document.body.appendChild(el); setTimeout(()=>{ if(el.parentNode) el.remove(); },8000);
+      }
+      function collectBean(el){
+        const r=Math.random(); spawnCoins(el,16); flashAt(el);
+        if(r<0.55){ const g=Math.max(cpsTotal()*30,100); state.cash+=g; state.lifetime+=g; bigLabel(el,"+"+fmt(g)); notify("🪙 Altın çekirdek! +"+fmt(g)+" ₿"); sfx("milestone"); }
+        else if(r<0.82){ startBoost(7,25); bigLabel(el,"×7!"); }
+        else { timeWarp(2); bigLabel(el,"+2sa"); notify("⏩ 2 saatlik kazanç peşin!"); }
+        el.remove(); save();
+      }
+
+      function checkOffline(){
+        const now=Date.now(), last=state.lastSeen||now, dt=Math.min((now-last)/1000, 8*3600);
+        if(dt<60) return; let g=0;
+        for(const b of BUSINESSES) if(state.owned[b.id]>0 && state.mgr[b.id]) g+=(revPerCycle(b)/b.time)*dt;
+        if(g<1) return;
+        const mins=Math.floor(dt/60), hrs=Math.floor(mins/60), tstr=hrs>0?(hrs+"sa "+(mins%60)+"dk"):(mins+"dk");
+        const o=document.createElement("div"); o.className="modal-bg";
+        o.innerHTML='<div class="modal"><img src="assets/icons/coffee.svg" style="width:54px;height:54px" alt=""><h3>Tekrar hoş geldin patron! ☕</h3><p>'+tstr+' yoktun — dükkan senin için demledi.</p><div class="modal-amt">+'+fmt(g)+' ₿</div><button class="modal-btn" id="collectOff">Topla</button></div>';
+        document.body.appendChild(o);
+        document.getElementById("collectOff").addEventListener("click",()=>{ state.cash+=g; state.lifetime+=g; displayCash=state.cash; spawnCoins(document.getElementById("cashVal"),16); sfx("coin"); o.remove(); save(); },{once:true});
+      }
+
+      function updateMuteBtn(){ const b=document.getElementById("muteBtn"); if(b) b.textContent=muted?"🔇":"🔊"; }
+      function toggleMute(){ muted=!muted; try{ localStorage.setItem("kahve-v2-mute",muted?"1":"0"); }catch(e){} updateMuteBtn(); if(!muted) sfx("tap"); }
+
+      /* ====== INIT ====== */
+      try{ muted = localStorage.getItem("kahve-v2-mute")==="1"; }catch(e){}
+      if(Object.values(state.owned).every(v=>v===0)){ state.owned.b1=1; state.running.b1=true; }
+      loadSfx(); updateMuteBtn();
+      document.getElementById("muteBtn").addEventListener("click", toggleMute);
+      setInterval(save,5000); window.addEventListener("beforeunload",save);
+      document.addEventListener("visibilitychange",()=>{ if(document.hidden) save(); });
+      renderBiz(); requestAnimationFrame(tick);
+      checkOffline();
+      setInterval(()=>{ if(Math.random()<0.55) spawnBean(); }, 32000);
+    </script>
+  </body>
+</html>
