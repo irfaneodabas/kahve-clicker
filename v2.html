@@ -190,7 +190,7 @@
           <span class="cash-val" id="cashVal">0</span>
           <span class="topright">
             <span class="boost-badge" id="boostBadge" style="display:none">×<b id="boostMx">7</b> <b id="boostT">0</b>s</span>
-            <span class="melek-badge" id="melekBadge" style="display:none"><img src="assets/icons/sparkles.svg" alt=""><b id="melekCount">0</b></span>
+            <span class="melek-badge" id="melekBadge" style="display:none"><img src="assets/icons/angel.svg" alt=""><b id="melekCount">0</b></span>
             <button class="mutebtn" id="muteBtn" type="button" aria-label="Ses">🔊</button>
           </span>
         </div>
@@ -215,7 +215,7 @@
       <div class="nav" id="nav">
         <button data-v="biz" class="on"><img src="assets/icons/store.svg" alt="">İşler</button>
         <button data-v="mgr"><img src="assets/icons/point.svg" alt="">Müdürler</button>
-        <button data-v="mlk"><span class="dot" id="mlkDot"></span><img src="assets/icons/sparkles.svg" alt="">Melekler</button>
+        <button data-v="mlk"><span class="dot" id="mlkDot"></span><img src="assets/icons/angel.svg" alt="">Melekler</button>
       </div>
     </div>
 
@@ -407,7 +407,7 @@
           btn=`<button class="angel-btn" id="prestigeBtn" disabled>Sonraki melek için ${fmt(Math.max(0,need-ltCur))} ₿ daha</button>`;
           prog=`<div class="angel-prog"><i style="width:${(frac*100).toFixed(0)}%"></i></div>`; }
         viewMlk.innerHTML=`<div class="angel-wrap">
-          <div class="angel-hero"><img src="assets/icons/sparkles.svg" alt="">
+          <div class="angel-hero"><img src="assets/icons/angel.svg" alt="">
             <div class="angel-count">${state.angels} Melek</div>
             <div class="angel-bonus">Tüm gelir <b>+%${bonus}</b> kalıcı</div></div>
           ${btn}${prog}
