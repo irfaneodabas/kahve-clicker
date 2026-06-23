@@ -126,6 +126,19 @@
       .angel-prog{ height:8px; border-radius:99px; background:var(--panel2); overflow:hidden; margin:12px 0 6px; }
       .angel-prog i{ display:block; height:100%; background:linear-gradient(90deg,var(--gold2),var(--gold)); width:0%; }
       .angel-note{ color:var(--muted); font-size:.78rem; line-height:1.4; margin-top:10px; }
+      .mk-ic{ width:14px; height:14px; vertical-align:-2px; }
+      .shop-hdr{ text-align:left; color:var(--muted); font-size:.8rem; font-weight:700; margin:16px 2px 8px; }
+      .shop-hdr b{ color:var(--gold); }
+      .angel-shop{ display:flex; flex-direction:column; gap:8px; }
+      .upg{ display:flex; align-items:center; gap:10px; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 12px; cursor:pointer; color:var(--ink); }
+      .upg:active{ transform:scale(.98); }
+      .upg:disabled{ cursor:default; opacity:.5; }
+      .upg.owned{ border-color:var(--green); opacity:.75; }
+      .upg-info{ flex:1 1 auto; display:flex; flex-direction:column; min-width:0; }
+      .upg-info b{ font-size:.9rem; }
+      .upg-info span{ font-size:.74rem; color:var(--muted); }
+      .upg-cost{ flex:0 0 auto; font-weight:900; color:var(--gold); font-size:.9rem; white-space:nowrap; }
+      .upg.owned .upg-cost{ color:var(--green); }
 
       /* NAV */
       .nav{ flex:0 0 auto; display:flex; border-top:1px solid var(--line); background:var(--panel);
@@ -238,7 +251,7 @@
       const ANGEL_SEED = 1e9;
 
       function freshState(){
-        const s = { cash:0, lifetime:0, angels:0, owned:{}, mgr:{}, prog:{}, running:{} };
+        const s = { cash:0, lifetime:0, angels:0, spentAngels:0, upg:{}, owned:{}, mgr:{}, prog:{}, running:{} };
         BUSINESSES.forEach(b => { s.owned[b.id]=0; s.mgr[b.id]=false; s.prog[b.id]=0; s.running[b.id]=false; });
         return s;
       }
@@ -250,11 +263,25 @@
       function milestoneMult(o){ let m=1; for(const t of MILESTONES) if(o>=t) m*=2; return m; }
       function nextMilestone(o){ for(const t of MILESTONES) if(o<t) return t; return null; }
       function angelMult(){ return 1 + state.angels*0.02; }
+      const ANGEL_UPGRADES = [
+        { id:"rev2",   cost:4,  name:"Altın Demleme",   desc:"Tüm gelir ×2" },
+        { id:"cost",   cost:8,  name:"Toptan Anlaşma",  desc:"Tüm maliyetler −%8" },
+        { id:"bean",   cost:6,  name:"Şanslı Çekirdek", desc:"Altın çekirdek daha sık" },
+        { id:"offline",cost:10, name:"Gece Vardiyası",  desc:"Offline tavan 8→24 saat" },
+        { id:"boost",  cost:14, name:"Uzun Mola",       desc:"Yoğun Saat süresi ×2" },
+        { id:"rev2b",  cost:30, name:"Usta Kavurma",    desc:"Tüm gelir ×2 (tekrar)" },
+      ];
+      function availAngels(){ return state.angels - (state.spentAngels||0); }
+      function hasUpg(id){ return !!(state.upg && state.upg[id]); }
+      function upgMult(){ let m=1; if(hasUpg("rev2"))m*=2; if(hasUpg("rev2b"))m*=2; return m; }
+      function costMult(){ return hasUpg("cost") ? 0.92 : 1; }
+      function offlineCapH(){ return hasUpg("offline") ? 24 : 8; }
+      function buyUpg(u){ if(hasUpg(u.id) || availAngels() < u.cost) return; if(!state.upg) state.upg={}; state.upg[u.id]=true; state.spentAngels=(state.spentAngels||0)+u.cost; sfx("angel"); screenShake(); save(); renderMlk(); }
       function totalAngels(lt){ return Math.floor(150 * Math.sqrt(Math.max(0,lt)/ANGEL_SEED)); }
       function pendingAngels(){ return Math.max(0, totalAngels(state.lifetime) - state.angels); }
       function lifetimeForAngels(n){ const a=(n)/150; return a*a*ANGEL_SEED; }
-      function revPerCycle(b){ const o=state.owned[b.id]; return o<=0?0:b.rev*o*milestoneMult(o)*angelMult()*boostFactor(); }
-      function buyCost(b,n){ const k=state.owned[b.id]; return b.baseCost*Math.pow(b.coef,k)*(Math.pow(b.coef,n)-1)/(b.coef-1); }
+      function revPerCycle(b){ const o=state.owned[b.id]; return o<=0?0:b.rev*o*milestoneMult(o)*angelMult()*upgMult()*boostFactor(); }
+      function buyCost(b,n){ const k=state.owned[b.id]; return b.baseCost*Math.pow(b.coef,k)*(Math.pow(b.coef,n)-1)/(b.coef-1)*costMult(); }
       function maxAffordable(b){ const base=b.baseCost*Math.pow(b.coef,state.owned[b.id]); const inner=1+state.cash*(b.coef-1)/base; return inner<=1?0:Math.max(0,Math.floor(Math.log(inner)/Math.log(b.coef))); }
       function buyN(b){ return buyAmt==="max" ? Math.max(1,maxAffordable(b)) : buyAmt; }
       function isUnlocked(b){ const i=ix[b.id]; return i===0 || state.owned[BUSINESSES[i-1].id]>0; }
@@ -319,8 +346,8 @@
       function doPrestige(){
         const gain=pendingAngels(); if(gain<=0) return;
         state.angels+=gain;
-        const lt=state.lifetime, ang=state.angels;
-        state=freshState(); state.lifetime=lt; state.angels=ang;
+        const lt=state.lifetime, ang=state.angels, sp=state.spentAngels||0, up=state.upg||{};
+        state=freshState(); state.lifetime=lt; state.angels=ang; state.spentAngels=sp; state.upg=up;
         state.owned.b1=1; state.running.b1=true;
         save(); displayCash=0;
         // KUTLAMA
@@ -406,14 +433,21 @@
           const frac=Math.max(0,Math.min(1,(ltCur-prevLt)/(need-prevLt||1)));
           btn=`<button class="angel-btn" id="prestigeBtn" disabled>Sonraki melek için ${fmt(Math.max(0,need-ltCur))} ₿ daha</button>`;
           prog=`<div class="angel-prog"><i style="width:${(frac*100).toFixed(0)}%"></i></div>`; }
+        const shop = ANGEL_UPGRADES.map(u=>{ const owned=hasUpg(u.id), aff=availAngels()>=u.cost;
+          return `<button class="upg${owned?' owned':''}" data-upg="${u.id}"${owned||!aff?' disabled':''}>
+            <span class="upg-info"><b>${u.name}</b><span>${u.desc}</span></span>
+            <span class="upg-cost">${owned?'✓':u.cost+' <img src=\"assets/icons/angel.svg\" class=\"mk-ic\">'}</span></button>`; }).join("");
         viewMlk.innerHTML=`<div class="angel-wrap">
           <div class="angel-hero"><img src="assets/icons/angel.svg" alt="">
             <div class="angel-count">${state.angels} Melek</div>
             <div class="angel-bonus">Tüm gelir <b>+%${bonus}</b> kalıcı</div></div>
           ${btn}${prog}
-          <div class="angel-note">Sıfırdan başla — <b>işler, müdürler ve para sıfırlanır</b> ama melekler ve kalıcı bonusun korunur. Kahve Melekleri her biri tüm gelire +%2 ekler.</div>
+          <div class="angel-note">Sıfırdan başla — <b>işler, müdürler ve para sıfırlanır</b> ama melekler, bonus ve ustalıklar korunur.</div>
+          <div class="shop-hdr">Demleme Ustalığı · <b>${availAngels()}</b> <img src="assets/icons/angel.svg" class="mk-ic"> harcanabilir</div>
+          <div class="angel-shop">${shop}</div>
         </div>`;
         const pb=document.getElementById("prestigeBtn"); if(pb&&pend>0) pb.addEventListener("click",doPrestige);
+        viewMlk.querySelectorAll("[data-upg]").forEach(b=>{ const u=ANGEL_UPGRADES.find(x=>x.id===b.dataset.upg); if(u) b.addEventListener("click",()=>buyUpg(u)); });
       }
       let displayCash=state.cash;
       function paint(){
@@ -456,7 +490,7 @@
       /* ====== BOOST / GOLDEN ÇEKİRDEK / TIME WARP ====== */
       let boostMult=1, boostUntil=0;
       function boostFactor(){ return performance.now()<boostUntil ? boostMult : 1; }
-      function startBoost(mult, sec){ boostMult=mult; boostUntil=performance.now()+sec*1000; sfx("milestone"); screenShake(); notify("☕ Yoğun Saat! Tüm gelir ×"+mult); }
+      function startBoost(mult, sec){ if(hasUpg("boost")) sec*=2; boostMult=mult; boostUntil=performance.now()+sec*1000; sfx("milestone"); screenShake(); notify("☕ Yoğun Saat! Tüm gelir ×"+mult); }
       function timeWarp(hours){ const g=cpsTotal()*hours*3600; if(g<=0) return; state.cash+=g; state.lifetime+=g; bigLabel(document.getElementById("cashVal"),"+"+fmt(g)); screenShake(); sfx("milestone"); save(); }
 
       function notify(msg){ const n=document.getElementById("notify"); if(!n) return; n.textContent=msg; n.classList.add("show"); clearTimeout(notify._t); notify._t=setTimeout(()=>n.classList.remove("show"),3500); }
@@ -477,7 +511,7 @@
       }
 
       function checkOffline(){
-        const now=Date.now(), last=state.lastSeen||now, dt=Math.min((now-last)/1000, 8*3600);
+        const now=Date.now(), last=state.lastSeen||now, dt=Math.min((now-last)/1000, offlineCapH()*3600);
         if(dt<60) return; let g=0;
         for(const b of BUSINESSES) if(state.owned[b.id]>0 && state.mgr[b.id]) g+=(revPerCycle(b)/b.time)*dt;
         if(g<1) return;
@@ -500,7 +534,7 @@
       document.addEventListener("visibilitychange",()=>{ if(document.hidden) save(); });
       renderBiz(); requestAnimationFrame(tick);
       checkOffline();
-      setInterval(()=>{ if(Math.random()<0.55) spawnBean(); }, 32000);
+      setInterval(()=>{ if(Math.random() < (hasUpg("bean")?0.85:0.55)) spawnBean(); }, 32000);
     </script>
   </body>
 </html>
